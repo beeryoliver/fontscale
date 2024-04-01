@@ -8,8 +8,8 @@
 \NeedsTeXFormat{LaTeX2e}[2022-06-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-03-26}
-  {1.0.3}
+  {2024-03-31}
+  {1.1.0}
   {A user interface for setting document font sizes}
 
 % The 2023-10-10 l3kernel update added many 'e'-variants.
@@ -452,7 +452,7 @@
   }
 \cs_new_protected:Npn \__fontscale_keys_name_code_split:ww #1 / #2 \q_stop
   {
-    \tl_set:cn { l__fontscale_ \l_keys_key_str _size        _tl } {#1}
+    \tl_set:cn { l__fontscale_ \l_keys_key_str _size_tl } {#1}
     \tl_set:cn { l__fontscale_ \l_keys_key_str _baselineskip_tl } {#2}
   }
 
@@ -1285,3 +1285,24 @@
       }
       { UNDEFINED \@ }
   }
+
+% TEXT PURIFY
+
+\cs_new:Npn \__fontscale_text_purify_equivalent:n #1
+  {
+    \bool_lazy_all:nT
+      {
+        { \tl_if_single_p:n {#1} }
+        { \tl_if_single_token_p:n #1 }
+        { \token_if_eq_meaning_p:NN #1 * }
+      }
+      { \use_none:n }
+  }
+\text_declare_purify_equivalent:Nn \SetFontStep
+  { \__fontscale_text_purify_equivalent:n }
+\text_declare_purify_equivalent:Nn \SetFontScale
+  { \__fontscale_text_purify_equivalent:n }
+\text_declare_purify_equivalent:Nn \SetFontSize
+  { \__fontscale_text_purify_equivalent:n }
+\text_declare_purify_equivalent:Nn \ScaleFont { \use_none:n }
+\text_declare_purify_equivalent:Nn \SetFontSizeBaselineskip { \use_none:nn }

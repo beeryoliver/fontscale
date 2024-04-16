@@ -8,8 +8,8 @@
 \NeedsTeXFormat{LaTeX2e}[2022-06-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-04-07}
-  {1.1.1}
+  {2024-04-15}
+  {1.2.0}
   {A user interface for setting document font sizes}
 
 % The 2023-10-10 l3kernel update added many 'e'-variants.
@@ -108,14 +108,12 @@
 \skip_new:N \l_fontscale_Huge_baselineskip_skip
 
 \str_new:N \l__fontscale_typographic_scale_str
-\tl_new:N  \l__fontscale_keys_precompile_preamble_tl
 
 % Used in floating point expressions for speed.
 \fp_new:N \l__fontscale_normalsize_size_fp
 \fp_new:N \l__fontscale_musical_notes_fp
 
 % Temporary variables
-\fp_new:N   \l__fontscale_step_fp
 \tl_new:N   \l__fontscale_step_tl
 \tl_new:N   \l__fontscale_scale_tl
 \dim_new:N  \l__fontscale_size_dim
@@ -246,13 +244,7 @@
 \keys_define:nn { fontscale }
   {
       reset .choices:nn = { initial , preamble }
-        {
-          \int_case:nn { \l_keys_choice_int }
-            {
-              { 1 } { \c__fontscale_keys_precompile_initial_tl  }
-              { 2 } { \l__fontscale_keys_precompile_preamble_tl }
-            }
-        }
+        { \use:c { __fontscale_keys_precompile_#1: } }
     , reset .default:n = initial
 
     , ignore-order .bool_set:N = \l__fontscale_ignore_order_bool
@@ -448,7 +440,7 @@
 
 % Pre-compiles the keys with their initial values. The keys are pre-compiled
 % by hand for speed.
-\tl_const:Nn \c__fontscale_keys_precompile_initial_tl
+\cs_new_protected:Npn \__fontscale_keys_precompile_initial:
   {
     \bool_set_false:N \l__fontscale_ignore_order_bool
     \fp_set:Nn  \l__fontscale_baselineskip_size_ratio_fp { 1.2 }
@@ -489,28 +481,29 @@
     \tl_set:Nn \l__fontscale_huge_baselineskip_tl         { \q_no_value }
     \tl_set:Nn \l__fontscale_Huge_baselineskip_tl         { \q_no_value }
   }
-\c__fontscale_keys_precompile_initial_tl
+\__fontscale_keys_precompile_initial:
 
 % Pre-compiles the keys with their values at the end of the preamble. The keys
 % are pre-compiled by hand for speed.
+\cs_new_eq:NN \__fontscale_keys_precompile_preamble: \prg_do_nothing
 \AddToHook { begindocument / before }
-  { \__fontscale_keys_precompile_preamble: }
-\cs_new_protected:Npn \__fontscale_keys_precompile_preamble:
+  { \__fontscale_keys_precompile_preamble_set: }
+\cs_new_protected:Npn \__fontscale_keys_precompile_preamble_set:
   {
-    \tl_set:Ne \l__fontscale_keys_precompile_preamble_tl
+    \cs_set_protected:Npe \__fontscale_keys_precompile_preamble:
       {
         \bool_if:NTF \l__fontscale_ignore_order_bool
           { \bool_set_true:N } { \bool_set_false:N }
-          \l__fontscale_ignore_order_bool
+          \exp_not:N \l__fontscale_ignore_order_bool
         \fp_set:Nn \exp_not:N \l__fontscale_baselineskip_size_ratio_fp
-          { \l__fontscale_baselineskip_size_ratio_fp }
+          { \exp_not:V \l__fontscale_baselineskip_size_ratio_fp }
         \str_set:Nn \exp_not:N \l__fontscale_typographic_scale_str
           { \l__fontscale_typographic_scale_str }
         \fp_set:Nn \exp_not:N \l__fontscale_modular_ratio_fp
-          { \l__fontscale_modular_ratio_fp }
+          { \exp_not:V \l__fontscale_modular_ratio_fp }
         \fp_set:Nn \exp_not:N \l__fontscale_musical_ratio_fp
-          { \l__fontscale_musical_ratio_fp }
-        \int_set:Nn \l__fontscale_musical_notes_int
+          { \exp_not:V \l__fontscale_musical_ratio_fp }
+        \int_set:Nn \exp_not:N \l__fontscale_musical_notes_int
           { \int_use:N \l__fontscale_musical_notes_int }
 
         \tl_set:Nn \exp_not:N \l__fontscale_tiny_scale_tl
@@ -1025,23 +1018,18 @@
   }
 \cs_new_protected:Npn \__fontscale_set_font_step:n #1
   {
-    \fp_set:Nn \l__fontscale_step_fp {#1}
-    \__fontscale_set_font_step_aux:N \l__fontscale_step_fp
-  }
-\cs_new_protected:Npn \__fontscale_set_font_step_aux:N #1
-  {
-    \token_case_meaning:NnF #1
+    \str_case:enF { \fp_eval:n {#1} }
       {
-        \c_fontscale_tiny_step_fp         { \tiny         }
-        \c_fontscale_scriptsize_step_fp   { \scriptsize   }
-        \c_fontscale_footnotesize_step_fp { \footnotesize }
-        \c_fontscale_small_step_fp        { \small        }
-        \c_fontscale_normalsize_step_fp   { \normalsize   }
-        \c_fontscale_large_step_fp        { \large        }
-        \c_fontscale_Large_step_fp        { \Large        }
-        \c_fontscale_LARGE_step_fp        { \LARGE        }
-        \c_fontscale_huge_step_fp         { \huge         }
-        \c_fontscale_Huge_step_fp         { \Huge         }
+        { -4 } { \tiny         }
+        { -3 } { \scriptsize   }
+        { -2 } { \footnotesize }
+        { -1 } { \small        }
+        {  0 } { \normalsize   }
+        {  1 } { \large        }
+        {  2 } { \Large        }
+        {  3 } { \LARGE        }
+        {  4 } { \huge         }
+        {  5 } { \Huge         }
       }
       {
         \str_case:onF \l__fontscale_typographic_scale_str
@@ -1053,7 +1041,7 @@
                   \fp_to_dim:n
                     {
                       \l__fontscale_normalsize_size_fp
-                      * \l__fontscale_modular_ratio_fp ^ #1
+                      * \l__fontscale_modular_ratio_fp ^ (#1)
                     }
                 }
                 {
@@ -1070,7 +1058,7 @@
                     {
                       \l__fontscale_normalsize_size_fp
                       * \l__fontscale_musical_ratio_fp
-                      ^ ( #1 / \l__fontscale_musical_notes_fp )
+                      ^ ( (#1) / \l__fontscale_musical_notes_fp )
                     }
                 }
                 {
@@ -1088,12 +1076,9 @@
     \tl_set:Ne \l__fontscale_step_tl { \__fontscale_current_font_step: }
     \tl_if_empty:NTF \l__fontscale_step_tl
       { \msg_error:nn { fontscale } { font-step-out-of-bounds } }
-      {
-        \fp_set:Nn \l__fontscale_step_fp { (#1) + \l__fontscale_step_tl }
-        \__fontscale_add_font_step_aux:N \l__fontscale_step_fp
-      }
+      { \__fontscale_add_font_step_aux:n { (#1) + \l__fontscale_step_tl } }
   }
-\cs_new_eq:NN \__fontscale_add_font_step_aux:N \__fontscale_set_font_step_aux:N
+\cs_new_eq:NN \__fontscale_add_font_step_aux:n \__fontscale_set_font_step:n
 
 \NewDocumentCommand \SetFontScale { s m }
   {

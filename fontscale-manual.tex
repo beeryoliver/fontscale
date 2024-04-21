@@ -13,7 +13,7 @@ A user interface for setting document font sizes
 
 Oliver Beery
 
-Version 1.2.0\quad{}15 April 2024
+Version 1.2.1\quad{}21 April 2024
 
 
 \section{Introduction}
@@ -167,13 +167,13 @@ Note that the font steps and the scale of \cs{normalsize} are constants and cann
 \Key{\meta{font size command}/scale}[\meta{fp expr}]
 \KeepNextPar*
 
-The keys \Key{\meta{font size command}\slash{}scale} set the scale of \meta{font size command} to \meta{fp expr}, ignoring the value set by the key \Key{typographic-scale}.
+The keys \Key{\meta{font size command}\slash{}scale} set the scale of \meta{font size command} to \meta{fp expr}, ignoring the value set by the key \Key{typographic\-/scale}.
 The key \Key{normalsize\slash{}scale} is not defined.
 
 \Key{\meta{font size command}/size}[\meta{dim expr}]
 \KeepNextPar*
 
-The keys \Key{\meta{font size command}\slash{}size} set the size of \meta{font size command} to \meta{dim expr}, ignoring the values set by the keys \Key{typographic-scale} and \Key{\meta{font size command}\slash{}scale}.
+The keys \Key{\meta{font size command}\slash{}size} set the size of \meta{font size command} to \meta{dim expr}, ignoring the values set by the keys \Key{typographic\-/scale} and \Key{\meta{font size command}\slash{}scale}.
 \meta{dim expr} supplies a default unit of \unit{pt}.
 
 The package will issue a warning if the user sets the keys \Key{\meta{font size command}\slash{}size} and \Key{\meta{font size command}\slash{}scale} for the same \meta{font size command} since the latter key will be ignored.
@@ -196,7 +196,7 @@ The number before/after the slash is the size/leading in \unit{pts}.
 \KeepNextPar*
 
 The user should take care to ensure that the font sizes and font baselineskips remain in the correct order when directly setting the scales, sizes, or baselineskips of the different font size commands.
-The magnitudes of the sizes and baselineskips should be ordered from \cs{tiny} to \cs{normalsize} to \cs{Huge}.
+The magnitudes of the font sizes and font baselineskips should be ordered from \cs{tiny} to \cs{normalsize} to \cs{Huge}.
 This is important for typographic and syntactic consistency.
 This package will issue a warning if they are not in the correct order.
 The user can disable this warning via the key \Key{ignore\-/order}[true] or just \Key{ignore\-/order}.
@@ -218,7 +218,7 @@ The user can disable this warning via the key \Key{ignore\-/order}[true] or just
 
 These are fully expandable commands that expand to the current font step, scale, size, or baselineskip.
 They can be used for printing or within calculations.
-Caution: \cs{CurrentFontStep} will expand to nothing if the current step is undefined.
+Caution: \cs{CurrentFontStep} will expand to nothing if the current font step is undefined.
 
 Internally, \cs{CurrentFontStep}, \cs{CurrentFontScale}, and \cs{CurrentFontSize} use the kernel command \cs{f@size}.
 \cs{CurrentFontSize} expands to \texttt{f@size pt}.
@@ -243,10 +243,10 @@ Generally, users should prefer the font size commands from \cs{tiny} to \cs{Huge
 \cs{SetFontStep} sets the font size by setting the font step to \meta{fp expr}.
 The starred version \cs{SetFontStep*} adds \meta{fp expr} to the current font step.
 If the choice of typographic scale is not modular or musical, then the only valid values for \meta{fp expr} are the integers from \num{-4} to \num{5}, corresponding to the font size commands from \cs{tiny} to \cs{Huge}.
-\cs{SetFontStep} will issue an error if the step is invalid.
-The starred version \cs{SetFontStep*} will also issue an error if the current step is invalid.
+\cs{SetFontStep} will issue an error if the calculated font step is invalid.
+The starred version \cs{SetFontStep*} will also issue an error if the current font step is invalid.
 \cs{SetFontStep} sets the font baselineskip to the calculated font size \texttimes{} \Key{baselineskip\-/size\-/ratio}.
-If the step matches the step of any font size command, then that font size command will be used directly.
+If the calculated font step matches the step of any font size command, then that font size command will be used directly.
 
 \listheading{Examples:}
 \begin{itemize}
@@ -277,8 +277,8 @@ If the current font size is \cs{normalsize}, \cs{SetFontScale*}\marg{0.2} is equ
 
 \cs{SetFontSize} sets the font size to \meta{dim expr}.
 \meta{dim expr} supplies a default unit of \unit{pt}.
-The font baselineskip is set to the font size \texttimes{} \Key{baselineskip\-/size\-/ratio}.
-The starred version \cs{SetFontSize*} adds \meta{dim expr} to the current size.
+The font baselineskip is set to the calculated font size \texttimes{} \Key{baselineskip\-/size\-/ratio}.
+The starred version \cs{SetFontSize*} adds \meta{dim expr} to the current font size.
 For example, \cs{SetFontSize*}\marg{1} and \cs{SetFontSize*}\marg{-1pt} increase and decrease the current font size by a \unit{pt}.
 
 \cs{ScaleFont}\marg{\meta{fp expr}}
@@ -291,7 +291,7 @@ For example, if the current font size and font baselineskip are \qty{10}{pt} and
 \cs{SetFontSizeBaselineskip}\marg{\meta{dim expr}}\marg{\meta{skip expr}}
 \KeepNextPar*
 
-Sets the font size and font baselineskip to \meta{dim expr} and \meta{skip expr}.
+Sets the font size to \meta{dim expr} and the font baselineskip to \meta{skip expr}.
 Both arguments supply a default unit of \unit{pt}.
 \cs{SetFontSizeBaselineskip} can be used as an alternative to \cs{fontsize} + \cs{selectfont} as it avoids the issue with \cs{f@size} discussed in \S\ref{subsec:fontparameters}.
 
@@ -305,8 +305,8 @@ I have used them often when developing this package so I think users will find t
 \nopagebreak\newline
 \cs{PrintAllFontParameters}
 
-\cs{PrintFontParameters} prints the current step, scale, size, and baselineskip in this order in a comma\-/separated list of key = value pairs.
-If the current step is undefined (as explained for \cs{SetFontStep} in \S\ref{subsec:fontsize}), it will be left blank.
+\cs{PrintFontParameters} prints the current font step, scale, size, and baselineskip in this order in a comma\-/separated list of key = value pairs.
+If the current font step is undefined (as explained for \cs{SetFontStep} in \S\ref{subsec:fontsize}), it will be left blank.
 \cs{PrintAllFontParameters} prints the step, scale, size, and baselineskip of each font size command.
 
 \cs{PrintSampleText}\oarg{\meta{text}}

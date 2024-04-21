@@ -7,6 +7,13 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v1.2.1] - 2024-04-21
+
+### Changed
+- Improved the error message for `\SetFontStep*` when the current font step is
+  undefined.
+- Documentation improvements.
+
 ## [v1.2.0] - 2024-04-15
 
 ### Added

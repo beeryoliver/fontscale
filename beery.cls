@@ -4,13 +4,14 @@
 \NeedsTeXFormat{LaTeX2e}[2023-06-01]
 \ProvidesExplClass
   {beery}
-  {2024-04-15}
+  {2024-04-21}
   {}
   {}
 
 \RequirePackage { fix-cm }
 \LoadClass { article }
 \RequirePackage { fontscale }
+\fontscalesetup { musical }
 \RequirePackage [ list-final-separator = { ,~ and~ } ] { siunitx }
 \RequirePackage { mathtools }
 \RequirePackage [ shortcuts , allowbreakbefore ] { extdash }
@@ -179,7 +180,7 @@
 \NewDocumentCommand \KeepNextPar { s }
   {
     \par
-    \bool_if:NTF #1
+    \IfBooleanTF #1
       { \int_compare:nNnT { \prevgraf } = { 1 } { \nobreak \@afterheading } }
       { \nobreak \@afterheading }
   }

@@ -8,8 +8,8 @@
 \NeedsTeXFormat{LaTeX2e}[2022-06-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-04-15}
-  {1.2.0}
+  {2024-04-21}
+  {1.2.1}
   {A user interface for setting document font sizes}
 
 % The 2023-10-10 l3kernel update added many 'e'-variants.
@@ -213,11 +213,7 @@
     \msg_line_context: \c_space_tl
     are~ not~ in~ the~ correct~ order.~
     The~ magnitude~ of~ the~ font~ sizes~ should~ be~ ordered~ from~
-    \token_to_str:N \tiny \c_space_tl
-    to~
-    \token_to_str:N \normalsize \c_space_tl
-    to~
-    \token_to_str:N \Huge .
+    \iow_char:N \\tiny~ to~ \iow_char:N \\normalsize~ to~ \iow_char:N \\Huge .
   }
 \msg_new:nnn { fontscale } { font-baselineskips-out-of-order }
   {
@@ -225,11 +221,7 @@
     \msg_line_context: \c_space_tl
     are~ not~ in~ the~ correct~ order.~
     The~ magnitude~ of~ the~ font~ baselineskips~ should~ be~ ordered~ from~
-    \token_to_str:N \tiny \c_space_tl
-    to~
-    \token_to_str:N \normalsize \c_space_tl
-    to~
-    \token_to_str:N \Huge .
+    \iow_char:N \\tiny~ to~ \iow_char:N \\normalsize~ to~ \iow_char:N \\Huge .
   }
 \msg_new:nnn { fontscale } { font-step-out-of-bounds }
   {
@@ -237,6 +229,13 @@
     \msg_line_context: \c_space_tl
     must~ be~ an~ integer~ from~ -4~ to~ 5,~
     unless~ the~ choice~ of~ typographic~ scale~ is~ modular~ or~ musical.
+  }
+\msg_new:nnn { fontscale } { current-font-step-out-of-bounds }
+  {
+    \iow_char:N \\SetFontStep*~
+    \msg_line_context: \c_space_tl
+    could~ not~ calculate~ the~ new~ font~ step~ because~
+    the~ current~ font~ step~ is~ undefined.
   }
 
 % DEFINE KEYS
@@ -581,11 +580,10 @@
   {
     \__fontscale_keys_process_normalsize:
     \__fontscale_keys_process_other:
-    \__fontscale_keys_process_other_props:
+    \__fontscale_keys_process_props:
     \__fontscale_keys_process_check_order:
   }
-% Sets the size and baselineskip of \normalsize, stores them in a property
-% list, and uses \normalsize.
+% Sets the size and baselineskip of \normalsize and uses \normalsize.
 \cs_new_protected:Npn \__fontscale_keys_process_normalsize:
   {
     \quark_if_no_value:NTF \l__fontscale_normalsize_size_tl
@@ -624,90 +622,71 @@
           \l_fontscale_normalsize_baselineskip_skip
           { \l__fontscale_normalsize_baselineskip_tl }
       }
-    \prop_put:Nno \l_fontscale_normalsize_prop { size }
-      { \dim_use:N \l_fontscale_normalsize_size_dim }
-    \prop_put:Nno \l_fontscale_normalsize_prop { baselineskip }
-      { \skip_use:N \l_fontscale_normalsize_baselineskip_skip }
     \normalsize
   }
 % Sets the size, scale, and baselineskip of the other font size commands.
 % Issues a warning if the user sets both the scale and size keys for the same
 % font size command.
-\cs_new_protected:Npn \__fontscale_keys_process_other_classic_xpt:n #1
+\cs_new:Npn \__fontscale_keys_process_other_classic_xpt:n #1
   {
-    \dim_set:cn { l_fontscale_#1_size_dim }
+    \str_case:nn {#1}
       {
-        \str_case:nn {#1}
-          {
-            { tiny         } {  6pt }
-            { scriptsize   } {  7pt }
-            { footnotesize } {  8pt }
-            { small        } {  9pt }
-            { large        } { 11pt }
-            { Large        } { 12pt }
-            { LARGE        } { 14pt }
-            { huge         } { 16pt }
-            { Huge         } { 18pt }
-          }
+        { tiny         } {  6pt }
+        { scriptsize   } {  7pt }
+        { footnotesize } {  8pt }
+        { small        } {  9pt }
+        { large        } { 11pt }
+        { Large        } { 12pt }
+        { LARGE        } { 14pt }
+        { huge         } { 16pt }
+        { Huge         } { 18pt }
       }
   }
-\cs_new_protected:Npn \__fontscale_keys_process_other_classic_xipt:n #1
+\cs_new:Npn \__fontscale_keys_process_other_classic_xipt:n #1
   {
-    \dim_set:cn { l_fontscale_#1_size_dim }
+    \str_case:nn {#1}
       {
-        \str_case:nn {#1}
-          {
-            { tiny         } {  7pt }
-            { scriptsize   } {  8pt }
-            { footnotesize } {  9pt }
-            { small        } { 10pt }
-            { large        } { 12pt }
-            { Large        } { 14pt }
-            { LARGE        } { 16pt }
-            { huge         } { 18pt }
-            { Huge         } { 21pt }
-          }
+        { tiny         } {  7pt }
+        { scriptsize   } {  8pt }
+        { footnotesize } {  9pt }
+        { small        } { 10pt }
+        { large        } { 12pt }
+        { Large        } { 14pt }
+        { LARGE        } { 16pt }
+        { huge         } { 18pt }
+        { Huge         } { 21pt }
       }
   }
-\cs_new_protected:Npn \__fontscale_keys_process_other_classic_xiipt:n #1
+\cs_new:Npn \__fontscale_keys_process_other_classic_xiipt:n #1
   {
-    \dim_set:cn { l_fontscale_#1_size_dim }
+    \str_case:nn {#1}
       {
-        \str_case:nn {#1}
-          {
-            { tiny         } {  8pt }
-            { scriptsize   } {  9pt }
-            { footnotesize } { 10pt }
-            { small        } { 11pt }
-            { large        } { 14pt }
-            { Large        } { 16pt }
-            { LARGE        } { 18pt }
-            { huge         } { 21pt }
-            { Huge         } { 24pt }
-          }
+        { tiny         } {  8pt }
+        { scriptsize   } {  9pt }
+        { footnotesize } { 10pt }
+        { small        } { 11pt }
+        { large        } { 14pt }
+        { Large        } { 16pt }
+        { LARGE        } { 18pt }
+        { huge         } { 21pt }
+        { Huge         } { 24pt }
       }
   }
-\cs_new_protected:Npn \__fontscale_keys_process_other_modular:n #1
+\cs_new:Npn \__fontscale_keys_process_other_modular:n #1
   {
-    \dim_set:cn { l_fontscale_#1_size_dim }
+    \fp_to_dim:n
       {
-        \fp_to_dim:n
-          {
-            \l__fontscale_normalsize_size_fp * \l__fontscale_modular_ratio_fp
-            ^ \use:c { c_fontscale_#1_step_fp }
-          }
+        \l__fontscale_normalsize_size_fp * \l__fontscale_modular_ratio_fp
+        ^ \use:c { c_fontscale_#1_step_fp }
       }
   }
-\cs_new_protected:Npn \__fontscale_keys_process_other_musical:n #1
+\cs_new:Npn \__fontscale_keys_process_other_musical:n #1
   {
-    \dim_set:cn { l_fontscale_#1_size_dim }
+    \fp_to_dim:n
       {
-        \fp_to_dim:n
-          {
-            \l__fontscale_normalsize_size_fp * \l__fontscale_musical_ratio_fp
-            ^ ( \use:c { c_fontscale_#1_step_fp }
-            / \l__fontscale_musical_notes_fp )
-          }
+        \l__fontscale_normalsize_size_fp * \l__fontscale_musical_ratio_fp
+        ^ ( \use:c { c_fontscale_#1_step_fp }
+        / \l__fontscale_musical_notes_fp )
       }
   }
 \cs_new_protected:Npn \__fontscale_keys_process_other:
@@ -767,7 +746,9 @@
           }
         \prg_break:
       }
-    \prg_break:n { \__fontscale_keys_process_other_typographic_scale:n {#1} }
+    \dim_set:cn { l_fontscale_#1_size_dim }
+      { \__fontscale_keys_process_other_typographic_scale:n {#1} }
+    \prg_break:
     \prg_break_point:
     \fp_set:cn { l_fontscale_#1_scale_fp }
       { \use:c { l_fontscale_#1_size_dim } / \l__fontscale_normalsize_size_fp }
@@ -788,9 +769,9 @@
           { \use:c { l__fontscale_#1_baselineskip_tl } }
       }
   }
-% Puts the scale, size, and baselineskip of the other font size commands in
-% property lists.
-\cs_new_protected:Npn \__fontscale_keys_process_other_props:
+% Puts the scale, size, and baselineskip of each font size command in
+% property lists, except the scale of \normalsize.
+\cs_new_protected:Npn \__fontscale_keys_process_props:
   {
     \prop_put:Nne \l_fontscale_tiny_prop { scale }
       { \fp_use:N \l_fontscale_tiny_scale_fp }
@@ -819,6 +800,8 @@
       { \dim_use:N \l_fontscale_footnotesize_size_dim }
     \prop_put:Nno \l_fontscale_small_prop { size }
       { \dim_use:N \l_fontscale_small_size_dim }
+    \prop_put:Nno \l_fontscale_normalsize_prop { size }
+      { \dim_use:N \l_fontscale_normalsize_size_dim }
     \prop_put:Nno \l_fontscale_large_prop { size }
       { \dim_use:N \l_fontscale_large_size_dim }
     \prop_put:Nno \l_fontscale_Large_prop { size }
@@ -838,6 +821,8 @@
       { \skip_use:N \l_fontscale_footnotesize_baselineskip_skip }
     \prop_put:Nno \l_fontscale_small_prop { baselineskip }
       { \skip_use:N \l_fontscale_small_baselineskip_skip }
+    \prop_put:Nno \l_fontscale_normalsize_prop { baselineskip }
+      { \skip_use:N \l_fontscale_normalsize_baselineskip_skip }
     \prop_put:Nno \l_fontscale_large_prop { baselineskip }
       { \skip_use:N \l_fontscale_large_baselineskip_skip }
     \prop_put:Nno \l_fontscale_Large_prop { baselineskip }
@@ -1075,7 +1060,7 @@
   {
     \tl_set:Ne \l__fontscale_step_tl { \__fontscale_current_font_step: }
     \tl_if_empty:NTF \l__fontscale_step_tl
-      { \msg_error:nn { fontscale } { font-step-out-of-bounds } }
+      { \msg_error:nn { fontscale } { current-font-step-out-of-bounds } }
       { \__fontscale_add_font_step_aux:n { (#1) + \l__fontscale_step_tl } }
   }
 \cs_new_eq:NN \__fontscale_add_font_step_aux:n \__fontscale_set_font_step:n

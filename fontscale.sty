@@ -8,8 +8,8 @@
 \NeedsTeXFormat{LaTeX2e}[2022-06-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-04-21}
-  {1.2.1}
+  {2024-04-29}
+  {1.2.2}
   {A user interface for setting document font sizes}
 
 % The 2023-10-10 l3kernel update added many 'e'-variants.
@@ -25,7 +25,7 @@
     \msg_critical:nn { fontscale } { expl3-out-of-date }
   }
 
-% SOME VARIABLES
+% DECLARE FONT PARAMETERS
 
 \fp_const:Nn \c_fontscale_tiny_step_fp         { -4 }
 \fp_const:Nn \c_fontscale_scriptsize_step_fp   { -3 }
@@ -39,41 +39,6 @@
 \fp_const:Nn \c_fontscale_Huge_step_fp         {  5 }
 
 \fp_const:Nn \c_fontscale_normalsize_scale_fp { 1 }
-
-\tl_const:Nn \c__fontscale_names_tl
-  {
-    {tiny} {scriptsize} {footnotesize} {small} {normalsize}
-    {large} {Large} {LARGE} {huge} {Huge}
-  }
-\tl_const:Nn \c__fontscale_names_other_tl
-  {
-    {tiny} {scriptsize} {footnotesize} {small}
-    {large} {Large} {LARGE} {huge} {Huge}
-  }
-
-\prop_new:N \l_fontscale_tiny_prop
-\prop_new:N \l_fontscale_scriptsize_prop
-\prop_new:N \l_fontscale_footnotesize_prop
-\prop_new:N \l_fontscale_small_prop
-\prop_new:N \l_fontscale_normalsize_prop
-\prop_new:N \l_fontscale_large_prop
-\prop_new:N \l_fontscale_Large_prop
-\prop_new:N \l_fontscale_LARGE_prop
-\prop_new:N \l_fontscale_huge_prop
-\prop_new:N \l_fontscale_Huge_prop
-
-\prop_put:Nnn \l_fontscale_tiny_prop         { step } { -4 }
-\prop_put:Nnn \l_fontscale_scriptsize_prop   { step } { -3 }
-\prop_put:Nnn \l_fontscale_footnotesize_prop { step } { -2 }
-\prop_put:Nnn \l_fontscale_small_prop        { step } { -1 }
-\prop_put:Nnn \l_fontscale_normalsize_prop   { step } {  0 }
-\prop_put:Nnn \l_fontscale_large_prop        { step } {  1 }
-\prop_put:Nnn \l_fontscale_Large_prop        { step } {  2 }
-\prop_put:Nnn \l_fontscale_LARGE_prop        { step } {  3 }
-\prop_put:Nnn \l_fontscale_huge_prop         { step } {  4 }
-\prop_put:Nnn \l_fontscale_Huge_prop         { step } {  5 }
-
-\prop_put:Nnn \l_fontscale_normalsize_prop { scale } { 1 }
 
 \fp_new:N \l_fontscale_tiny_scale_fp
 \fp_new:N \l_fontscale_scriptsize_scale_fp
@@ -107,21 +72,41 @@
 \skip_new:N \l_fontscale_huge_baselineskip_skip
 \skip_new:N \l_fontscale_Huge_baselineskip_skip
 
-\str_new:N \l__fontscale_typographic_scale_str
+\prop_new:N \l_fontscale_tiny_prop
+\prop_new:N \l_fontscale_scriptsize_prop
+\prop_new:N \l_fontscale_footnotesize_prop
+\prop_new:N \l_fontscale_small_prop
+\prop_new:N \l_fontscale_normalsize_prop
+\prop_new:N \l_fontscale_large_prop
+\prop_new:N \l_fontscale_Large_prop
+\prop_new:N \l_fontscale_LARGE_prop
+\prop_new:N \l_fontscale_huge_prop
+\prop_new:N \l_fontscale_Huge_prop
 
-% Used in floating point expressions for speed.
-\fp_new:N \l__fontscale_normalsize_size_fp
-\fp_new:N \l__fontscale_musical_notes_fp
+\prop_put:Nnn \l_fontscale_tiny_prop         { step } { -4 }
+\prop_put:Nnn \l_fontscale_scriptsize_prop   { step } { -3 }
+\prop_put:Nnn \l_fontscale_footnotesize_prop { step } { -2 }
+\prop_put:Nnn \l_fontscale_small_prop        { step } { -1 }
+\prop_put:Nnn \l_fontscale_normalsize_prop   { step } {  0 }
+\prop_put:Nnn \l_fontscale_large_prop        { step } {  1 }
+\prop_put:Nnn \l_fontscale_Large_prop        { step } {  2 }
+\prop_put:Nnn \l_fontscale_LARGE_prop        { step } {  3 }
+\prop_put:Nnn \l_fontscale_huge_prop         { step } {  4 }
+\prop_put:Nnn \l_fontscale_Huge_prop         { step } {  5 }
 
-% Temporary variables
-\tl_new:N   \l__fontscale_step_tl
-\tl_new:N   \l__fontscale_scale_tl
-\dim_new:N  \l__fontscale_size_dim
-\skip_new:N \l__fontscale_baselineskip_skip
+\prop_put:Nnn \l_fontscale_normalsize_prop { scale } { 1 }
 
-% INITIAL FONT PARAMETERS
+% INITIALIZE FONT PARAMETERS
 
-\fp_set:Nn \l__fontscale_normalsize_size_fp { 10 }
+\fp_set:Nn \l_fontscale_tiny_scale_fp         { 0.6 }
+\fp_set:Nn \l_fontscale_scriptsize_scale_fp   { 0.7 }
+\fp_set:Nn \l_fontscale_footnotesize_scale_fp { 0.8 }
+\fp_set:Nn \l_fontscale_small_scale_fp        { 0.9 }
+\fp_set:Nn \l_fontscale_large_scale_fp        { 1.1 }
+\fp_set:Nn \l_fontscale_Large_scale_fp        { 1.2 }
+\fp_set:Nn \l_fontscale_LARGE_scale_fp        { 1.4 }
+\fp_set:Nn \l_fontscale_huge_scale_fp         { 1.6 }
+\fp_set:Nn \l_fontscale_Huge_scale_fp         { 1.8 }
 
 \dim_set:Nn \l_fontscale_tiny_size_dim         {  6pt }
 \dim_set:Nn \l_fontscale_scriptsize_size_dim   {  7pt }
@@ -133,16 +118,6 @@
 \dim_set:Nn \l_fontscale_LARGE_size_dim        { 14pt }
 \dim_set:Nn \l_fontscale_huge_size_dim         { 16pt }
 \dim_set:Nn \l_fontscale_Huge_size_dim         { 18pt }
-
-\fp_set:Nn \l_fontscale_tiny_scale_fp         { 0.6 }
-\fp_set:Nn \l_fontscale_scriptsize_scale_fp   { 0.7 }
-\fp_set:Nn \l_fontscale_footnotesize_scale_fp { 0.8 }
-\fp_set:Nn \l_fontscale_small_scale_fp        { 0.9 }
-\fp_set:Nn \l_fontscale_large_scale_fp        { 1.1 }
-\fp_set:Nn \l_fontscale_Large_scale_fp        { 1.2 }
-\fp_set:Nn \l_fontscale_LARGE_scale_fp        { 1.4 }
-\fp_set:Nn \l_fontscale_huge_scale_fp         { 1.6 }
-\fp_set:Nn \l_fontscale_Huge_scale_fp         { 1.8 }
 
 \skip_set:Nn \l_fontscale_tiny_baselineskip_skip         {  7.2pt }
 \skip_set:Nn \l_fontscale_scriptsize_baselineskip_skip   {  8.4pt }
@@ -187,21 +162,48 @@
 \prop_put:Nnn \l_fontscale_huge_prop         { baselineskip } { 19.2pt }
 \prop_put:Nnn \l_fontscale_Huge_prop         { baselineskip } { 21.6pt }
 
+% SOME VARIABLES
+
+% Used for mapping.
+\tl_const:Nn \c__fontscale_names_tl
+  {
+    {tiny} {scriptsize} {footnotesize} {small} {normalsize}
+    {large} {Large} {LARGE} {huge} {Huge}
+  }
+\tl_const:Nn \c__fontscale_names_other_tl
+  {
+    {tiny} {scriptsize} {footnotesize} {small}
+    {large} {Large} {LARGE} {huge} {Huge}
+  }
+
+% Used to speed up floating point calculations.
+\fp_new:N \l__fontscale_normalsize_size_fp
+\fp_set:Nn \l__fontscale_normalsize_size_fp
+  { \l_fontscale_normalsize_size_dim }
+\fp_new:N \l__fontscale_musical_notes_fp
+
+% Temporary variables
+\tl_new:N   \l__fontscale_step_tl
+\tl_new:N   \l__fontscale_scale_tl
+\dim_new:N  \l__fontscale_size_dim
+\skip_new:N \l__fontscale_baselineskip_skip
+
 % SOME HELPER FUNCTIONS
 
-% Sets a dimen or skip variable, supplying a default unit of pt.
-\cs_new_protected:Npn \__fontscale_dim_set_with_default_unit:Nn #1#2
+% Sets a dimen/skip variable from a dimen/skip expression, supplying a default
+% unit of pt.
+\cs_new_protected:Npn \__fontscale_dim_set_with_default_pt:Nn #1#2
   { \@defaultunits #1 = \dimexpr #2 pt \relax \relax \@nnil }
-\cs_generate_variant:Nn \__fontscale_dim_set_with_default_unit:Nn { c }
-\cs_new_protected:Npn \__fontscale_skip_set_with_default_unit:Nn #1#2
+\cs_generate_variant:Nn \__fontscale_dim_set_with_default_pt:Nn { c }
+\cs_new_protected:Npn \__fontscale_skip_set_with_default_pt:Nn #1#2
   { \@defaultunits #1 = \glueexpr #2 pt \relax \@nnil }
-\cs_generate_variant:Nn \__fontscale_skip_set_with_default_unit:Nn { c }
+\cs_generate_variant:Nn \__fontscale_skip_set_with_default_pt:Nn { c }
 
 % MESSAGES
 
 \msg_new:nnn { fontscale } { key-font-scale-ignored }
   {
-    Key~ #1 / scale~
+    Key~ '#1 / scale'~
     \msg_line_context: \c_space_tl
     ignored.~
     Setting~ the~ scale~ and~ size~ keys~ for~ the~ same~
@@ -213,7 +215,8 @@
     \msg_line_context: \c_space_tl
     are~ not~ in~ the~ correct~ order.~
     The~ magnitude~ of~ the~ font~ sizes~ should~ be~ ordered~ from~
-    \iow_char:N \\tiny~ to~ \iow_char:N \\normalsize~ to~ \iow_char:N \\Huge .
+    '\iow_char:N \\tiny'~ to~ '\iow_char:N \\normalsize'~ to~
+    '\iow_char:N \\Huge' .
   }
 \msg_new:nnn { fontscale } { font-baselineskips-out-of-order }
   {
@@ -221,24 +224,28 @@
     \msg_line_context: \c_space_tl
     are~ not~ in~ the~ correct~ order.~
     The~ magnitude~ of~ the~ font~ baselineskips~ should~ be~ ordered~ from~
-    \iow_char:N \\tiny~ to~ \iow_char:N \\normalsize~ to~ \iow_char:N \\Huge .
+    '\iow_char:N \\tiny'~ to~ '\iow_char:N \\normalsize'~ to~
+    '\iow_char:N \\Huge' .
   }
 \msg_new:nnn { fontscale } { font-step-out-of-bounds }
   {
     The~ font~ step~
     \msg_line_context: \c_space_tl
     must~ be~ an~ integer~ from~ -4~ to~ 5,~
-    unless~ the~ choice~ of~ typographic~ scale~ is~ modular~ or~ musical.
+    unless~ the~ choice~ key~ 'typographic-scale'~
+    is~ set~ to~ 'modular'~ or~ 'musical'.
   }
 \msg_new:nnn { fontscale } { current-font-step-out-of-bounds }
   {
-    \iow_char:N \\SetFontStep*~
+    '\iow_char:N \\SetFontStep*'~
     \msg_line_context: \c_space_tl
     could~ not~ calculate~ the~ new~ font~ step~ because~
     the~ current~ font~ step~ is~ undefined.
   }
 
 % DEFINE KEYS
+
+\str_new:N \l__fontscale_typographic_scale_str
 
 \keys_define:nn { fontscale }
   {
@@ -484,7 +491,7 @@
 
 % Pre-compiles the keys with their values at the end of the preamble. The keys
 % are pre-compiled by hand for speed.
-\cs_new_eq:NN \__fontscale_keys_precompile_preamble: \prg_do_nothing
+\cs_new_eq:NN \__fontscale_keys_precompile_preamble: \prg_do_nothing:
 \AddToHook { begindocument / before }
   { \__fontscale_keys_precompile_preamble_set: }
 \cs_new_protected:Npn \__fontscale_keys_precompile_preamble_set:
@@ -579,11 +586,12 @@
 \cs_new_protected:Npn \__fontscale_keys_process:
   {
     \__fontscale_keys_process_normalsize:
+    \normalsize
     \__fontscale_keys_process_other:
     \__fontscale_keys_process_props:
     \__fontscale_keys_process_check_order:
   }
-% Sets the size and baselineskip of \normalsize and uses \normalsize.
+% Sets the size and baselineskip of \normalsize.
 \cs_new_protected:Npn \__fontscale_keys_process_normalsize:
   {
     \quark_if_no_value:NTF \l__fontscale_normalsize_size_tl
@@ -601,7 +609,7 @@
           }
       }
       {
-        \__fontscale_dim_set_with_default_unit:Nn
+        \__fontscale_dim_set_with_default_pt:Nn
           \l_fontscale_normalsize_size_dim { \l__fontscale_normalsize_size_tl }
       }
     \fp_set:Nn \l__fontscale_normalsize_size_fp
@@ -618,11 +626,10 @@
           }
       }
       {
-        \__fontscale_skip_set_with_default_unit:Nn
+        \__fontscale_skip_set_with_default_pt:Nn
           \l_fontscale_normalsize_baselineskip_skip
           { \l__fontscale_normalsize_baselineskip_tl }
       }
-    \normalsize
   }
 % Sets the size, scale, and baselineskip of the other font size commands.
 % Issues a warning if the user sets both the scale and size keys for the same
@@ -728,7 +735,7 @@
   {
     \quark_if_no_value:cF { l__fontscale_#1_size_tl }
       {
-        \__fontscale_dim_set_with_default_unit:cn { l_fontscale_#1_size_dim }
+        \__fontscale_dim_set_with_default_pt:cn { l_fontscale_#1_size_dim }
           { \use:c { l__fontscale_#1_size_tl } }
         \quark_if_no_value:cF { l__fontscale_#1_scale_tl }
           { \msg_warning:nnn { fontscale } { key-font-scale-ignored } {#1} }
@@ -764,7 +771,7 @@
           }
       }
       {
-        \__fontscale_skip_set_with_default_unit:cn
+        \__fontscale_skip_set_with_default_pt:cn
           { l_fontscale_#1_baselineskip_skip }
           { \use:c { l__fontscale_#1_baselineskip_tl } }
       }
@@ -834,8 +841,8 @@
     \prop_put:Nno \l_fontscale_Huge_prop { baselineskip }
       { \skip_use:N \l_fontscale_Huge_baselineskip_skip }
   }
-% Issues a warning if the font sizes or font baselineskips are not in the
-% correct order.
+% Issues a warning if the font sizes or font baselineskips (ignoring the
+% stretch and shrink components) are not in the correct order.
 \cs_new_protected:Npn \__fontscale_keys_process_check_order:
   {
     \bool_if:NF \l__fontscale_ignore_order_bool
@@ -1094,14 +1101,14 @@
   }
 \cs_new_protected:Npn \__fontscale_set_font_size:n #1
   {
-    \__fontscale_dim_set_with_default_unit:Nn \l__fontscale_size_dim {#1}
+    \__fontscale_dim_set_with_default_pt:Nn \l__fontscale_size_dim {#1}
     \fontsize \l__fontscale_size_dim
       { \fp_to_dim:n { \f@size * \l__fontscale_baselineskip_size_ratio_fp } }
     \selectfont
   }
 \cs_new_protected:Npn \__fontscale_add_font_size:n #1
   {
-    \__fontscale_dim_set_with_default_unit:Nn \l__fontscale_size_dim {#1}
+    \__fontscale_dim_set_with_default_pt:Nn \l__fontscale_size_dim {#1}
     \dim_add:Nn \l__fontscale_size_dim { \f@size pt }
     \fontsize \l__fontscale_size_dim
       { \fp_to_dim:n { \f@size * \l__fontscale_baselineskip_size_ratio_fp } }
@@ -1121,8 +1128,8 @@
   { \__fontscale_set_font_size_baselineskip:nn {#1} {#2} }
 \cs_new_protected:Npn \__fontscale_set_font_size_baselineskip:nn #1#2
   {
-    \__fontscale_dim_set_with_default_unit:Nn \l__fontscale_size_dim {#1}
-    \__fontscale_skip_set_with_default_unit:Nn \l__fontscale_baselineskip_skip
+    \__fontscale_dim_set_with_default_pt:Nn \l__fontscale_size_dim {#1}
+    \__fontscale_skip_set_with_default_pt:Nn \l__fontscale_baselineskip_skip
       {#2}
     \fontsize \l__fontscale_size_dim \l__fontscale_baselineskip_skip
     \selectfont
@@ -1197,70 +1204,72 @@
 \NewDocumentCommand \PrintFontSizeCommand { } { \__fontscale_print_name: }
 \cs_new_protected:Npn \__fontscale_print_name:
   {
-    \dim_case:nnF { \f@size pt }
+    \dim_case:nn { \f@size pt }
       {
         { \l_fontscale_tiny_size_dim }
         {
-          \skip_if_eq:nnTF { \f@baselineskip }
+          \skip_if_eq:nnT { \f@baselineskip }
             { \l_fontscale_tiny_baselineskip_skip }
-            { \token_to_str:N \tiny } { UNDEFINED \@ }
+            { \token_to_str:N \tiny \prg_break: }
         }
         { \l_fontscale_scriptsize_size_dim }
         {
-          \skip_if_eq:nnTF { \f@baselineskip }
+          \skip_if_eq:nnT { \f@baselineskip }
             { \l_fontscale_scriptsize_baselineskip_skip }
-            { \token_to_str:N \scriptsize } { UNDEFINED \@ }
+            { \token_to_str:N \scriptsize \prg_break: }
         }
         { \l_fontscale_footnotesize_size_dim }
         {
-          \skip_if_eq:nnTF { \f@baselineskip }
+          \skip_if_eq:nnT { \f@baselineskip }
             { \l_fontscale_footnotesize_baselineskip_skip }
-            { \token_to_str:N \footnotesize } { UNDEFINED \@ }
+            { \token_to_str:N \footnotesize \prg_break: }
         }
         { \l_fontscale_small_size_dim }
         {
-          \skip_if_eq:nnTF { \f@baselineskip }
+          \skip_if_eq:nnT { \f@baselineskip }
             { \l_fontscale_small_baselineskip_skip }
-            { \token_to_str:N \small } { UNDEFINED \@ }
+            { \token_to_str:N \small \prg_break: }
         }
         { \l_fontscale_normalsize_size_dim }
         {
-          \skip_if_eq:nnTF { \f@baselineskip }
+          \skip_if_eq:nnT { \f@baselineskip }
             { \l_fontscale_normalsize_baselineskip_skip }
-            { \token_to_str:N \normalsize } { UNDEFINED \@ }
+            { \token_to_str:N \normalsize \prg_break: }
         }
         { \l_fontscale_large_size_dim }
         {
-          \skip_if_eq:nnTF { \f@baselineskip }
+          \skip_if_eq:nnT { \f@baselineskip }
             { \l_fontscale_large_baselineskip_skip }
-            { \token_to_str:N \large } { UNDEFINED \@ }
+            { \token_to_str:N \large \prg_break: }
         }
         { \l_fontscale_Large_size_dim }
         {
-          \skip_if_eq:nnTF { \f@baselineskip }
+          \skip_if_eq:nnT { \f@baselineskip }
             { \l_fontscale_Large_baselineskip_skip }
-            { \token_to_str:N \Large } { UNDEFINED \@ }
+            { \token_to_str:N \Large \prg_break: }
         }
         { \l_fontscale_LARGE_size_dim }
         {
-          \skip_if_eq:nnTF { \f@baselineskip }
+          \skip_if_eq:nnT { \f@baselineskip }
             { \l_fontscale_LARGE_baselineskip_skip }
-            { \token_to_str:N \LARGE \@ } { UNDEFINED \@ }
+            { \token_to_str:N \LARGE \@ \prg_break: }
         }
         { \l_fontscale_huge_size_dim }
         {
-          \skip_if_eq:nnTF { \f@baselineskip }
+          \skip_if_eq:nnT { \f@baselineskip }
             { \l_fontscale_huge_baselineskip_skip }
-            { \token_to_str:N \huge } { UNDEFINED \@ }
+            { \token_to_str:N \huge \prg_break: }
         }
         { \l_fontscale_Huge_size_dim }
         {
-          \skip_if_eq:nnTF { \f@baselineskip }
+          \skip_if_eq:nnT { \f@baselineskip }
             { \l_fontscale_Huge_baselineskip_skip }
-            { \token_to_str:N \Huge } { UNDEFINED \@ }
+            { \token_to_str:N \Huge \prg_break: }
         }
       }
-      { UNDEFINED \@ }
+    UNDEFINED \@
+    \prg_break:
+    \prg_break_point:
   }
 
 % TEXT PURIFY

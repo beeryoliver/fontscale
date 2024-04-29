@@ -13,7 +13,7 @@ A user interface for setting document font sizes
 
 Oliver Beery
 
-Version 1.2.1\quad{}21 April 2024
+Version 1.2.2\quad{}29 April 2024
 
 
 \section{Introduction}
@@ -285,7 +285,6 @@ For example, \cs{SetFontSize*}\marg{1} and \cs{SetFontSize*}\marg{-1pt} increase
 \KeepNextPar*
 
 Scales the current font size and the current font baselineskip by a factor of \meta{fp expr}.
-\cs{ScaleFont} resembles the \cs{scalefont} command provided by the \pkg{scalefnt} package, except that it uses floating point calculations and clears the stretch and shrink components of the font baselineskip.
 For example, if the current font size and font baselineskip are \qty{10}{pt} and \qty{12}{pt}, using \cs{ScaleFont}\marg{0.8} will reduce them proportionally to \qty{8}{pt} and \qty{9.6}{pt}.
 
 \cs{SetFontSizeBaselineskip}\marg{\meta{dim expr}}\marg{\meta{skip expr}}
@@ -321,11 +320,12 @@ The default \meta{text} is \enquote{The \texttt{fontscale} package: A user inter
 \cs{PrintFontSizeCommand}
 \KeepNextPar*
 
-\cs{PrintFontSizeCommand} tests whether the current font size and font baselineskip match that of any font size command.
+\cs{PrintFontSizeCommand} tests whether the current font size and the current font baselineskip match that of any font size command from \cs{tiny} to \cs{Huge}.
 If so, it prints the name of that font size command.
 If not, it instead prints \enquote{UNDEFINED\@}.
 One useful way of printing example text is by using
 \cs{PrintSampleText}\oarg{\cs{PrintFontSizeCommand}:\textvisiblespace{}\cs{PrintFontParameters}}.
+\vfill%manual
 
 \subsection
   {%
@@ -336,7 +336,8 @@ One useful way of printing example text is by using
 \label{subsec:fontscalesetup}
 
 \cs{fontscalesetup}\marg{\meta{keyval list}}
-\KeepNextPar*
+\nopagebreak\newline
+\Key{reset}[initial, preamble]
 
 Sets and processes the \pkg{fontscale} package keys and uses \cs{normalsize}.
 \cs{fontscalesetup} can be applied mid\-/document or locally within the current \TeX{} group.
@@ -351,7 +352,7 @@ The key \Key{reset}[preamble] sets all the keys to their values at the end of th
 
 This section is relevant to \LaTeX3 programmers.
 
-The user commands \cs{SetFontStep}, \cs{SetFontScale}, \cs{SetFontSize}, \cs{ScaleFont}, and \cs{SetFontSizeBaselineskip} are set up to work with \cs{text_purify:n}.
+The document commands \cs{SetFontStep}, \cs{SetFontScale}, \cs{SetFontSize}, \cs{ScaleFont}, and \cs{SetFontSizeBaselineskip} are set up to work with \cs{text_purify:n}.
 \cs{text_purify:n} will correctly remove these commands and their arguments.
 This includes the starred versions \cs{SetFontStep*}, \cs{SetFontScale*}, and \cs{SetFontSize*}.
 

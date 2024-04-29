@@ -7,6 +7,18 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v1.2.2] - 2024-04-29
+
+### Changed
+- Improved package messages when issuing errors and warnings.
+- Code improvements.
+
+### Fixed
+- The documentation no longer incorrectly compares `\ScaleFont` with
+  `\scalefont` from the `scalefnt` package.
+- The internal function for the key `reset=preamble` now correctly initializes
+  to `\prg_do_nothing:`.
+
 ## [v1.2.1] - 2024-04-21
 
 ### Changed

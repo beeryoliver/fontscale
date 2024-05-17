@@ -13,7 +13,7 @@ A user interface for setting document font sizes
 
 Oliver Beery
 
-Version 1.2.2\quad{}29 April 2024
+Version 1.3.0\quad{}17 May 2024
 
 
 \section{Introduction}
@@ -25,9 +25,9 @@ Version 1.2.2\quad{}29 April 2024
 \listheading{The \pkg{fontscale} package provides the following functionalities:}
 \begin{itemize}
   \item
-  Set document font sizes via a classic, modular, or musical typographic scale.
+  Set font sizes via a classic, modular, or musical typographic scale.
   \item
-  Set arbitrary scales, sizes, and baselineskips for the standard font size commands \cs{tiny}, \cs{scriptsize}, \cs{footnotesize}, \cs{small}, \cs{normalsize}, \cs{large}, \cs{Large}, \cs{LARGE}, \cs{huge}, and \cs{Huge}.
+  Set arbitrary sizes and baselineskips for the standard font size commands \cs{tiny}, \cs{scriptsize}, \cs{footnotesize}, \cs{small}, \cs{normalsize}, \cs{large}, \cs{Large}, \cs{LARGE}, \cs{huge}, and \cs{Huge}.
   \item
   Set the font size settings mid\-/document or within a local group.
   \item
@@ -46,7 +46,7 @@ Version 1.2.2\quad{}29 April 2024
 \label{subsec:loading}
 
 This package requires the 10 October 2023 \pkg{l3kernel} update.
-Since this update is fairly recent, you may need to ensure that your \LaTeX{} installation is up\-/to\-/date before using this package.
+You may need to ensure that your \LaTeX{} installation is up\-/to\-/date before using this package.
 
 This package lets the user set arbitrary font sizes.
 This works with most fonts produced today, but, for historical reasons, the default Computer Modern font is available only in a number of fixed sizes.
@@ -223,7 +223,7 @@ Caution: \cs{CurrentFontStep} will expand to nothing if the current font step is
 Internally, \cs{CurrentFontStep}, \cs{CurrentFontScale}, and \cs{CurrentFontSize} use the kernel command \cs{f@size}.
 \cs{CurrentFontSize} expands to \texttt{f@size pt}.
 \cs{CurrentFontBaselineskip} expands to the kernel command \cs{f@baselineskip}.
-Note that the low\-/level font command \cs{fontsize}\marg{\meta{dimen}}\marg{\meta{skip}} sets \cs{f@size} before expanding its second argument.
+Note that the low\-/level font command \cs{fontsize}\marg{\meta{dimen}}\marg{\meta{skip}} sets \cs{f@size} to the new font size before expanding its second argument.
 This means that \cs{CurrentFontStep}, \cs{CurrentFontScale}, and \cs{CurrentFontSize} may need to be first expanded if used in \meta{skip}.
 This package provides the command \cs{SetFontSizeBaselineskip} as an alternative to \cs{fontsize} + \cs{selectfont} that avoids this issue (\S\ref{subsec:fontsize}).
 
@@ -316,16 +316,16 @@ If the current font step is undefined (as explained for \cs{SetFontStep} in \S\r
 The starred version \cs{PrintSampleText*} reverses the sizing order.
 The \meta{text} can be changed via the optional argument, but cannot contain \cs{par} tokens.
 The default \meta{text} is \enquote{The \texttt{fontscale} package: A user interface for setting document font sizes}.
+One useful way of printing example text is by using
+\cs{PrintSampleText}\oarg{\cs{PrintFontSizeCommand}:\textvisiblespace{}\cs{PrintFontParameters}}.
 
 \cs{PrintFontSizeCommand}
 \KeepNextPar*
 
-\cs{PrintFontSizeCommand} tests whether the current font size and the current font baselineskip match that of any font size command from \cs{tiny} to \cs{Huge}.
-If so, it prints the name of that font size command.
+\cs{PrintFontSizeCommand} tests whether the current font size and the current font baselineskip match the font size and font baselineskip of any font size command from \cs{tiny} to \cs{Huge}.
+If so, it prints the name of that font size command, including the backslash character.
 If not, it instead prints \enquote{UNDEFINED\@}.
-One useful way of printing example text is by using
-\cs{PrintSampleText}\oarg{\cs{PrintFontSizeCommand}:\textvisiblespace{}\cs{PrintFontParameters}}.
-\vfill%manual
+\vfill\pagebreak%manual
 
 \subsection
   {%
@@ -336,11 +336,14 @@ One useful way of printing example text is by using
 \label{subsec:fontscalesetup}
 
 \cs{fontscalesetup}\marg{\meta{keyval list}}
-\nopagebreak\newline
-\Key{reset}[initial, preamble]
+\KeepNextPar*
 
-Sets and processes the \pkg{fontscale} package keys and uses \cs{normalsize}.
+Sets and processes the \pkg{fontscale} package keys and then uses \cs{normalsize}.
 \cs{fontscalesetup} can be applied mid\-/document or locally within the current \TeX{} group.
+
+\Key{reset}[initial, preamble]
+\KeepNextPar*
+
 The key \Key{reset} is also available.
 Its value must be either \texttt{initial} or \texttt{preamble}.
 The key \Key{reset}[initial] or just \Key{reset} sets all the keys to their initial values.

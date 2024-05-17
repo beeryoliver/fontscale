@@ -7,6 +7,20 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v1.3.0] - 2024-05-17
+
+### Added
+- `\fontscalesetup` now provides error checking for the keys `modular/ratio`,
+  `musical/ratio`, and `musical/notes`.
+- It is now documented that `\fontscalesetup` uses `\normalsize` after it
+  finishes processing the package keys.
+
+### Changed
+- The code now regularly uses `V`- and `v`-type arguments to get the value of a
+  variable.
+- The code now uses private `expl3` wrappers around the LaTeX2e commands
+  `\@setfontsize`, `\fontsize`, and `\selectfont`.
+
 ## [v1.2.2] - 2024-04-29
 
 ### Changed

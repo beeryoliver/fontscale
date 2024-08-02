@@ -1,71 +1,83 @@
-% Note: This documentclass is designed ONLY for the document 'fontscale-manual'. Compiled using LuaLaTeX.
+% Note: This class is designed ONLY for 'fontscale.tex'. Compiled with LuaTeX.
 
-% The 2023-06-01 LaTeX kernel update added the 'shipout' hook.
-\NeedsTeXFormat{LaTeX2e}[2023-06-01]
+% LaTeX2e version 2023-11-01 added \IfExplAtLeastTF.
+\NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplClass
   {beery}
-  {2024-04-21}
+  {2024-08-02}
   {}
   {}
 
-\RequirePackage { fix-cm }
 \LoadClass { article }
+
+\box_new:N \l__beery_tmp_box
+
 \RequirePackage { fontscale }
 \fontscalesetup { musical }
-\RequirePackage [ list-final-separator = { ,~ and~ } ] { siunitx }
+\RequirePackage { siunitx }
+\sisetup { list-final-separator = { ,~ and~ } , mode = match }
 \RequirePackage { mathtools }
 \RequirePackage [ shortcuts , allowbreakbefore ] { extdash }
 \RequirePackage { csquotes }
+\RequirePackage { lmodern }
 
 % CUSTOM MACROS
 
+\NewExpandableDocumentCommand \alphabet { } { abcdefghijklmnopqrstuvwxyz }
 \NewDocumentCommand \Key { m o o }
   {
+    \mode_leave_vertical:
     \group_begin:
       \ttfamily
-      \bool_case:nF
+      \IfNoValueTF {#3}
         {
-          {
-            \bool_lazy_and_p:nn
-              { \tl_if_novalue_p:n {#2} }
-              { \tl_if_novalue_p:n {#3} }
-          }
-          {#1}
-          {
-            \bool_lazy_and_p:nn
-              { ! \tl_if_novalue_p:n {#2} }
-              {   \tl_if_novalue_p:n {#3} }
-          }
-          { #1~ =~ #2 }
-          {
-            \bool_lazy_and_p:nn
-              { ! \tl_if_novalue_p:n {#2} }
-              { ! \tl_if_novalue_p:n {#3} }
-          }
-          { #1~ =~ #2 \hspace* { \fill } \makebox { initial~ =~ #3 } }
+          \IfNoValueTF {#2}
+            {#1}
+            { #1 $\,=\,$ \allowbreak #2 }
         }
-        { \errmessage { invalid } }
+        { #1 $\,=\,$ #2 \hspace* { \fill } \hbox:n { initial $\,=\,$ #3 } }
     \group_end:
   }
+\NewDocumentCommand \Value { m } { \texttt {#1} }
 \NewDocumentCommand \cmd { m } { \texttt { \token_to_str:N #1 } \@ }
 \NewDocumentCommand \cs { m } { \texttt { \token_to_str:c {#1} } \@ }
 \NewDocumentCommand \marg { m }
-  { \allowbreak \texttt { \c_left_brace_str #1 \c_right_brace_str } }
-\NewDocumentCommand \oarg { m } { \allowbreak \texttt { [ #1 ] } }
-\NewDocumentCommand \meta { m } { \texttt { \textlangle #1 \textrangle } }
+  {
+    \allowbreak
+    \texttt { \c_left_brace_str }
+    $\langle$
+    { \normalfont \itshape #1 }
+    $\rangle$
+    \texttt { \c_right_brace_str }
+  }
+\NewDocumentCommand \oarg { m }
+  {
+    \allowbreak
+    \texttt { [ }
+    $\langle$
+    { \normalfont \itshape #1 }
+    $\rangle$
+    \texttt { ] }
+  }
+\NewDocumentCommand \sarg { } { $\langle$ \texttt {*} $\rangle$ }
+\NewDocumentCommand \meta { m }
+  {
+    $\langle$
+    { \normalfont \itshape #1 }
+    $\rangle$
+  }
 \NewDocumentCommand \cls { m } { \textsf {#1} }
 \NewDocumentCommand \env { m } { \texttt {#1} }
 \NewDocumentCommand \pkg { m } { \textsf {#1} }
-\NewDocumentCommand \filex { m } { \texttt {#1} \@ }
 \NewDocumentCommand \latin { m } { \textit {#1} }
 
 % PAGE STYLE
 
-\hbox_set:Nn \l_tmpa_box { abcdefghijklmnopqrstuvwxyz }
-\dim_const:Nn \c_beery_alphabet_dim { \box_wd:N \l_tmpa_box }
+\hbox_set:Nn \l__beery_tmp_box { abcdefghijklmnopqrstuvwxyz }
+\dim_const:Nn \c_beery_alphabet_dim { \box_wd:N \l__beery_tmp_box }
+\dim_log:N \c_beery_alphabet_dim
 
-\dim_const:Nn \c_beery_big_dim
-  { \fp_to_dim:n { \l_fontscale_normalsize_size_dim * 10 / 7 } }
+\dim_const:Nn \c_beery_big_dim { \l_fontscale_normalsize_baselineskip_skip }
 \dim_const:Nn \c_beery_medium_dim { \c_beery_big_dim / 2 }
 \dim_const:Nn \c_beery_small_dim  { \c_beery_big_dim / 4 }
 \skip_const:Nn \c_beery_big_skip
@@ -85,12 +97,15 @@
 
 \skip_set:Nn \topskip { \l_fontscale_normalsize_size_dim }
 \skip_set_eq:NN \splittopskip \topskip
-\RequirePackage
-  [
-      letterpaper
-    , textwidth = \dim_eval:n { \fp_use:N \c_e_fp \c_beery_alphabet_dim }
+\RequirePackage { geometry }
+\geometry
+  {
+      a4paper
+    , textwidth =
+        \dim_eval:n { \fp_to_dim:n { \c_e_fp * \c_beery_alphabet_dim } }
     , textheight =
-        \dim_eval:n { \fp_eval:n { \c_e_fp * 1.6180 } \c_beery_alphabet_dim }
+        \dim_eval:n
+          { \fp_to_dim:n { 1.6180 * \c_e_fp * \c_beery_alphabet_dim } }
     , heightrounded
     , centering
     , headheight = \l_fontscale_footnotesize_baselineskip_skip
@@ -98,8 +113,7 @@
     , footskip =
         \dim_eval:n
           { \c_beery_big_dim + \l_fontscale_footnotesize_baselineskip_skip }
-  ]
-  { geometry }
+  }
 
 \RequirePackage { fancyhdr }
 \pagestyle { fancy }
@@ -111,14 +125,21 @@
 % PARAGRAPH STYLE
 
 \nonfrenchspacing
-\linespread { \fp_eval:n { 25 / 21 } }
+\linespread { 1 }
 \RequirePackage [ skip = \c_beery_medium_skip ] { parskip }
 \RequirePackage [ raggedrightboxes ] { ragged2e }
 \skip_set:Nn \RaggedRightRightskip { 0pt plus 0.5 \linewidth }
+\dim_zero:N \RaggedRightParindent
+\dim_set_eq:NN \JustifyingParindent \RaggedRightParindent
 \RaggedRight
+\int_set:Nn \pretolerance { -1 }
+\int_set:Nn \tolerance { 200 }
+\dim_zero:N \emergencystretch
 \int_set:Nn \widowpenalty { 10000 }
 \int_set_eq:NN \clubpenalty \widowpenalty
 \int_set_eq:NN \displaywidowpenalty \widowpenalty
+\int_set:Nn \hyphenpenalty { 99 }
+\int_set_eq:NN \exhyphenpenalty \hyphenpenalty
 
 % HEADINGS, TABLE OF CONTENTS
 
@@ -129,9 +150,9 @@
 \titlespacing* \section % section
   { 0pt } % indent
   {
-    \fp_eval:n { 4 / 3 } \c_beery_medium_dim
-    plus  \fp_eval:n { 1 / 2 * 4 } \c_beery_medium_dim
-    minus \fp_eval:n { 1 / 3 / 4 } \c_beery_medium_dim
+    \c_beery_big_dim
+    plus  \fp_eval:n { 1 / 2 * 4 } \c_beery_big_dim
+    minus \fp_eval:n { 1 / 3 / 4 } \c_beery_big_dim
   } % before
   { \c_beery_medium_skip } % after
 \titlespacing* \subsection
@@ -146,15 +167,15 @@
 \titleformat \section % section
   [ block ] % shape
   { \raggedright \large \bfseries } % format
-  { \thesection . } % label
-  { 0.5em } % the horizontal separation between label and title body
+  { \thesection } % label
+  { 1em } % the horizontal separation between label and title body
   { } % before code
   { } % after code
 \titleformat \subsection
   [ block ]
   { \raggedright \normalsize \bfseries }
-  { \thesubsection . }
-  { 0.5em }
+  { \thesubsection }
+  { 1em }
   { }
   { }
 
@@ -215,7 +236,10 @@
 \coffin_new:N \l__beery_footnote_coffin
 % 1.2 = baselineskip-size-ratio
 \dim_const:Nn \c_beery_footnote_baselineheight_dim
-  { \fp_eval:n { 1.2 * \f@linespread - 1 } \l_fontscale_footnotesize_size_dim }
+  {
+    \fp_to_dim:n
+      { ( 1.2 * \f@linespread - 1 ) * \l_fontscale_footnotesize_size_dim }
+  }
 \RenewDocumentCommand \@makefntext { +m }
   {
     \vcoffin_set:Nnn \l__beery_footnote_coffin { \textwidth }
@@ -224,8 +248,10 @@
           {
             \dim_set:Nn \leftmargin
               {
-                \fp_eval:n { ( 1 - \l_fontscale_footnotesize_scale_fp ) / 2 }
-                \textwidth
+                \fp_to_dim:n
+                  {
+                    ( 1 - \l_fontscale_footnotesize_scale_fp ) / 2 * \textwidth
+                  }
               }
             \dim_set_eq:NN \rightmargin \leftmargin
             \dim_set:Nn \labelsep { 0.5em }
@@ -242,4 +268,5 @@
 
 \AddToHook { shipout / lastpage } { \label { LastPage } }
 \RequirePackage { xurl }
-\RequirePackage [ bookmarksnumbered , hidelinks , linktoc = page ] { hyperref }
+\RequirePackage { hyperref }
+\hypersetup { bookmarksnumbered , hidelinks , linktoc = page }

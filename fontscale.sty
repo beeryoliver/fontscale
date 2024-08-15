@@ -8,8 +8,8 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-08-02}
-  {2.0.0}
+  {2024-08-12}
+  {2.1.0}
   {A flexible interface for setting font sizes}
 
 % l3kernel version 2023-10-10 added many 'e'-variants.
@@ -117,6 +117,7 @@
 
 % Scratch variables
 \tl_new:N  \l__fontscale_tmp_tl
+\str_new:N \l__fontscale_tmp_str
 \dim_new:N \l__fontscale_tmp_dim
 \fp_new:N  \l__fontscale_tmp_fp
 
@@ -284,7 +285,8 @@
     The~ font~ step~
     \msg_line_context: \c_space_tl
     must~ equal~ an~ integer~ from~ -4~ to~ 5,~
-    unless~ the~ value~ of~ the~ key~ 'typographic-scale'~ is~ 'musical'.
+    unless~ the~ value~ of~ the~ key~ 'typographic-scale'~ is~ 'musical'.~
+    \msg_see_documentation_text:n { fontscale }
   }
 \msg_new:nnn { fontscale } { current-font-step-out-of-bounds }
   {
@@ -940,6 +942,65 @@
   { \__fontscale_baselineskip: }
 \cs_new:Npn \__fontscale_baselineskip: { \f@baselineskip }
 
+\NewExpandableDocumentCommand \CurrentFontSizeCommand { }
+  { \__fontscale_name: }
+\cs_new:Npn \__fontscale_name:
+  {
+    \dim_case:nn { \f@size pt }
+      {
+        { \l_fontscale_tiny_size_dim }
+        {
+          \skip_if_eq:nnT { \l_fontscale_tiny_baselineskip_skip }
+            { \f@baselineskip } { tiny }
+        }
+        { \l_fontscale_scriptsize_size_dim }
+        {
+          \skip_if_eq:nnT { \l_fontscale_scriptsize_baselineskip_skip }
+            { \f@baselineskip } { scriptsize }
+        }
+        { \l_fontscale_footnotesize_size_dim }
+        {
+          \skip_if_eq:nnT { \l_fontscale_footnotesize_baselineskip_skip }
+            { \f@baselineskip } { footnotesize }
+        }
+        { \l_fontscale_small_size_dim }
+        {
+          \skip_if_eq:nnT { \l_fontscale_small_baselineskip_skip }
+            { \f@baselineskip } { small }
+        }
+        { \l_fontscale_normalsize_size_dim }
+        {
+          \skip_if_eq:nnT { \l_fontscale_normalsize_baselineskip_skip }
+            { \f@baselineskip } { normalsize }
+        }
+        { \l_fontscale_large_size_dim }
+        {
+          \skip_if_eq:nnT { \l_fontscale_large_baselineskip_skip }
+            { \f@baselineskip } { large }
+        }
+        { \l_fontscale_Large_size_dim }
+        {
+          \skip_if_eq:nnT { \l_fontscale_Large_baselineskip_skip }
+            { \f@baselineskip } { Large }
+        }
+        { \l_fontscale_LARGE_size_dim }
+        {
+          \skip_if_eq:nnT { \l_fontscale_LARGE_baselineskip_skip }
+            { \f@baselineskip } { LARGE }
+        }
+        { \l_fontscale_huge_size_dim }
+        {
+          \skip_if_eq:nnT { \l_fontscale_huge_baselineskip_skip }
+            { \f@baselineskip } { huge }
+        }
+        { \l_fontscale_Huge_size_dim }
+        {
+          \skip_if_eq:nnT { \l_fontscale_Huge_baselineskip_skip }
+            { \f@baselineskip } { Huge }
+        }
+      }
+  }
+
 \NewDocumentCommand \SetFontStep { s m }
   {
     \mode_if_math:TF
@@ -1204,72 +1265,10 @@
   }
 \cs_new_protected:Npn \__fontscale_print_name:
   {
-    \dim_case:nn { \f@size pt }
-      {
-        { \l_fontscale_tiny_size_dim }
-        {
-          \skip_if_eq:nnT { \f@baselineskip }
-            { \l_fontscale_tiny_baselineskip_skip }
-            { \token_to_str:N \tiny \prg_break: }
-        }
-        { \l_fontscale_scriptsize_size_dim }
-        {
-          \skip_if_eq:nnT { \f@baselineskip }
-            { \l_fontscale_scriptsize_baselineskip_skip }
-            { \token_to_str:N \scriptsize \prg_break: }
-        }
-        { \l_fontscale_footnotesize_size_dim }
-        {
-          \skip_if_eq:nnT { \f@baselineskip }
-            { \l_fontscale_footnotesize_baselineskip_skip }
-            { \token_to_str:N \footnotesize \prg_break: }
-        }
-        { \l_fontscale_small_size_dim }
-        {
-          \skip_if_eq:nnT { \f@baselineskip }
-            { \l_fontscale_small_baselineskip_skip }
-            { \token_to_str:N \small \prg_break: }
-        }
-        { \l_fontscale_normalsize_size_dim }
-        {
-          \skip_if_eq:nnT { \f@baselineskip }
-            { \l_fontscale_normalsize_baselineskip_skip }
-            { \token_to_str:N \normalsize \prg_break: }
-        }
-        { \l_fontscale_large_size_dim }
-        {
-          \skip_if_eq:nnT { \f@baselineskip }
-            { \l_fontscale_large_baselineskip_skip }
-            { \token_to_str:N \large \prg_break: }
-        }
-        { \l_fontscale_Large_size_dim }
-        {
-          \skip_if_eq:nnT { \f@baselineskip }
-            { \l_fontscale_Large_baselineskip_skip }
-            { \token_to_str:N \Large \prg_break: }
-        }
-        { \l_fontscale_LARGE_size_dim }
-        {
-          \skip_if_eq:nnT { \f@baselineskip }
-            { \l_fontscale_LARGE_baselineskip_skip }
-            { \token_to_str:N \LARGE \@ \prg_break: }
-        }
-        { \l_fontscale_huge_size_dim }
-        {
-          \skip_if_eq:nnT { \f@baselineskip }
-            { \l_fontscale_huge_baselineskip_skip }
-            { \token_to_str:N \huge \prg_break: }
-        }
-        { \l_fontscale_Huge_size_dim }
-        {
-          \skip_if_eq:nnT { \f@baselineskip }
-            { \l_fontscale_Huge_baselineskip_skip }
-            { \token_to_str:N \Huge \prg_break: }
-        }
-      }
-    \token_to_str:N \undefined
-    \prg_break:
-    \prg_break_point:
+    \str_set:Ne \l__fontscale_tmp_str { \__fontscale_name: }
+    \str_if_empty:NTF \l__fontscale_tmp_str
+      { \token_to_str:N \undefined }
+      { \c_backslash_str \l__fontscale_tmp_str \@ }
   }
 
 % TEXT PURIFY

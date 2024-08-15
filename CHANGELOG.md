@@ -7,6 +7,14 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v2.1.0] - 2024-08-12
+
+### Changed
+- Documentation improvements.
+
+### Added
+- `\CurrentFontSizeCommand`
+
 ## [v2.0.0] - 2024-08-02
 
 ### Changed

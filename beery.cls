@@ -4,7 +4,7 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplClass
   {beery}
-  {2024-08-02}
+  {2024-08-12}
   {}
   {}
 
@@ -23,7 +23,8 @@
 
 % CUSTOM MACROS
 
-\NewExpandableDocumentCommand \alphabet { } { abcdefghijklmnopqrstuvwxyz }
+\tl_const:Nn \c_beery_alphabet_tl { abcdefghijklmnopqrstuvwxyz }
+\NewExpandableDocumentCommand \alphabet { } { \c_beery_alphabet_tl }
 \NewDocumentCommand \Key { m o o }
   {
     \mode_leave_vertical:
@@ -73,7 +74,7 @@
 
 % PAGE STYLE
 
-\hbox_set:Nn \l__beery_tmp_box { abcdefghijklmnopqrstuvwxyz }
+\hbox_set:Nn \l__beery_tmp_box { \c_beery_alphabet_tl }
 \dim_const:Nn \c_beery_alphabet_dim { \box_wd:N \l__beery_tmp_box }
 \dim_log:N \c_beery_alphabet_dim
 
@@ -126,7 +127,8 @@
 
 \nonfrenchspacing
 \linespread { 1 }
-\RequirePackage [ skip = \c_beery_medium_skip ] { parskip }
+\skip_set_eq:NN \parskip \c_beery_medium_skip
+\dim_zero:N \parindent
 \RequirePackage [ raggedrightboxes ] { ragged2e }
 \skip_set:Nn \RaggedRightRightskip { 0pt plus 0.5 \linewidth }
 \dim_zero:N \RaggedRightParindent
@@ -150,19 +152,21 @@
 \titlespacing* \section % section
   { 0pt } % indent
   {
-    \c_beery_big_dim
+    - \parskip
+    + \c_beery_big_dim
     plus  \fp_eval:n { 1 / 2 * 4 } \c_beery_big_dim
     minus \fp_eval:n { 1 / 3 / 4 } \c_beery_big_dim
   } % before
-  { \c_beery_medium_skip } % after
+  { - \parskip + \c_beery_medium_skip } % after
 \titlespacing* \subsection
   { 0pt }
   {
-    \fp_eval:n { 4 / 3 } \c_beery_medium_dim
+    - \parskip
+    + \fp_eval:n { 4 / 3 } \c_beery_medium_dim
     plus  \fp_eval:n { 1 / 2 * 4 } \c_beery_medium_dim
     minus \fp_eval:n { 1 / 3 / 4 } \c_beery_medium_dim
   }
-  { \c_beery_medium_skip }
+  { - \parskip + \c_beery_medium_skip }
 
 \titleformat \section % section
   [ block ] % shape
@@ -202,7 +206,10 @@
   {
     \par
     \IfBooleanTF #1
-      { \int_compare:nNnT { \prevgraf } = { 1 } { \nobreak \@afterheading } }
+      {
+        \int_compare:nNnT { \prevgraf } = { 1 }
+          { \nobreak \@afterheading }
+      }
       { \nobreak \@afterheading }
   }
 \NewDocumentCommand \listheading { m }
@@ -210,7 +217,8 @@
     \par
     #1
     \par
-    \int_compare:nNnT { \prevgraf } = { 1 } { \nobreak \@afterheading }
+    \int_compare:nNnT { \prevgraf } = { 1 }
+      { \nobreak \@afterheading }
     \vspace { \skip_eval:n { \c_beery_small_skip - \parskip } }
   }
 

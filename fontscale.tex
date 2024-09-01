@@ -14,7 +14,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 2.1.0\quad{}12 August 2024
+Version 2.2.0\quad{}29 August 2024
 
 
 \section{Introduction}
@@ -182,7 +182,7 @@ The font baselineskips of the font size commands from \cs{tiny} to \cs{Huge} are
 
 Sets the font baselineskip of each font size command from \cs{tiny} to \cs{Huge} equal to its font size \texttimes{} the result of computing the \meta{floating point expression}.
 Sets the font baselineskip set by \cs{SetFontStep}, \cs{SetFontScale}, and \cs{SetFontSize} (\S\ref{subsec:fontsize}) equal to the new font size \texttimes{} the result of computing the \meta{floating point expression}.
-The font baselineskip must be greater than or equal to the font size.
+The value of this key must be at least \num{1}.
 
 
 \subsection{Overwriting the previous keys}
@@ -235,7 +235,6 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 Sets and processes the \pkg{fontscale} package keys (\S\ref{sec:keys}) in \meta{key\-/value list} and then uses \cs{normalsize}.
 Adding the optional star first resets all the \pkg{fontscale} package keys to their initial values.
-The order of the keys in \meta{key\-/value list} does not matter.
 Can be used mid\-/document.
 The effect is local to the current group.
 Does nothing, except issue a warning, if used in math mode.
@@ -332,6 +331,18 @@ The font baselineskip must be greater than or equal to the font size.
 Does nothing, except issue a warning, if used in math mode.
 Can be used as an alternative to \cs{fontsize} + \cs{selectfont} as discussed in \S\ref{subsec:expandable}.
 
+\subsection{Setting only the font baselineskip}
+\label{subsec:setfontbaselineskip}
+
+\cs{SetFontBaselineskip} \sarg{} \marg{skip expression}
+\KeepNextPar*
+
+Sets the font baselineskip to the value of \meta{skip expression}, appending a default unit of \unit{pt}.
+Adding the optional star instead increases the current font baselineskip by the result of \meta{skip expression}, appending a default unit of \unit{pt}.
+The font baselineskip must be greater than or equal to the font size.
+Does not change the font size.
+Does nothing, except issue a warning, if used in math mode.
+
 \subsection{Testing and debugging}
 \label{subsec:debug}
 
@@ -380,7 +391,7 @@ This section documents the \pkg{expl3} programming support provided by the \pkg{
   }
 \label{subsec:textpurify}
 
-\cs{text_purify:n} will correctly remove the formatting commands defined by this package, including \cs{fontscalesetup} and the commands documented in \S\ref{subsec:fontsize}.
+\cs{text_purify:n} will correctly remove the formatting commands defined by this package, including the commands documented in \S\ref{subsec:fontscalesetup}, \S\ref{subsec:fontsize}, and \S\ref{subsec:setfontbaselineskip}.
 
 \subsection{Public functions and variables}
 \label{subsec:publicexpl3}

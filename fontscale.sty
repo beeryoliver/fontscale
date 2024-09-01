@@ -8,8 +8,8 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-08-12}
-  {2.1.0}
+  {2024-08-29}
+  {2.2.0}
   {A flexible interface for setting font sizes}
 
 % l3kernel version 2023-10-10 added many 'e'-variants.
@@ -116,20 +116,32 @@
 \fp_new:N \l__fontscale_musical_notes_fp
 
 % Scratch variables
-\tl_new:N  \l__fontscale_tmp_tl
-\str_new:N \l__fontscale_tmp_str
-\dim_new:N \l__fontscale_tmp_dim
-\fp_new:N  \l__fontscale_tmp_fp
+\tl_new:N   \l__fontscale_tmp_tl
+\str_new:N  \l__fontscale_tmp_str
+\dim_new:N  \l__fontscale_tmp_dim
+\skip_new:N \l__fontscale_tmp_skip
+\fp_new:N   \l__fontscale_tmp_fp
 
-% SOME HELPER FUNCTIONS
+% SOME FUNCTIONS
 
+% Variants of l3kernel functions
+\cs_generate_variant:Nn \msg_error:nnnnn { nnVV , nnvv }
+\cs_generate_variant:Nn \msg_error:nnnn { nnv , nne }
 % Sets a dimen/skip variable from a dimen/skip expression, appending a default
-% unit of pt.
+% unit of pt. This also removes extra tokens.
 \cs_new_protected:Npn \__fontscale_dim_set_default_pt:Nn #1#2
-  { \@defaultunits #1 = \dimexpr #2 pt \relax \relax \@nnil }
+  {
+    \afterassignment \use_none_delimit_by_q_stop:w
+      #1 = \dimexpr #2 pt \relax \relax
+    \q_stop
+  }
 \cs_generate_variant:Nn \__fontscale_dim_set_default_pt:Nn { c }
 \cs_new_protected:Npn \__fontscale_skip_set_default_pt:Nn #1#2
-  { \@defaultunits #1 = \glueexpr #2 pt \relax \@nnil }
+  {
+    \afterassignment \use_none_delimit_by_q_stop:w
+      #1 = \glueexpr #2 pt \relax
+    \q_stop
+  }
 \cs_generate_variant:Nn \__fontscale_skip_set_default_pt:Nn { c }
 % Similar to \@setfontsize. Used to define \tiny to \Huge. Need \dim_use:N for
 % compatibility with the microtype package.
@@ -160,13 +172,19 @@
       {
         \dim_compare:nNnTF \l__fontscale_fontsize_skip <
           \l__fontscale_fontsize_dim
-          { \msg_error:nn { fontscale } { font-baselineskip-out-of-bounds } }
+          {
+            \msg_error:nnVV { fontscale } { font-baselineskip-out-of-bounds }
+              \l__fontscale_fontsize_skip \l__fontscale_fontsize_dim
+          }
           {
             \fontsize \l__fontscale_fontsize_dim \l__fontscale_fontsize_skip
             \selectfont
           }
       }
-      { \msg_error:nn { fontscale } { font-size-out-of-bounds } }
+      {
+        \msg_error:nnV { fontscale } { font-size-out-of-bounds }
+          \l__fontscale_fontsize_dim
+      }
   }
 % Similar to the above function, except that it sets the font baselineskip
 % equal to the new font size times the baselineskip-size-ratio.
@@ -185,116 +203,98 @@
           }
         \selectfont
       }
-      { \msg_error:nn { fontscale } { font-size-out-of-bounds } }
+      {
+        \msg_error:nnV { fontscale } { font-size-out-of-bounds }
+          \l__fontscale_fontsize_dim
+      }
   }
 
 % MESSAGES
 
 \msg_new:nnn { fontscale } { key-baselineskip-size-ratio-out-of-bounds }
   {
+    Invalid~ value~ '#1'~ \msg_line_context:. \\
     The~ value~ of~ the~ key~ 'baselineskip-size-ratio'~
-    \msg_line_context: \c_space_tl
     must~ be~ at~ least~ 1.
   }
 \msg_new:nnn { fontscale } { key-musical-base-out-of-bounds }
   {
+    Invalid~ value~ '#1'~ \msg_line_context:. \\
     The~ value~ of~ the~ key~ 'musical / base'~
-    \msg_line_context: \c_space_tl
     must~ be~ a~ positive~ length.
   }
 \msg_new:nnn { fontscale } { key-musical-ratio-out-of-bounds }
   {
+    Invalid~ value~ '#1'~ \msg_line_context:. \\
     The~ value~ of~ the~ key~ 'musical / ratio'~
-    \msg_line_context: \c_space_tl
     must~ be~ greater~ than~ 1.
   }
 \msg_new:nnn { fontscale } { key-musical-notes-out-of-bounds }
   {
+    Invalid~ value~ '#1'~ \msg_line_context:. \\
     The~ value~ of~ the~ key~ 'musical / notes'~
-    \msg_line_context: \c_space_tl
     must~ be~ a~ positive~ integer.
   }
 \msg_new:nnn { fontscale } { key-font-scale-out-of-bounds }
   {
-    The~ value~ of~ the~ key~ '#1 / scale'~
-    \msg_line_context: \c_space_tl
+    Invalid~ value~ '#1'~ \msg_line_context:. \\
+    The~ value~ of~ the~ key~ '#2 / scale'~
     must~ be~ positive.
   }
 \msg_new:nnn { fontscale } { key-font-size-out-of-bounds }
   {
-    The~ value~ of~ the~ key~ '#1 / size'~
-    \msg_line_context: \c_space_tl
+    Invalid~ value~ '#1'~ \msg_line_context:. \\
+    The~ value~ of~ the~ key~ '#2 / size'~
     must~ be~ a~ positive~ length.
   }
 \msg_new:nnn { fontscale } { key-font-scale-overwritten }
   {
     The~ font~ size~ set~ by~ the~ key~ '#1 / scale'~
-    has~ been~ overwritten~ by~ the~ key~ '#1 / size'~
-    \msg_line_context:.
+    has~ been~ overwritten~ by~ the~ key~ '#1 / size'~ \msg_line_context:.
   }
 \msg_new:nnn { fontscale } { key-font-baselineskip-out-of-bounds }
   {
-    The~ value~ of~ the~ key~ '#1 / baselineskip'~
-    \msg_line_context: \c_space_tl
+    Invalid~ value~ '#1'~ \msg_line_context:. \\
+    The~ value~ of~ the~ key~ '#3 / baselineskip'~
     must~ be~ greater~ than~ or~ equal~ to~
-    the~ font~ size~ of~ '\iow_char:N \\#1'.
+    the~ font~ size~ of~ \iow_char:N \\#3~ '#2'.
   }
-\msg_new:nnn { fontscale } { font-sizes-out-of-order }
+\msg_new:nnn { fontscale } { key-font-sizes-out-of-order }
   {
     The~ font~ sizes~
-    \msg_line_context: \c_space_tl
-    are~ not~ in~ the~ correct~ order.~
+    are~ not~ in~ the~ correct~ order~ \msg_line_context:. \\
     The~ lengths~ of~ the~ font~ sizes~ should~ be~ ordered~ from~
-    '\iow_char:N \\tiny'~ to~ '\iow_char:N \\Huge'.
+    \iow_char:N \\tiny~ to~ \iow_char:N \\Huge.
   }
-\msg_new:nnn { fontscale } { font-baselineskips-out-of-order }
+\msg_new:nnn { fontscale } { key-font-baselineskips-out-of-order }
   {
     The~ font~ baselineskips~
-    \msg_line_context: \c_space_tl
-    are~ not~ in~ the~ correct~ order.~
+    are~ not~ in~ the~ correct~ order~ \msg_line_context:. \\
     The~ lengths~ of~ the~ font~ baselineskips~ should~ be~ ordered~ from~
-    '\iow_char:N \\tiny'~ to~ '\iow_char:N \\Huge'.
+    \iow_char:N \\tiny~ to~ \iow_char:N \\Huge.
   }
 
 \msg_new:nnn { fontscale } { math-mode-warning }
-  {
-    '#1'~
-    \msg_line_context: \c_space_tl
-    does~ nothing~ if~ used~ in~ math~ mode.
-  }
+  { '#1'~ does~ nothing~ if~ used~ in~ math~ mode~ \msg_line_context:. }
 \msg_new:nnn { fontscale } { math-mode-error }
-  {
-    '#1'~
-    \msg_line_context: \c_space_tl
-    cannot~ be~ used~ in~ math~ mode.
-  }
+  { '#1'~ cannot~ be~ used~ in~ math~ mode~ \msg_line_context:. }
 \msg_new:nnn { fontscale } { font-size-out-of-bounds }
-  {
-    The~ font~ size~
-    \msg_line_context: \c_space_tl
-    must~ be~ a~ positive~ length.
-  }
+  { The~ font~ size~ '#1'~ must~ be~ a~ positive~ length~ \msg_line_context:. }
 \msg_new:nnn { fontscale } { font-baselineskip-out-of-bounds }
   {
-    The~ font~ baselineskip~
-    \msg_line_context: \c_space_tl
-    must~ be~ greater~ than~ or~ equal~ to~ the~ font~ size.
+    The~ font~ baselineskip~ '#1'~ must~ be~ greater~ than~ or~ equal~ to~
+    the~ font~ size~ '#2'~ \msg_line_context:.
   }
 \msg_new:nnn { fontscale } { font-step-out-of-bounds }
   {
-    The~ font~ step~
-    \msg_line_context: \c_space_tl
-    must~ equal~ an~ integer~ from~ -4~ to~ 5,~
-    unless~ the~ value~ of~ the~ key~ 'typographic-scale'~ is~ 'musical'.~
-    \msg_see_documentation_text:n { fontscale }
+    Invalid~ font~ step~ '#1'~ \msg_line_context:. \\
+    The~ font~ step~ must~ equal~ an~ integer~ from~ -4~ to~ 5,~
+    unless~ the~ value~ of~ the~ key~ 'typographic-scale'~ is~ 'musical'.
   }
 \msg_new:nnn { fontscale } { current-font-step-out-of-bounds }
   {
-    '\iow_char:N \\SetFontStep*'~
-    \msg_line_context: \c_space_tl
-    could~ not~ calculate~ the~ new~ font~ step~ because~
-    the~ current~ font~ step~ is~ undefined.~
-    \msg_see_documentation_text:n { fontscale }
+    '\iow_char:N \\SetFontStep*'~ could~ not~ calculate~ the~ new~ font~ step~
+    because~ the~ current~ font~ step~ is~ undefined~ \msg_line_context:.
   }
 
 % DEFINE KEYS
@@ -571,23 +571,27 @@
   {
     \fp_compare:nNnT \l__fontscale_baselineskip_size_ratio_fp < \c_one_fp
       {
-        \msg_error:nn { fontscale }
+        \msg_error:nne { fontscale }
           { key-baselineskip-size-ratio-out-of-bounds }
+          { \fp_use:N \l__fontscale_baselineskip_size_ratio_fp }
         \prg_break:
       }
     \dim_compare:nNnF \l__fontscale_musical_base_dim > \c_zero_dim
       {
-        \msg_error:nn { fontscale } { key-musical-base-out-of-bounds }
+        \msg_error:nnV { fontscale } { key-musical-base-out-of-bounds }
+          \l__fontscale_musical_base_dim
         \prg_break:
       }
     \fp_compare:nNnF \l__fontscale_musical_ratio_fp > \c_one_fp
       {
-        \msg_error:nn { fontscale } { key-musical-ratio-out-of-bounds }
+        \msg_error:nne { fontscale } { key-musical-ratio-out-of-bounds }
+          { \fp_use:N \l__fontscale_musical_ratio_fp }
         \prg_break:
       }
     \int_compare:nNnF \l__fontscale_musical_notes_int > 0
       {
-        \msg_error:nn { fontscale } { key-musical-notes-out-of-bounds }
+        \msg_error:nnV { fontscale } { key-musical-notes-out-of-bounds }
+          \l__fontscale_musical_notes_int
         \prg_break:
       }
   }
@@ -612,8 +616,8 @@
           { \l__fontscale_normalsize_size_tl }
         \dim_compare:nNnF \l_fontscale_normalsize_size_dim > \c_zero_dim
           {
-            \msg_error:nnn { fontscale } { key-font-size-out-of-bounds }
-              { normalsize }
+            \msg_error:nnVn { fontscale } { key-font-size-out-of-bounds }
+              \l_fontscale_normalsize_size_dim { normalsize }
             \prg_break:
           }
       }
@@ -637,8 +641,10 @@
         \dim_compare:nNnT \l_fontscale_normalsize_baselineskip_skip <
           \l_fontscale_normalsize_size_dim
           {
-            \msg_error:nnn { fontscale }
-              { key-font-baselineskip-out-of-bounds } { normalsize }
+            \msg_error:nnVVn { fontscale }
+              { key-font-baselineskip-out-of-bounds }
+              \l_fontscale_normalsize_baselineskip_skip
+              \l_fontscale_normalsize_size_dim { normalsize }
             \prg_break:
           }
       }
@@ -753,8 +759,8 @@
           {
             \tl_map_break:n
               {
-                \msg_error:nnn { fontscale } { key-font-scale-out-of-bounds }
-                  {#1}
+                \msg_error:nnen { fontscale } { key-font-scale-out-of-bounds }
+                  { \fp_eval:n { \use:c { l__fontscale_#1_scale_tl } } } {#1}
                 \prg_break:
               }
           }
@@ -768,8 +774,8 @@
           {
             \tl_map_break:n
               {
-                \msg_error:nnn { fontscale } { key-font-size-out-of-bounds }
-                  {#1}
+                \msg_error:nnvn { fontscale } { key-font-size-out-of-bounds }
+                  { l_fontscale_#1_size_dim } {#1}
                 \prg_break:
               }
           }
@@ -805,15 +811,17 @@
           {
             \tl_map_break:n
               {
-                \msg_error:nnn { fontscale }
-                  { key-font-baselineskip-out-of-bounds } {#1}
+                \msg_error:nnvvn { fontscale }
+                  { key-font-baselineskip-out-of-bounds }
+                  { l_fontscale_#1_baselineskip_skip }
+                  { l_fontscale_#1_size_dim } {#1}
                 \prg_break:
               }
           }
       }
   }
-% Issues a warning if the font sizes or font baselineskips (ignoring the
-% stretch and shrink components) are not in the correct order.
+% Issues a warning if the font sizes or font baselineskips are not in the
+% correct order.
 \cs_new_protected:Npn \__fontscale_keys_process_check_order:
   {
     \dim_compare:nF
@@ -829,7 +837,7 @@
         < \l_fontscale_huge_size_dim
         < \l_fontscale_Huge_size_dim
       }
-      { \msg_warning:nn { fontscale } { font-sizes-out-of-order } }
+      { \msg_warning:nn { fontscale } { key-font-sizes-out-of-order } }
     \dim_compare:nF
       {
           \l_fontscale_tiny_baselineskip_skip
@@ -843,7 +851,7 @@
         < \l_fontscale_huge_baselineskip_skip
         < \l_fontscale_Huge_baselineskip_skip
       }
-      { \msg_warning:nn { fontscale } { font-baselineskips-out-of-order } }
+      { \msg_warning:nn { fontscale } { key-font-baselineskips-out-of-order } }
   }
 
 % DOCUMENT COMMANDS
@@ -1044,7 +1052,10 @@
                   }
               }
           }
-          { \msg_error:nn { fontscale } { font-step-out-of-bounds } }
+          {
+            \msg_error:nne { fontscale } { font-step-out-of-bounds }
+              { \fp_eval:n {#1} }
+          }
       }
   }
 \cs_new_protected:Npn \__fontscale_add_font_step:n #1
@@ -1131,6 +1142,28 @@
   }
 \cs_new_eq:NN \__fontscale_set_font_size_baselineskip:nn
   \__fontscale_fontsize:nn
+
+\NewDocumentCommand \SetFontBaselineskip { s m }
+  {
+    \mode_if_math:TF
+      {
+        \msg_warning:nne { fontscale } { math-mode-warning }
+          { \token_to_str:N \SetFontBaselineskip }
+      }
+      {
+        \IfBooleanTF #1
+          { \__fontscale_add_font_baselineskip:n {#2} }
+          { \__fontscale_set_font_baselineskip:n {#2} }
+      }
+  }
+\cs_new_protected:Npn \__fontscale_set_font_baselineskip:n
+  { \__fontscale_fontsize:nn { \f@size pt } }
+\cs_new_protected:Npn \__fontscale_add_font_baselineskip:n #1
+  {
+    \__fontscale_skip_set_default_pt:Nn \l__fontscale_tmp_skip {#1}
+    \__fontscale_fontsize:nn { \f@size pt }
+      { \l__fontscale_tmp_skip + \f@baselineskip }
+  }
 
 \NewDocumentCommand \PrintFontSizeParameters { }
   { \__fontscale_print_font_size_parameters: }
@@ -1293,3 +1326,5 @@
   { \__fontscale_remove_arg_spec_sm:n }
 \text_declare_purify_equivalent:Nn \ScaleFont { \use_none:n }
 \text_declare_purify_equivalent:Nn \SetFontSizeBaselineskip { \use_none:nn }
+\text_declare_purify_equivalent:Nn \SetFontBaselineskip
+  { \__fontscale_remove_arg_spec_sm:n }

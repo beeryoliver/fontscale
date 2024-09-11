@@ -14,7 +14,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 2.2.0\quad{}29 August 2024
+Version 2.3.0\quad{}6 September 2024
 
 
 \section{Introduction}
@@ -131,8 +131,6 @@ Sets the font size of each font size command from \cs{tiny} to \cs{Huge} using a
 These are common methods of choosing a set of document font sizes.
 The keys \Key{classic\-/10pt}, \Key{classic\-/11pt}, \Key{classic\-/12pt}, and \Key{musical} set the key \Key{typographic\-/scale} to the corresponding value.
 
-\input{./fontscale-table-classic.tex}
-
 The classic typographic scale consists of the traditional font sizes
 \numlist{6;7;8;9;10;11;12;14;16;18;21;24;36;48;60;72}.%
 \footnote{See \S3.1 of \textit{The Elements of Typographic Style} by Robert Bringhurst.}
@@ -141,6 +139,8 @@ Setting the value of the key \Key{typographic\-/scale} to \Key{classic\-/10pt}, 
 The named point size\---\qtylist[list-final-separator={, or }]{10;11;12}{pt}\---is the font size of \cs{normalsize}.
 The font sizes of the other font size commands are the adjacent font sizes in the classic typographic scale.
 Table~\ref{table:classic} displays the font size of each font size command when using a classic typographic scale.
+
+\input{./fontscale-table-classic.tex}
 
 \Key{musical/base}[\meta{dimen expression}][10pt]%
 \nopagebreak\newline
@@ -182,7 +182,6 @@ The font baselineskips of the font size commands from \cs{tiny} to \cs{Huge} are
 
 Sets the font baselineskip of each font size command from \cs{tiny} to \cs{Huge} equal to its font size \texttimes{} the result of computing the \meta{floating point expression}.
 Sets the font baselineskip set by \cs{SetFontStep}, \cs{SetFontScale}, and \cs{SetFontSize} (\S\ref{subsec:fontsize}) equal to the new font size \texttimes{} the result of computing the \meta{floating point expression}.
-The value of this key must be at least \num{1}.
 
 
 \subsection{Overwriting the previous keys}
@@ -210,7 +209,6 @@ Overwrites the font size set by the keys \Key{typographic\-/scale} and \Key{\met
 \KeepNextPar*
 
 Sets the font baselineskip of \meta{font size command} to the value of \meta{skip expression}, appending a default unit of \unit{pt}.
-The font baselineskip must be greater than or equal to the font size.
 Overwrites the font baselineskip set by the key \Key{baselineskip\-/size\-/ratio}.
 
 \Key{\meta{font size command}}[\meta{dimen expression}]
@@ -327,7 +325,6 @@ Does nothing, except issue a warning, if used in math mode.
 
 Sets the font size to the value of \meta{dimen expression}, appending a default unit of \unit{pt}.
 Sets the font baselineskip to the value of \meta{skip expression}, appending a default unit of \unit{pt}.
-The font baselineskip must be greater than or equal to the font size.
 Does nothing, except issue a warning, if used in math mode.
 Can be used as an alternative to \cs{fontsize} + \cs{selectfont} as discussed in \S\ref{subsec:expandable}.
 
@@ -339,7 +336,6 @@ Can be used as an alternative to \cs{fontsize} + \cs{selectfont} as discussed in
 
 Sets the font baselineskip to the value of \meta{skip expression}, appending a default unit of \unit{pt}.
 Adding the optional star instead increases the current font baselineskip by the result of \meta{skip expression}, appending a default unit of \unit{pt}.
-The font baselineskip must be greater than or equal to the font size.
 Does not change the font size.
 Does nothing, except issue a warning, if used in math mode.
 

@@ -8,8 +8,8 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-08-29}
-  {2.2.0}
+  {2024-09-06}
+  {2.3.0}
   {A flexible interface for setting font sizes}
 
 % l3kernel version 2023-10-10 added many 'e'-variants.
@@ -125,7 +125,6 @@
 % SOME FUNCTIONS
 
 % Variants of l3kernel functions
-\cs_generate_variant:Nn \msg_error:nnnnn { nnVV , nnvv }
 \cs_generate_variant:Nn \msg_error:nnnn { nnv , nne }
 % Sets a dimen/skip variable from a dimen/skip expression, appending a default
 % unit of pt. This also removes extra tokens.
@@ -161,7 +160,8 @@
 % (1) Takes dimen and skip expressions as arguments.
 % (2) Avoids the issue where \f@size is set to the new font size before the
 % second argument is expanded.
-% (3) Provides error checking for the font size and font baselineskip.
+% (3) Issues a user-friendly error message if the font size is not a positive
+% length.
 \dim_new:N  \l__fontscale_fontsize_dim
 \skip_new:N \l__fontscale_fontsize_skip
 \cs_new_protected:Npn \__fontscale_fontsize:nn #1#2
@@ -170,16 +170,8 @@
     \__fontscale_skip_set_default_pt:Nn \l__fontscale_fontsize_skip {#2}
     \dim_compare:nNnTF \l__fontscale_fontsize_dim > \c_zero_dim
       {
-        \dim_compare:nNnTF \l__fontscale_fontsize_skip <
-          \l__fontscale_fontsize_dim
-          {
-            \msg_error:nnVV { fontscale } { font-baselineskip-out-of-bounds }
-              \l__fontscale_fontsize_skip \l__fontscale_fontsize_dim
-          }
-          {
-            \fontsize \l__fontscale_fontsize_dim \l__fontscale_fontsize_skip
-            \selectfont
-          }
+        \fontsize \l__fontscale_fontsize_dim \l__fontscale_fontsize_skip
+        \selectfont
       }
       {
         \msg_error:nnV { fontscale } { font-size-out-of-bounds }
@@ -211,12 +203,6 @@
 
 % MESSAGES
 
-\msg_new:nnn { fontscale } { key-baselineskip-size-ratio-out-of-bounds }
-  {
-    Invalid~ value~ '#1'~ \msg_line_context:. \\
-    The~ value~ of~ the~ key~ 'baselineskip-size-ratio'~
-    must~ be~ at~ least~ 1.
-  }
 \msg_new:nnn { fontscale } { key-musical-base-out-of-bounds }
   {
     Invalid~ value~ '#1'~ \msg_line_context:. \\
@@ -252,26 +238,19 @@
     The~ font~ size~ set~ by~ the~ key~ '#1 / scale'~
     has~ been~ overwritten~ by~ the~ key~ '#1 / size'~ \msg_line_context:.
   }
-\msg_new:nnn { fontscale } { key-font-baselineskip-out-of-bounds }
-  {
-    Invalid~ value~ '#1'~ \msg_line_context:. \\
-    The~ value~ of~ the~ key~ '#3 / baselineskip'~
-    must~ be~ greater~ than~ or~ equal~ to~
-    the~ font~ size~ of~ \iow_char:N \\#3~ '#2'.
-  }
 \msg_new:nnn { fontscale } { key-font-sizes-out-of-order }
   {
     The~ font~ sizes~
     are~ not~ in~ the~ correct~ order~ \msg_line_context:. \\
-    The~ lengths~ of~ the~ font~ sizes~ should~ be~ ordered~ from~
-    \iow_char:N \\tiny~ to~ \iow_char:N \\Huge.
+    The~ lengths~ of~ the~ font~ sizes~
+    should~ be~ ordered~ from~ \iow_char:N \\tiny~ to~ \iow_char:N \\Huge.
   }
 \msg_new:nnn { fontscale } { key-font-baselineskips-out-of-order }
   {
     The~ font~ baselineskips~
     are~ not~ in~ the~ correct~ order~ \msg_line_context:. \\
-    The~ lengths~ of~ the~ font~ baselineskips~ should~ be~ ordered~ from~
-    \iow_char:N \\tiny~ to~ \iow_char:N \\Huge.
+    The~ lengths~ of~ the~ font~ baselineskips~
+    should~ be~ ordered~ from~ \iow_char:N \\tiny~ to~ \iow_char:N \\Huge.
   }
 
 \msg_new:nnn { fontscale } { math-mode-warning }
@@ -280,11 +259,6 @@
   { '#1'~ cannot~ be~ used~ in~ math~ mode~ \msg_line_context:. }
 \msg_new:nnn { fontscale } { font-size-out-of-bounds }
   { The~ font~ size~ '#1'~ must~ be~ a~ positive~ length~ \msg_line_context:. }
-\msg_new:nnn { fontscale } { font-baselineskip-out-of-bounds }
-  {
-    The~ font~ baselineskip~ '#1'~ must~ be~ greater~ than~ or~ equal~ to~
-    the~ font~ size~ '#2'~ \msg_line_context:.
-  }
 \msg_new:nnn { fontscale } { font-step-out-of-bounds }
   {
     Invalid~ font~ step~ '#1'~ \msg_line_context:. \\
@@ -569,13 +543,6 @@
   }
 \cs_new_protected:Npn \__fontscale_keys_process_start:
   {
-    \fp_compare:nNnT \l__fontscale_baselineskip_size_ratio_fp < \c_one_fp
-      {
-        \msg_error:nne { fontscale }
-          { key-baselineskip-size-ratio-out-of-bounds }
-          { \fp_use:N \l__fontscale_baselineskip_size_ratio_fp }
-        \prg_break:
-      }
     \dim_compare:nNnF \l__fontscale_musical_base_dim > \c_zero_dim
       {
         \msg_error:nnV { fontscale } { key-musical-base-out-of-bounds }
@@ -638,15 +605,6 @@
         \__fontscale_skip_set_default_pt:Nn
           \l_fontscale_normalsize_baselineskip_skip
           { \l__fontscale_normalsize_baselineskip_tl }
-        \dim_compare:nNnT \l_fontscale_normalsize_baselineskip_skip <
-          \l_fontscale_normalsize_size_dim
-          {
-            \msg_error:nnVVn { fontscale }
-              { key-font-baselineskip-out-of-bounds }
-              \l_fontscale_normalsize_baselineskip_skip
-              \l_fontscale_normalsize_size_dim { normalsize }
-            \prg_break:
-          }
       }
   }
 % Auxiliary functions that expand to the font size depending on the name of the
@@ -806,18 +764,6 @@
         \__fontscale_skip_set_default_pt:cn
           { l_fontscale_#1_baselineskip_skip }
           { \use:c { l__fontscale_#1_baselineskip_tl } }
-        \dim_compare:nNnT { \use:c { l_fontscale_#1_baselineskip_skip } } <
-          { \use:c { l_fontscale_#1_size_dim } }
-          {
-            \tl_map_break:n
-              {
-                \msg_error:nnvvn { fontscale }
-                  { key-font-baselineskip-out-of-bounds }
-                  { l_fontscale_#1_baselineskip_skip }
-                  { l_fontscale_#1_size_dim } {#1}
-                \prg_break:
-              }
-          }
       }
   }
 % Issues a warning if the font sizes or font baselineskips are not in the
@@ -1186,65 +1132,20 @@
   }
 \cs_new_protected:Npn \__fontscale_print_all_font_size_parameters:
   {
-    \token_to_str:N \tiny \c_colon_str \c_space_tl
-    step         ~=~ -4                                              ,~
-    scale        ~=~ \fp_use:N   \l_fontscale_tiny_scale_fp          ,~
-    size         ~=~ \dim_use:N  \l_fontscale_tiny_size_dim          ,~
-    baselineskip ~=~ \skip_use:N \l_fontscale_tiny_baselineskip_skip
-    \newline
-    \token_to_str:N \scriptsize \c_colon_str \c_space_tl
-    step         ~=~ -3                                                    ,~
-    scale        ~=~ \fp_use:N   \l_fontscale_scriptsize_scale_fp          ,~
-    size         ~=~ \dim_use:N  \l_fontscale_scriptsize_size_dim          ,~
-    baselineskip ~=~ \skip_use:N \l_fontscale_scriptsize_baselineskip_skip
-    \newline
-    \token_to_str:N \footnotesize \c_colon_str \c_space_tl
-    step         ~=~ -2                                                      ,~
-    scale        ~=~ \fp_use:N   \l_fontscale_footnotesize_scale_fp          ,~
-    size         ~=~ \dim_use:N  \l_fontscale_footnotesize_size_dim          ,~
-    baselineskip ~=~ \skip_use:N \l_fontscale_footnotesize_baselineskip_skip
-    \newline
-    \token_to_str:N \small \c_colon_str \c_space_tl
-    step         ~=~ -1                                               ,~
-    scale        ~=~ \fp_use:N   \l_fontscale_small_scale_fp          ,~
-    size         ~=~ \dim_use:N  \l_fontscale_small_size_dim          ,~
-    baselineskip ~=~ \skip_use:N \l_fontscale_small_baselineskip_skip
-    \newline
-    \token_to_str:N \normalsize \c_colon_str \c_space_tl
-    step         ~=~ 0                                                     ,~
-    scale        ~=~ 1                                                     ,~
-    size         ~=~ \dim_use:N  \l_fontscale_normalsize_size_dim          ,~
-    baselineskip ~=~ \skip_use:N \l_fontscale_normalsize_baselineskip_skip
-    \newline
-    \token_to_str:N \large \c_colon_str \c_space_tl
-    step         ~=~ 1                                                ,~
-    scale        ~=~ \fp_use:N   \l_fontscale_large_scale_fp          ,~
-    size         ~=~ \dim_use:N  \l_fontscale_large_size_dim          ,~
-    baselineskip ~=~ \skip_use:N \l_fontscale_large_baselineskip_skip
-    \newline
-    \token_to_str:N \Large \c_colon_str \c_space_tl
-    step         ~=~ 2                                                ,~
-    scale        ~=~ \fp_use:N   \l_fontscale_Large_scale_fp          ,~
-    size         ~=~ \dim_use:N  \l_fontscale_Large_size_dim          ,~
-    baselineskip ~=~ \skip_use:N \l_fontscale_Large_baselineskip_skip
-    \newline
-    \token_to_str:N \LARGE \@ \c_colon_str \c_space_tl
-    step         ~=~ 3                                                ,~
-    scale        ~=~ \fp_use:N   \l_fontscale_LARGE_scale_fp          ,~
-    size         ~=~ \dim_use:N  \l_fontscale_LARGE_size_dim          ,~
-    baselineskip ~=~ \skip_use:N \l_fontscale_LARGE_baselineskip_skip
-    \newline
-    \token_to_str:N \huge \c_colon_str \c_space_tl
-    step         ~=~ 4                                               ,~
-    scale        ~=~ \fp_use:N   \l_fontscale_huge_scale_fp          ,~
-    size         ~=~ \dim_use:N  \l_fontscale_huge_size_dim          ,~
-    baselineskip ~=~ \skip_use:N \l_fontscale_huge_baselineskip_skip
-    \newline
-    \token_to_str:N \Huge \c_colon_str \c_space_tl
-    step         ~=~ 5                                               ,~
-    scale        ~=~ \fp_use:N   \l_fontscale_Huge_scale_fp          ,~
-    size         ~=~ \dim_use:N  \l_fontscale_Huge_size_dim          ,~
-    baselineskip ~=~ \skip_use:N \l_fontscale_Huge_baselineskip_skip
+    \tl_map_inline:nn
+      {
+        {tiny} {scriptsize} {footnotesize} {small} {normalsize}
+        {large} {Large} {LARGE} {huge} {Huge}
+      }
+      {
+        \token_to_str:c {##1} \@ \c_colon_str \c_space_tl
+        step ~=~ \fp_use:c { c_fontscale_##1_step_fp } ,~
+        scale ~=~ \str_if_eq:nnTF {##1} { normalsize }
+          { 1 } { \fp_use:c { l_fontscale_##1_scale_fp } } ,~
+        size ~=~ \dim_use:c { l_fontscale_##1_size_dim } ,~
+        baselineskip ~=~ \skip_use:c { l_fontscale_##1_baselineskip_skip }
+        \str_if_eq:nnF {##1} { Huge } { \newline }
+      }
   }
 
 \NewDocumentCommand \PrintSampleText { s +m }
@@ -1255,36 +1156,30 @@
           { \token_to_str:N \PrintSampleText }
       }
       {
-        \IfBooleanTF #1
-          { \__fontscale_print_sample_text_descending_order:n {#2} }
-          { \__fontscale_print_sample_text_ascending_order:n  {#2} }
+        \group_begin:
+          \IfBooleanTF #1
+            { \__fontscale_print_sample_text_descending_order:n {#2} }
+            { \__fontscale_print_sample_text_ascending_order:n  {#2} }
+        \group_end:
       }
   }
 \cs_new_protected:Npn \__fontscale_print_sample_text_ascending_order:n #1
   {
-    { \tiny         #1 \par }
-    { \scriptsize   #1 \par }
-    { \footnotesize #1 \par }
-    { \small        #1 \par }
-    { \normalsize   #1 \par }
-    { \large        #1 \par }
-    { \Large        #1 \par }
-    { \LARGE        #1 \par }
-    { \huge         #1 \par }
-    { \Huge         #1 \par }
+    \tl_map_inline:nn
+      {
+        \tiny \scriptsize \footnotesize \small \normalsize
+        \large \Large \LARGE \huge \Huge
+      }
+      { ##1 #1 \par }
   }
 \cs_new_protected:Npn \__fontscale_print_sample_text_descending_order:n #1
   {
-    { \Huge         #1 \par }
-    { \huge         #1 \par }
-    { \LARGE        #1 \par }
-    { \Large        #1 \par }
-    { \large        #1 \par }
-    { \normalsize   #1 \par }
-    { \small        #1 \par }
-    { \footnotesize #1 \par }
-    { \scriptsize   #1 \par }
-    { \tiny         #1 \par }
+    \tl_map_inline:nn
+      {
+        \Huge \huge \LARGE \Large \large
+        \normalsize \small \footnotesize \scriptsize \tiny
+      }
+      { ##1 #1 \par }
   }
 
 \NewDocumentCommand \PrintFontSizeCommand { }

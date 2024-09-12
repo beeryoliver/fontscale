@@ -7,6 +7,13 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v2.4.0] - 2024-09-10
+
+### Changed
+- `\fontscalesetup` no longer issues a warning if the lengths of the font
+  baselineskips are not ordered from `\tiny` to `\Huge`.
+- Code improvements.
+
 ## [v2.3.0] - 2024-09-06
 
 ### Changed

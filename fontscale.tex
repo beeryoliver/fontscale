@@ -14,7 +14,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 2.3.0\quad{}6 September 2024
+Version 2.4.0\quad{}10 September 2024
 
 
 \section{Introduction}
@@ -101,7 +101,7 @@ This syntax has the same representation as the arguments to \cs{fpeval}, \cs{int
 
 This section documents the keys provided by the \pkg{fontscale} package.
 This package has no package options.
-Set the package keys using \cs{fontscalesetup}\marg{key-value list} (\S\ref{subsec:fontscalesetup}).
+Set the package keys using \cs{fontscalesetup}\marg{key\-/value list} (\S\ref{subsec:fontscalesetup}).
 
 \subsection{The typographic scale}
 \label{subsec:typographicscale}
@@ -181,16 +181,17 @@ The font baselineskips of the font size commands from \cs{tiny} to \cs{Huge} are
 \KeepNextPar*
 
 Sets the font baselineskip of each font size command from \cs{tiny} to \cs{Huge} equal to its font size \texttimes{} the result of computing the \meta{floating point expression}.
-Sets the font baselineskip set by \cs{SetFontStep}, \cs{SetFontScale}, and \cs{SetFontSize} (\S\ref{subsec:fontsize}) equal to the new font size \texttimes{} the result of computing the \meta{floating point expression}.
+Sets the font baselineskip set by \cs{SetFontStep}, \cs{SetFontScale}, and \cs{SetFontSize} equal to the new font size \texttimes{} the result of computing the \meta{floating point expression} (\S\ref{subsec:fontsize}).
 
 
 \subsection{Overwriting the previous keys}
 \label{subsec:overwriting}
 
 This subsection documents keys for directly setting the font scales, font sizes, and font baselineskips of the font size commands from \cs{tiny} to \cs{Huge}.
-When doing so, the user should take care to ensure that the lengths of the font sizes and font baselineskips remain correctly ordered from \cs{tiny} to \cs{Huge}.
+
+The user should take care to ensure that the lengths of the font sizes remain correctly ordered from \cs{tiny} to \cs{Huge}.
 This is important for typographic and syntactic consistency.
-If the font size commands are in the wrong order, this package will issue a warning and some package features may not work correctly.
+If the font sizes are in the wrong order, \cs{fontscalesetup} will issue a warning and some package features may not work correctly.
 
 \Key{\meta{font size command}/scale}[\meta{floating point expression}][\meta{not set}]
 \KeepNextPar*
@@ -215,9 +216,12 @@ Overwrites the font baselineskip set by the key \Key{baselineskip\-/size\-/ratio
 \nopagebreak\newline
 \Key{\meta{font size command}}[\meta{dimen expression}/\meta{skip expression}]
 
-Sets the keys \Key{\meta{font size command}\slash{}size}[\meta{dimen expression}] or \Key{\meta{font size command}\slash{}baselineskip}[\meta{skip expression}] in a condensed format.
-The latter format resembles traditional typographic notation where the size and leading of a text can be expressed as, for example, \num{10}/\num{12} or \num{11}/\num{13}.
-The number before\slash{}after the slash is the size\slash{}leading in units of \unit{pt}.
+Sets the keys \Key{\meta{font size command}\slash{}size}[\meta{dimen expression}] or \Key{\meta{font size command}\slash{}baselineskip}[\meta{skip expression}] in a condensed format.%
+\footnote
+  {%
+    The latter format resembles traditional typographic notation where the size and leading of a text can be expressed as, for example, \num{10}/\num{12} or \num{11}/\num{13}.
+    The number before\slash{}after the slash is the size\slash{}leading in units of \unit{pt}.%
+  }
 
 
 \section{Commands}
@@ -271,7 +275,7 @@ Tests if the current font size and current font baselineskip equal the font size
 If so, expands to the name of that font size command.
 This omits the backslash character and leaves only letters with catcode \num{11}.
 If not, expands to nothing.
-This package also provides a similar command \cs{PrintFontSizeCommand} (\S\ref{subsec:debug}), which is not expandable and includes the backslash character.
+This package also provides a similar command \cs{PrintFontSizeCommand}, which is not expandable and includes the backslash character (\S\ref{subsec:debug}).
 
 \subsection{More font size commands}
 \label{subsec:fontsize}
@@ -362,7 +366,7 @@ Prints the font step, font scale, font size, and font baselineskip of each font 
 Prints \meta{text} in each font size ordered from \cs{tiny} to \cs{Huge} each followed by a paragraph break.
 \meta{text} can contain \cs{par} tokens.
 Adding the optional star reverses the order of the font sizes.
-One useful way of printing example text is \cs{PrintSampleText}\allowbreak\texttt{\{\cs{PrintFontSizeCommand}:\allowbreak\textvisiblespace\allowbreak\cs{PrintFontSizeParameters}\}}.
+One useful way of printing sample text is \cs{PrintSampleText}\allowbreak\texttt{\{\cs{PrintFontSizeCommand}:\allowbreak\textvisiblespace\allowbreak\cs{PrintFontSizeParameters}\}}.
 
 \cs{PrintFontSizeCommand}
 \KeepNextPar*
@@ -370,7 +374,7 @@ One useful way of printing example text is \cs{PrintSampleText}\allowbreak\textt
 Tests if the current font size and current font baselineskip equal the font size and font baselineskip, respectively, of any font size command from \cs{tiny} to \cs{Huge}.
 If so, prints the name of that font size command, including the backslash character.
 If not, prints \enquote{\string\undefined}.
-This package also provides a similar command \cs{CurrentFontSizeCommand} (\S\ref{subsec:expandable}), which is expandable and omits the backslash character.
+This package also provides a similar command \cs{CurrentFontSizeCommand}, which is expandable and omits the backslash character (\S\ref{subsec:expandable}).
 
 
 \section{Programming}

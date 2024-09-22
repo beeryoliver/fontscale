@@ -8,7 +8,7 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-09-21}
+  {2024-09-22}
   {3.0.0}
   {A flexible interface for setting font sizes}
 
@@ -199,12 +199,15 @@
           \l_fontscale_normalsize_size_dim
           {
             \fp_set:Nn \l_fontscale_step_fp
-              { \l__fontscale_musical_aux_fp * ln ( \l_fontscale_scale_fp ) }
+              {
+                \l__fontscale_musical_precompile_fp
+                * ln ( \l_fontscale_scale_fp )
+              }
           }
           {
             \fp_set:Nn \l_fontscale_step_fp
               {
-                \l__fontscale_musical_aux_fp
+                \l__fontscale_musical_precompile_fp
                 * ln ( \f@size / \l__fontscale_musical_base_fp )
               }
           }
@@ -217,9 +220,10 @@
 \fp_set:Nn \l__fontscale_normalsize_size_fp { 10 }
 \fp_new:N \l__fontscale_musical_base_fp
 \fp_new:N \l__fontscale_musical_notes_fp
-\fp_new:N \l__fontscale_musical_aux_fp
+\fp_new:N \l__fontscale_musical_precompile_fp
 
-% Scratch variables
+% Scratch variables. \l__fontscale_tmp_fp is used primarily to speed up
+% floating point calculations.
 \str_new:N  \l__fontscale_tmp_str
 \dim_new:N  \l__fontscale_tmp_dim
 \skip_new:N \l__fontscale_tmp_skip
@@ -265,8 +269,8 @@
     \fontsize { \dim_use:N #2 } #3 \selectfont
   }
 % Similar to \fontsize + \selectfont, except that it:
-% (1) Takes dimen and skip expressions as arguments without appending a
-% default unit of pt.
+% (1) Takes dimen and skip expressions as arguments without appending a default
+% unit of pt.
 % (2) Avoids the issue where \f@size is set to the new font size before the
 % second argument is expanded.
 % (3) Issues a user-friendly error message if the font size is not a positive
@@ -792,7 +796,7 @@
             { \l__fontscale_musical_base_dim }
           \fp_set:Nn \l__fontscale_musical_notes_fp
             { \l__fontscale_musical_notes_int }
-          \fp_set:Nn \l__fontscale_musical_aux_fp
+          \fp_set:Nn \l__fontscale_musical_precompile_fp
             {
               \l__fontscale_musical_notes_fp
               / ln ( \l__fontscale_musical_ratio_fp )
@@ -1134,7 +1138,8 @@
 % repeatedly testing \fp_compare:.
 \cs_new_protected:Npn \__fontscale_set_font_step:n #1
   {
-    \str_case:enF { \fp_eval:n {#1} }
+    \fp_set:Nn \l__fontscale_tmp_fp {#1}
+    \str_case:enF { \fp_use:N \l__fontscale_tmp_fp }
       {
         { -4 } { \tiny         }
         { -3 } { \scriptsize   }
@@ -1156,13 +1161,13 @@
                   {
                     \l__fontscale_musical_base_fp
                     * \l__fontscale_musical_ratio_fp
-                    ^ ( (#1) / \l__fontscale_musical_notes_fp )
+                    ^ ( \l__fontscale_tmp_fp / \l__fontscale_musical_notes_fp )
                   }
               }
           }
           {
             \msg_error:nne { fontscale } { font-step-out-of-bounds }
-              { \fp_eval:n {#1} }
+              { \fp_use:N \l__fontscale_tmp_fp }
           }
       }
   }
@@ -1361,7 +1366,10 @@
 \NewExpandableDocumentCommand \__fontscale_use_none_sm:w { s m } { }
 \tl_map_inline:nn
   {
-    \fontscalesetup \SetFontStep \SetFontScale \SetFontSize
+    \fontscalesetup
+    \SetFontStep
+    \SetFontScale
+    \SetFontSize
     \SetFontBaselineskip
   }
   { \text_declare_purify_equivalent:Nn #1 { \__fontscale_use_none_sm:w } }

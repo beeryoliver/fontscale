@@ -8,7 +8,7 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-09-20}
+  {2024-09-21}
   {3.0.0}
   {A flexible interface for setting font sizes}
 
@@ -259,7 +259,7 @@
   }
 % Used to define \tiny to \Huge. Sets \@currsize only for compatibility. Need
 % \dim_use:N only for compatibility with the microtype package.
-\cs_new_protected:Npn \__fontscale_fontsize:NNN #1#2#3
+\cs_new_protected:Npn \__fontscale_name:NNN #1#2#3
   {
     \cs_set_eq:NN \@currsize #1
     \fontsize { \dim_use:N #2 } #3 \selectfont
@@ -912,7 +912,7 @@
   }
 \cs_new_protected:Npn \__fontscale_tiny:
   {
-    \__fontscale_fontsize:NNN \tiny \l_fontscale_tiny_size_dim
+    \__fontscale_name:NNN \tiny \l_fontscale_tiny_size_dim
       \l_fontscale_tiny_baselineskip_skip
   }
 \DeclareDocumentCommand \scriptsize { }
@@ -926,7 +926,7 @@
   }
 \cs_new_protected:Npn \__fontscale_scriptsize:
   {
-    \__fontscale_fontsize:NNN \scriptsize \l_fontscale_scriptsize_size_dim
+    \__fontscale_name:NNN \scriptsize \l_fontscale_scriptsize_size_dim
       \l_fontscale_scriptsize_baselineskip_skip
   }
 \DeclareDocumentCommand \footnotesize { }
@@ -940,7 +940,7 @@
   }
 \cs_new_protected:Npn \__fontscale_footnotesize:
   {
-    \__fontscale_fontsize:NNN \footnotesize \l_fontscale_footnotesize_size_dim
+    \__fontscale_name:NNN \footnotesize \l_fontscale_footnotesize_size_dim
       \l_fontscale_footnotesize_baselineskip_skip
   }
 \DeclareDocumentCommand \small { }
@@ -954,7 +954,7 @@
   }
 \cs_new_protected:Npn \__fontscale_small:
   {
-    \__fontscale_fontsize:NNN \small \l_fontscale_small_size_dim
+    \__fontscale_name:NNN \small \l_fontscale_small_size_dim
       \l_fontscale_small_baselineskip_skip
   }
 \DeclareDocumentCommand \normalsize { }
@@ -968,7 +968,7 @@
   }
 \cs_new_protected:Npn \__fontscale_normalsize:
   {
-    \__fontscale_fontsize:NNN \normalsize \l_fontscale_normalsize_size_dim
+    \__fontscale_name:NNN \normalsize \l_fontscale_normalsize_size_dim
       \l_fontscale_normalsize_baselineskip_skip
   }
 \DeclareDocumentCommand \large { }
@@ -982,7 +982,7 @@
   }
 \cs_new_protected:Npn \__fontscale_large:
   {
-    \__fontscale_fontsize:NNN \large \l_fontscale_large_size_dim
+    \__fontscale_name:NNN \large \l_fontscale_large_size_dim
       \l_fontscale_large_baselineskip_skip
   }
 \DeclareDocumentCommand \Large { }
@@ -996,7 +996,7 @@
   }
 \cs_new_protected:Npn \__fontscale_Large:
   {
-    \__fontscale_fontsize:NNN \Large \l_fontscale_Large_size_dim
+    \__fontscale_name:NNN \Large \l_fontscale_Large_size_dim
       \l_fontscale_Large_baselineskip_skip
   }
 \DeclareDocumentCommand \LARGE { }
@@ -1010,7 +1010,7 @@
   }
 \cs_new_protected:Npn \__fontscale_LARGE:
   {
-    \__fontscale_fontsize:NNN \LARGE \l_fontscale_LARGE_size_dim
+    \__fontscale_name:NNN \LARGE \l_fontscale_LARGE_size_dim
       \l_fontscale_LARGE_baselineskip_skip
   }
 \DeclareDocumentCommand \huge { }
@@ -1024,7 +1024,7 @@
   }
 \cs_new_protected:Npn \__fontscale_huge:
   {
-    \__fontscale_fontsize:NNN \huge \l_fontscale_huge_size_dim
+    \__fontscale_name:NNN \huge \l_fontscale_huge_size_dim
       \l_fontscale_huge_baselineskip_skip
   }
 \DeclareDocumentCommand \Huge { }
@@ -1038,7 +1038,7 @@
   }
 \cs_new_protected:Npn \__fontscale_Huge:
   {
-    \__fontscale_fontsize:NNN \Huge \l_fontscale_Huge_size_dim
+    \__fontscale_name:NNN \Huge \l_fontscale_Huge_size_dim
       \l_fontscale_Huge_baselineskip_skip
   }
 \normalsize

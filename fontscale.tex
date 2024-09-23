@@ -14,7 +14,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 2.4.0\quad{}10 September 2024
+Version 3.0.0\quad{}22 September 2024
 
 
 \section{Introduction}
@@ -36,7 +36,7 @@ Version 2.4.0\quad{}10 September 2024
   \item
   Provides additional font size commands, including setting the font size by setting the font step or font scale and setting the font size relative to the current font size using more powerful tools than the \pkg{scalefnt} and \pkg{relsize} packages (\S\ref{subsec:fontsize}).
   \item
-  For \LaTeX3 programmers, this package defines public \pkg{expl3} variables that store the font step, font scale, font size, and font baselineskip of each font size command from \cs{tiny} to \cs{Huge} (\S\ref{sec:programming}).
+  For \LaTeX3 programmers, this package defines public \pkg{expl3} variables that store the font step, font scale, font size, and font baselineskip of each font size command from \cs{tiny} to \cs{Huge} and the current font step, font scale, font size, and font baselineskip (\S\ref{sec:programming}).
 \end{itemize}
 
 \subsection{Loading the package}
@@ -257,16 +257,9 @@ This package provides expandable commands that expand to the current font step, 
 They can be used for printing or within calculations.
 
 For clarity, \cs{CurrentFontStep} will be explained in detail.
-\cs{CurrentFontStep} initially tests if the current font size equals the font size of any font size command from \cs{tiny} to \cs{Huge}.
-If so, it expands to the font step of that font size command (Table~\ref{table:fontsteps}).
+If the current font size equals the font size of any font size command from \cs{tiny} to \cs{Huge}, then \cs{CurrentFontStep} expands to the font step of that font size command (Table~\ref{table:fontsteps}).
 If not and if the value of the key \Key{typographic\-/scale} is \Value{musical}, \cs{CurrentFontStep} expands to the current font step calculated from the musical typographic scale (Equation~\ref{eq:musical}).
 Otherwise, the current font step is undefined and \cs{CurrentFontStep} expands to nothing.
-
-Internally, \cs{CurrentFontStep}, \cs{CurrentFontScale}, and \cs{CurrentFontSize} rely on the kernel command \cs{f@size}.
-(\cs{f@size} stores the current font size in units of \unit{pt}, omitting the unit.)
-The low\-/level font command \cs{fontsize}\marg{dimen}\marg{skip} sets \cs{f@size} to the new font size before expanding its second argument.
-This means that, if used in \meta{skip}, \cs{CurrentFontStep}, \cs{CurrentFontScale}, and \cs{CurrentFontSize} will expand to the new value\---unless they are first expanded.
-This package provides \cs{SetFontSizeBaselineskip} as an alternative to \cs{fontsize} + \cs{selectfont} that avoids this issue (\S\ref{subsec:fontsize}).
 
 \cs{CurrentFontSizeCommand}
 \KeepNextPar*
@@ -293,10 +286,10 @@ Sets the font baselineskip equal to the new font size \texttimes{} the value of 
 \listheading{Three exceptions:}
 \begin{itemize}
   \item
-  The font step must equal the font step of any font size command from \cs{tiny} to \cs{Huge} (Table~\ref{table:fontsteps}) unless the value of the key \Key{typographic\-/scale} is \Value{musical}.
+  The font step, rounded to \num{5} decimal places, must equal the font step of any font size command from \cs{tiny} to \cs{Huge} (Table~\ref{table:fontsteps}) unless the value of the key \Key{typographic\-/scale} is \Value{musical}.
   \cs{SetFontStep} will issue an error if the font step is undefined (as explained for \cs{CurrentFontStep} in \S\ref{subsec:expandable}).
   \item
-  If the font step equals the font step of any font size command from \cs{tiny} to \cs{Huge}, then that font size command will be used directly.
+  If the font step, rounded to \num{5} decimal places, equals the font step of any font size command from \cs{tiny} to \cs{Huge}, then that font size command will be used directly.
   \item
   Does nothing, except issue a warning, if used in math mode.
 \end{itemize}
@@ -330,7 +323,6 @@ Does nothing, except issue a warning, if used in math mode.
 Sets the font size to the value of \meta{dimen expression}, appending a default unit of \unit{pt}.
 Sets the font baselineskip to the value of \meta{skip expression}, appending a default unit of \unit{pt}.
 Does nothing, except issue a warning, if used in math mode.
-Can be used as an alternative to \cs{fontsize} + \cs{selectfont} as discussed in \S\ref{subsec:expandable}.
 
 \subsection{Setting only the font baselineskip}
 \label{subsec:setfontbaselineskip}
@@ -399,8 +391,8 @@ This section documents the \pkg{expl3} programming support provided by the \pkg{
 This package does not define any public \pkg{expl3} functions.
 
 This package defines public \pkg{expl3} variables that store the font step, font scale, font size, and font baselineskip of each font size command from \cs{tiny} to \cs{Huge}.
-These variables should never be modified directly.
-Their values should be changed only by \cs{fontscalesetup}.
+These variables, excluding the constants, are set by \cs{fontscalesetup}.
+They should never be modified directly.
 
 Each takes the form:
 
@@ -415,6 +407,20 @@ Each takes the form:
 Exception:
 \cs{l_fontscale_normalsize_scale_fp} is not defined.
 The font scale of \cs{normalsize} is stored in \cs{c_fontscale_normalsize_scale_fp}.
+
+This package also defines public \pkg{expl3} variables that store the current font step, font scale, font size, and font baselineskip.
+These variables are set in the \texttt{selectfont} hook.
+They should never be modified directly.
+
+\cs{l_fontscale_step_fp}
+\nopagebreak\newline
+\cs{l_fontscale_scale_fp}
+\newline
+\cs{l_fontscale_size_dim}
+\nopagebreak\newline
+\cs{l_fontscale_baselineskip_skip}
+
+\cs{l_fontscale_step_fp} equals \texttt{nan} if the current font step is undefined (as explained for \cs{CurrentFontStep} in \S\ref{subsec:expandable}).
 
 
 \end{document}

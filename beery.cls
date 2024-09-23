@@ -4,7 +4,7 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplClass
   {beery}
-  {2024-09-10}
+  {2024-09-22}
   {}
   {}
 
@@ -93,7 +93,7 @@
 \skip_set_eq:NN \medskipamount   \c_beery_medium_skip
 \skip_set_eq:NN \smallskipamount \c_beery_small_skip
 
-\flushbottom
+\raggedbottom
 \int_set:Nn \vbadness { 100 }
 
 \skip_set:Nn \topskip { \l_fontscale_normalsize_size_dim }

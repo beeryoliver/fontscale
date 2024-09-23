@@ -222,8 +222,7 @@
 \fp_new:N \l__fontscale_musical_notes_fp
 \fp_new:N \l__fontscale_musical_precompile_fp
 
-% Scratch variables. \l__fontscale_tmp_fp is used primarily to speed up
-% floating point calculations.
+% Scratch variables
 \str_new:N  \l__fontscale_tmp_str
 \dim_new:N  \l__fontscale_tmp_dim
 \skip_new:N \l__fontscale_tmp_skip
@@ -1138,7 +1137,7 @@
 % repeatedly testing \fp_compare:.
 \cs_new_protected:Npn \__fontscale_set_font_step:n #1
   {
-    \fp_set:Nn \l__fontscale_tmp_fp {#1}
+    \fp_set:Nn \l__fontscale_tmp_fp { round ( #1 , 5 ) }
     \str_case:enF { \fp_use:N \l__fontscale_tmp_fp }
       {
         { -4 } { \tiny         }

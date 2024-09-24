@@ -7,7 +7,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v3.0.0] - 2024-09-22
+## [v3.0.0] - 2024-09-24
 
 ### Added
 - Added new `expl3` public variables that store the current font step, font

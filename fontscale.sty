@@ -8,7 +8,7 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-09-24}
+  {2024-09-29}
   {3.0.0}
   {A flexible interface for setting font sizes}
 
@@ -215,7 +215,7 @@
       { \fp_set_eq:NN \l_fontscale_step_fp \c_nan_fp }
   }
 
-% Used to speed up floating point calculations.
+% Used only to speed up floating point calculations.
 \fp_new:N \l__fontscale_normalsize_size_fp
 \fp_set:Nn \l__fontscale_normalsize_size_fp { 10 }
 \fp_new:N \l__fontscale_musical_base_fp
@@ -223,7 +223,6 @@
 \fp_new:N \l__fontscale_musical_precompile_fp
 
 % Scratch variables
-\str_new:N  \l__fontscale_tmp_str
 \dim_new:N  \l__fontscale_tmp_dim
 \skip_new:N \l__fontscale_tmp_skip
 \fp_new:N   \l__fontscale_tmp_fp
@@ -274,31 +273,25 @@
 % second argument is expanded.
 % (3) Issues a user-friendly error message if the font size is not a positive
 % length.
-\cs_new_protected:Npn \__fontscale_set_font_size_baselineskip:nn #1#2
+\cs_new_protected:Npn \__fontscale_set_font_size:nn #1#2
   {
     \use:e
       {
-        \__fontscale_set_font_size_baselineskip_aux:nn
-          { \dim_eval:n {#1} } { \skip_eval:n {#2} }
+        \__fontscale_set_font_size_aux:nn { \dim_eval:n {#1} }
+          { \skip_eval:n {#2} }
       }
   }
-\cs_new_protected:Npn \__fontscale_set_font_size_baselineskip_aux:nn #1#2
+\cs_new_protected:Npn \__fontscale_set_font_size_aux:nn #1#2
   {
     \dim_compare:nNnTF {#1} > \c_zero_dim
       { \fontsize {#1} {#2} \selectfont }
       { \msg_error:nnn { fontscale } { font-size-out-of-bounds } {#1} }
   }
-% Similar to the above function, except that it sets the font baselineskip
-% equal to the new font size times the baselineskip-size-ratio.
-\cs_new_protected:Npn \__fontscale_set_font_size_baselineskip:n #1
-  {
-    \use:e
-      {
-        \__fontscale_set_font_size_baselineskip_aux:n
-          { \dim_to_decimal:n {#1} }
-      }
-  }
-\cs_new_protected:Npn \__fontscale_set_font_size_baselineskip_aux:n #1
+% Similar to \__fontscale_set_font_size:nn, except that it sets the font
+% baselineskip equal to the new font size times the baselineskip-size-ratio.
+\cs_new_protected:Npn \__fontscale_set_font_size:n #1
+  { \use:e { \__fontscale_set_font_size_aux:n { \dim_to_decimal:n {#1} } } }
+\cs_new_protected:Npn \__fontscale_set_font_size_aux:n #1
   {
     \dim_compare:nNnTF { #1 pt } > \c_zero_dim
       {
@@ -362,12 +355,13 @@
 \msg_new:nnn { fontscale } { font-step-out-of-bounds }
   {
     Invalid~ font~ step~ '#1'~ \msg_line_context:. \\
-    The~ font~ step~ must~ equal~ an~ integer~ from~ -4~ to~ 5,~
+    The~ font~ step~ must~ equal~ the~ font~ step~ of~
+    any~ font~ size~ command~ from~ \iow_char:N \\tiny~ to~ \iow_char:N \\Huge~
     unless~ the~ value~ of~ the~ key~ 'typographic-scale'~ is~ 'musical'.
   }
 \msg_new:nnn { fontscale } { current-font-step-out-of-bounds }
   {
-    '\iow_char:N \\SetFontStep*'~ could~ not~ calculate~ the~ new~ font~ step~
+    The~ new~ font~ step~ could~ not~ be~ calculated~
     because~ the~ current~ font~ step~ is~ undefined~ \msg_line_context:.
   }
 
@@ -1061,65 +1055,6 @@
 \cs_new:Npn \__fontscale_baselineskip:
   { \skip_use:N \l_fontscale_baselineskip_skip }
 
-\NewExpandableDocumentCommand \CurrentFontSizeCommand { }
-  { \__fontscale_name: }
-\cs_new:Npn \__fontscale_name:
-  {
-    \dim_case:nn { \l_fontscale_size_dim }
-      {
-        { \l_fontscale_tiny_size_dim }
-        {
-          \skip_if_eq:nnT { \l_fontscale_baselineskip_skip }
-            { \l_fontscale_tiny_baselineskip_skip } { tiny }
-        }
-        { \l_fontscale_scriptsize_size_dim }
-        {
-          \skip_if_eq:nnT { \l_fontscale_baselineskip_skip }
-            { \l_fontscale_scriptsize_baselineskip_skip } { scriptsize }
-        }
-        { \l_fontscale_footnotesize_size_dim }
-        {
-          \skip_if_eq:nnT { \l_fontscale_baselineskip_skip }
-            { \l_fontscale_footnotesize_baselineskip_skip } { footnotesize }
-        }
-        { \l_fontscale_small_size_dim }
-        {
-          \skip_if_eq:nnT { \l_fontscale_baselineskip_skip }
-            { \l_fontscale_small_baselineskip_skip } { small }
-        }
-        { \l_fontscale_normalsize_size_dim }
-        {
-          \skip_if_eq:nnT { \l_fontscale_baselineskip_skip }
-            { \l_fontscale_normalsize_baselineskip_skip } { normalsize }
-        }
-        { \l_fontscale_large_size_dim }
-        {
-          \skip_if_eq:nnT { \l_fontscale_baselineskip_skip }
-            { \l_fontscale_large_baselineskip_skip } { large }
-        }
-        { \l_fontscale_Large_size_dim }
-        {
-          \skip_if_eq:nnT { \l_fontscale_baselineskip_skip }
-            { \l_fontscale_Large_baselineskip_skip } { Large }
-        }
-        { \l_fontscale_LARGE_size_dim }
-        {
-          \skip_if_eq:nnT { \l_fontscale_baselineskip_skip }
-            { \l_fontscale_LARGE_baselineskip_skip } { LARGE }
-        }
-        { \l_fontscale_huge_size_dim }
-        {
-          \skip_if_eq:nnT { \l_fontscale_baselineskip_skip }
-            { \l_fontscale_huge_baselineskip_skip } { huge }
-        }
-        { \l_fontscale_Huge_size_dim }
-        {
-          \skip_if_eq:nnT { \l_fontscale_baselineskip_skip }
-            { \l_fontscale_Huge_baselineskip_skip } { Huge }
-        }
-      }
-  }
-
 \NewDocumentCommand \SetFontStep { s m }
   {
     \mode_if_math:TF
@@ -1154,7 +1089,7 @@
       {
         \str_if_eq:VnTF \l__fontscale_typographic_scale_str { musical }
           {
-            \__fontscale_set_font_size_baselineskip:n
+            \__fontscale_set_font_size:n
               {
                 \fp_to_dim:n
                   {
@@ -1192,7 +1127,7 @@
   }
 \cs_new_protected:Npn \__fontscale_set_font_scale:n #1
   {
-    \__fontscale_set_font_size_baselineskip:n
+    \__fontscale_set_font_size:n
       { \fp_to_dim:n { (#1) * \l__fontscale_normalsize_size_fp } }
   }
 \cs_new_protected:Npn \__fontscale_add_font_scale:n #1
@@ -1212,8 +1147,6 @@
           { \__fontscale_set_font_size:n {#2} }
       }
   }
-\cs_new_eq:NN \__fontscale_set_font_size:n
-  \__fontscale_set_font_size_baselineskip:n
 \cs_new_protected:Npn \__fontscale_add_font_size:n #1
   { \__fontscale_set_font_size:n { (#1) + \l_fontscale_size_dim } }
 
@@ -1229,7 +1162,7 @@
 \cs_new_protected:Npn \__fontscale_scale_font:n #1
   {
     \fp_set:Nn \l__fontscale_tmp_fp {#1}
-    \__fontscale_set_font_size_baselineskip:nn
+    \__fontscale_set_font_size:nn
       { \fp_to_dim:n { \l__fontscale_tmp_fp * \l_fontscale_size_dim } }
       {
         \fp_to_dim:n { \l__fontscale_tmp_fp * \l_fontscale_baselineskip_skip }
@@ -1247,7 +1180,7 @@
         \msg_warning:nne { fontscale } { math-mode-warning }
           { \token_to_str:N \SetFontSizeBaselineskip }
       }
-      { \__fontscale_set_font_size_baselineskip:nn {#1} {#2} }
+      { \__fontscale_set_font_size:nn {#1} {#2} }
   }
 
 \NewDocumentCommand \SetFontBaselineskip
@@ -1265,7 +1198,7 @@
       }
   }
 \cs_new_protected:Npn \__fontscale_set_font_baselineskip:n
-  { \__fontscale_set_font_size_baselineskip:nn { \l_fontscale_size_dim } }
+  { \__fontscale_set_font_size:nn { \l_fontscale_size_dim } }
 \cs_new_protected:Npn \__fontscale_add_font_baselineskip:n #1
   {
     \__fontscale_set_font_baselineskip:n
@@ -1317,30 +1250,32 @@
           { \token_to_str:N \PrintSampleText }
       }
       {
-        \group_begin:
-          \IfBooleanTF #1
-            { \__fontscale_print_sample_text_descending_order:n {#2} }
-            { \__fontscale_print_sample_text_ascending_order:n  {#2} }
-        \group_end:
+        \IfBooleanTF #1
+          { \__fontscale_print_sample_text_descending_order:n {#2} }
+          { \__fontscale_print_sample_text_ascending_order:n  {#2} }
       }
   }
 \cs_new_protected:Npn \__fontscale_print_sample_text_ascending_order:n #1
   {
-    \tl_map_inline:nn
-      {
-        \tiny \scriptsize \footnotesize \small \normalsize
-        \large \Large \LARGE \huge \Huge
-      }
-      { ##1 #1 \par }
+    \group_begin:
+      \tl_map_inline:nn
+        {
+          \tiny \scriptsize \footnotesize \small \normalsize
+          \large \Large \LARGE \huge \Huge
+        }
+        { ##1 #1 \par }
+    \group_end:
   }
 \cs_new_protected:Npn \__fontscale_print_sample_text_descending_order:n #1
   {
-    \tl_map_inline:nn
-      {
-        \Huge \huge \LARGE \Large \large
-        \normalsize \small \footnotesize \scriptsize \tiny
-      }
-      { ##1 #1 \par }
+    \group_begin:
+      \tl_map_inline:nn
+        {
+          \Huge \huge \LARGE \Large \large
+          \normalsize \small \footnotesize \scriptsize \tiny
+        }
+        { ##1 #1 \par }
+    \group_end:
   }
 
 \NewDocumentCommand \PrintFontSizeCommand { }
@@ -1354,10 +1289,24 @@
   }
 \cs_new_protected:Npn \__fontscale_print_name:
   {
-    \str_set:Ne \l__fontscale_tmp_str { \__fontscale_name: }
-    \str_if_empty:NTF \l__fontscale_tmp_str
-      { \token_to_str:N \undefined }
-      { \c_backslash_str \l__fontscale_tmp_str \@ }
+    \token_to_str:c
+      {
+        \dim_case:nnF { \l_fontscale_size_dim }
+          {
+            { \l_fontscale_tiny_size_dim         } { tiny         }
+            { \l_fontscale_scriptsize_size_dim   } { scriptsize   }
+            { \l_fontscale_footnotesize_size_dim } { footnotesize }
+            { \l_fontscale_small_size_dim        } { small        }
+            { \l_fontscale_normalsize_size_dim   } { normalsize   }
+            { \l_fontscale_large_size_dim        } { large        }
+            { \l_fontscale_Large_size_dim        } { Large        }
+            { \l_fontscale_LARGE_size_dim        } { LARGE        }
+            { \l_fontscale_huge_size_dim         } { huge         }
+            { \l_fontscale_Huge_size_dim         } { Huge         }
+          }
+          { undefined }
+      }
+    \@
   }
 
 % TEXT PURIFY

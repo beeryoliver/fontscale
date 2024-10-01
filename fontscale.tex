@@ -14,7 +14,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 3.0.0\quad{}29 September 2024
+Version 3.0.0\quad{}1 October 2024
 
 
 \section{Introduction}
@@ -60,7 +60,7 @@ Instead, this package provides the command \cs{fontscalesetup}\marg{key\-/value 
 
 When loaded, this package uses \cs{normalsize} after defining and initializing the font size commands from \cs{tiny} to \cs{Huge}.
 
-Many \LaTeX{} document classes have a font size option (e.g.\@ \Key{10pt}, \Key{11pt}, \Key{12pt}) which not only changes the set of document font sizes, but also modifies additional settings such as the page layout and vertical spacing which were specifically designed to work with those font sizes.
+Many \LaTeX{} document classes have a font size option (e.g.\ \Key{10pt}, \Key{11pt}, \Key{12pt}) which not only changes the set of document font sizes, but also modifies additional settings such as the page layout and vertical spacing which were specifically designed to work with those font sizes.
 For this reason, you may want to set the document class font size option close to the font size of \cs{normalsize} set by this package.
 
 \listheading{Internally, this package defines each font size command from \cs{tiny} to \cs{Huge} using the low\-/level font commands \cs{fontsize} and \cs{selectfont}\---they have no additional functionality beyond that of \cs{fontsize} and \cs{selectfont}, except that they:}
@@ -222,6 +222,7 @@ Sets the keys \Key{\meta{font size command}\slash{}size}[\meta{dimen expression}
     The latter format resembles traditional typographic notation where the size and leading of a text can be expressed as, for example, \num{10}/\num{12} or \num{11}/\num{13}.
     The number before\slash{}after the slash is the size\slash{}leading in units of \unit{pt}.%
   }
+A \enquote{\texttt{/}} contained within a brace group will not be treated as the delimiter.
 
 
 \section{Commands}
@@ -412,7 +413,7 @@ They should never be modified directly.
 \nopagebreak\newline
 \cs{l_fontscale_baselineskip_skip}
 
-\cs{l_fontscale_step_fp} equals \texttt{nan} if the current font step is undefined (as explained for \cs{CurrentFontStep} in \S\ref{subsec:expandable}).
+\cs{l_fontscale_step_fp} equals \texttt{nan} (not a number) if the current font step is undefined (as explained for \cs{CurrentFontStep} in \S\ref{subsec:expandable}).
 
 
 \end{document}

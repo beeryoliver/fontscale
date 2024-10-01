@@ -4,7 +4,7 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplClass
   {beery}
-  {2024-09-29}
+  {2024-10-01}
   {}
   {}
 
@@ -239,7 +239,7 @@
 
 \RequirePackage [ bottom ] { footmisc }
 \renewcommand \footnoterule { }
-\setlength { \skip \footins } { \c_beery_big_skip }
+% \setlength { \skip \footins } { \c_beery_big_skip }
 \dim_set:Nn \footnotesep { \f@linespread \footnotesep }
 \coffin_new:N \l__beery_footnote_coffin
 % 1.2 = baselineskip-size-ratio

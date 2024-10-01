@@ -8,7 +8,7 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-09-29}
+  {2024-10-01}
   {3.0.0}
   {A flexible interface for setting font sizes}
 
@@ -200,14 +200,14 @@
           {
             \fp_set:Nn \l_fontscale_step_fp
               {
-                \l__fontscale_musical_precompile_fp
+                \l__fontscale_musical_selectfont_fp
                 * ln ( \l_fontscale_scale_fp )
               }
           }
           {
             \fp_set:Nn \l_fontscale_step_fp
               {
-                \l__fontscale_musical_precompile_fp
+                \l__fontscale_musical_selectfont_fp
                 * ln ( \f@size / \l__fontscale_musical_base_fp )
               }
           }
@@ -220,7 +220,7 @@
 \fp_set:Nn \l__fontscale_normalsize_size_fp { 10 }
 \fp_new:N \l__fontscale_musical_base_fp
 \fp_new:N \l__fontscale_musical_notes_fp
-\fp_new:N \l__fontscale_musical_precompile_fp
+\fp_new:N \l__fontscale_musical_selectfont_fp
 
 % Scratch variables
 \dim_new:N  \l__fontscale_tmp_dim
@@ -789,7 +789,7 @@
             { \l__fontscale_musical_base_dim }
           \fp_set:Nn \l__fontscale_musical_notes_fp
             { \l__fontscale_musical_notes_int }
-          \fp_set:Nn \l__fontscale_musical_precompile_fp
+          \fp_set:Nn \l__fontscale_musical_selectfont_fp
             {
               \l__fontscale_musical_notes_fp
               / ln ( \l__fontscale_musical_ratio_fp )

@@ -7,11 +7,12 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v3.0.0] - 2024-09-29
+## [v3.0.0] - 2024-10-01
 
 ### Added
 - Added new `expl3` public variables that store the current font step, font
-  scale, font size, and font baselineskip:
+  scale, font size, and font baselineskip. They are set in the `selectfont`
+  hook.
   - `\l_fontscale_step_fp`
   - `\l_fontscale_scale_fp`
   - `\l_fontscale_size_dim`

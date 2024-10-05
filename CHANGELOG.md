@@ -7,7 +7,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v3.0.0] - 2024-10-02
+## [v3.0.0] - 2024-10-05
 
 ### Added
 - Added new `expl3` public variables that store the current font step, font
@@ -33,6 +33,8 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   from `\tiny` to `\Huge`.
 - A default `pt` is now appended only in user-level commands, not in internal
   `expl3` functions.
+- `\fontscalesetup` now processes the keys slightly faster when the key
+  `<font size command>/baselineskip` is not set.
 - Documentation improvements.
 
 ### Removed

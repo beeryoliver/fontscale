@@ -8,7 +8,7 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-10-02}
+  {2024-10-05}
   {3.0.0}
   {A flexible interface for setting font sizes}
 
@@ -621,6 +621,8 @@
           { \__fontscale_keys_set:n   {#2} }
       }
   }
+\cs_new_protected:Npn \__fontscale_keys_reset:n
+  { \__fontscale_keys_set_initial: \__fontscale_keys_set:n }
 \cs_new_protected:Npn \__fontscale_keys_set:n #1
   {
     \keys_set:nn { fontscale } {#1}
@@ -629,8 +631,6 @@
     \prg_break:
     \prg_break_point:
   }
-\cs_new_protected:Npn \__fontscale_keys_reset:n
-  { \__fontscale_keys_set_initial: \__fontscale_keys_set:n }
 \cs_new_protected:Npn \__fontscale_keys_process:
   {
     \__fontscale_keys_process_start:
@@ -1068,6 +1068,12 @@
           { \__fontscale_set_font_step:n {#2} }
       }
   }
+\cs_new_protected:Npn \__fontscale_add_font_step:n #1
+  {
+    \fp_if_nan:nTF { \l_fontscale_step_fp }
+      { \msg_error:nn { fontscale } { current-font-step-out-of-bounds } }
+      { \__fontscale_set_font_step:n { (#1) + \l_fontscale_step_fp } }
+  }
 % Using \str_case: here is significantly faster (and easier to write) than
 % repeatedly testing \fp_compare:.
 \cs_new_protected:Npn \__fontscale_set_font_step:n #1
@@ -1105,12 +1111,6 @@
           }
       }
   }
-\cs_new_protected:Npn \__fontscale_add_font_step:n #1
-  {
-    \fp_if_nan:nTF { \l_fontscale_step_fp }
-      { \msg_error:nn { fontscale } { current-font-step-out-of-bounds } }
-      { \__fontscale_set_font_step:n { (#1) + \l_fontscale_step_fp } }
-  }
 
 \NewDocumentCommand \SetFontScale { s m }
   {
@@ -1125,13 +1125,13 @@
           { \__fontscale_set_font_scale:n {#2} }
       }
   }
+\cs_new_protected:Npn \__fontscale_add_font_scale:n #1
+  { \__fontscale_set_font_scale:n { (#1) + \l_fontscale_scale_fp } }
 \cs_new_protected:Npn \__fontscale_set_font_scale:n #1
   {
     \__fontscale_set_font_size:n
       { \fp_to_dim:n { (#1) * \l__fontscale_normalsize_size_fp } }
   }
-\cs_new_protected:Npn \__fontscale_add_font_scale:n #1
-  { \__fontscale_set_font_scale:n { (#1) + \l_fontscale_scale_fp } }
 
 \NewDocumentCommand \SetFontSize
   { s >{ \__fontscale_arg_to_dim_default_pt:n } m }
@@ -1197,13 +1197,13 @@
           { \__fontscale_set_font_baselineskip:n {#2} }
       }
   }
-\cs_new_protected:Npn \__fontscale_set_font_baselineskip:n
-  { \__fontscale_set_font_size:nn { \l_fontscale_size_dim } }
 \cs_new_protected:Npn \__fontscale_add_font_baselineskip:n #1
   {
     \__fontscale_set_font_baselineskip:n
       { (#1) + \l_fontscale_baselineskip_skip }
   }
+\cs_new_protected:Npn \__fontscale_set_font_baselineskip:n
+  { \__fontscale_set_font_size:nn { \l_fontscale_size_dim } }
 
 \NewDocumentCommand \PrintFontSizeParameters { }
   { \__fontscale_print_font_size_parameters: }
@@ -1242,7 +1242,7 @@
       }
   }
 
-\NewDocumentCommand \PrintSampleText { s +m }
+\NewDocumentCommand \PrintSampleText { >{ \ReverseBoolean } s +m }
   {
     \mode_if_math:TF
       {
@@ -1251,8 +1251,8 @@
       }
       {
         \IfBooleanTF #1
-          { \__fontscale_print_sample_text_descending_order:n {#2} }
           { \__fontscale_print_sample_text_ascending_order:n  {#2} }
+          { \__fontscale_print_sample_text_descending_order:n {#2} }
       }
   }
 \cs_new_protected:Npn \__fontscale_print_sample_text_ascending_order:n #1

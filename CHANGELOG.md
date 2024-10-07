@@ -7,6 +7,47 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v3.0.0] - 2024-10-05
+
+### Added
+- Added new `expl3` public variables that store the current font step, font
+  scale, font size, and font baselineskip. They are set in the `selectfont`
+  hook.
+  - `\l_fontscale_step_fp`
+  - `\l_fontscale_scale_fp`
+  - `\l_fontscale_size_dim`
+  - `\l_fontscale_baselineskip_skip`
+
+### Changed
+- This update includes some changes that are backwards incompatible.
+- The package commands now use the above variables instead of `\f@size` and
+  `\f@baselineskip`. This changes the behavior of `\CurrentFontStep`,
+  `\CurrentFontScale`, and `\CurrentFontSize` within the second argument of
+  `\fontsize` because `\fontsize` sets `\f@size` to the new font size before
+  expanding its second argument.
+- `\PrintFontSizeCommand` no longer tests if the current font baselineskip
+  equals the font baselineskip of any font size command from `\tiny` to
+  `\Huge`.
+- `\SetFontStep` now rounds the new font step to 5 decimal places. This is
+  important when checking if it equals the font step of any font size command
+  from `\tiny` to `\Huge`.
+- A default `pt` is now appended only in user-level commands, not in internal
+  `expl3` functions.
+- `\fontscalesetup` now processes the keys slightly faster when the key
+  `<font size command>/baselineskip` is not set.
+- Documentation improvements.
+
+### Removed
+- `\CurrentFontSizeCommand` (redundant with `\CurrentFontSize` and
+  `\CurrentFontBaselineskip`)
+
+### Fixed
+- The error message for `\SetFontStep*` when the current font step is undefined
+  no longer writes `\SetFontStep*`. This would be incorrect if its
+  corresponding internal function was used instead of `\SetFontStep*`.
+- The internal functions of `\PrintSampleText` now correctly enclose their
+  contents within a group.
+
 ## [v2.4.0] - 2024-09-10
 
 ### Changed

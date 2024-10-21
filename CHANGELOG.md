@@ -7,6 +7,12 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v3.0.1] - 2024-10-20
+
+### Changed
+- Improved the error message when the font size is not a positive length.
+- Documentation improvements.
+
 ## [v3.0.0] - 2024-10-05
 
 ### Added

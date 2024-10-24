@@ -8,8 +8,8 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-10-05}
-  {3.0.0}
+  {2024-10-20}
+  {3.0.1}
   {A flexible interface for setting font sizes}
 
 % l3kernel version 2023-10-10 added many 'e'-variants.
@@ -186,9 +186,9 @@
       }
       { \__fontscale_hook_selectfont_auxii: }
   }
-% For speed, \f@size is used here instead of \l_fontscale_size_dim. The case
-% where the base font size of the musical typographic scale equals the font
-% size of \normalsize is optimized further.
+% For speed, \__fontscale_hook_selectfont_auxii: uses \f@size instead of
+% \l_fontscale_size_dim. The case where the base font size of the musical
+% typographic scale equals the font size of \normalsize is optimized further.
 \cs_new_protected:Npn \__fontscale_hook_selectfont_auxii:
   {
     \fp_set:Nn \l_fontscale_scale_fp
@@ -342,8 +342,8 @@
 \msg_new:nnn { fontscale } { font-sizes-out-of-order }
   {
     The~ font~ sizes~ are~ not~ in~ the~ correct~ order~ \msg_line_context:. \\
-    The~ lengths~ of~ the~ font~ sizes~
-    should~ be~ ordered~ from~ \iow_char:N \\tiny~ to~ \iow_char:N \\Huge.
+    The~ lengths~ of~ the~ font~ sizes~ should~ be~ ordered~ from~
+    \iow_char:N \\tiny~ to~ \iow_char:N \\Huge.
   }
 
 \msg_new:nnn { fontscale } { math-mode-warning }
@@ -351,7 +351,10 @@
 \msg_new:nnn { fontscale } { math-mode-error }
   { '#1'~ cannot~ be~ used~ in~ math~ mode~ \msg_line_context:. }
 \msg_new:nnn { fontscale } { font-size-out-of-bounds }
-  { The~ font~ size~ '#1'~ must~ be~ a~ positive~ length~ \msg_line_context:. }
+  {
+    Invalid~ font~ size~ '#1'~ \msg_line_context:. \\
+    The~ font~ size~ must~ be~ a~ positive~ length.
+  }
 \msg_new:nnn { fontscale } { font-step-out-of-bounds }
   {
     Invalid~ font~ step~ '#1'~ \msg_line_context:. \\
@@ -659,7 +662,8 @@
         \prg_break:
       }
   }
-% Sets the font size and font baselineskip of \normalsize.
+% Sets the font size and font baselineskip of \normalsize. Its font size must
+% be set before doing any processing involving the font scale.
 \cs_new_protected:Npn \__fontscale_keys_process_normalsize:
   {
     \quark_if_no_value:NTF \l__fontscale_normalsize_size_tl
@@ -895,8 +899,8 @@
 % DOCUMENT COMMANDS
 
 % Defines the standard LaTeX font size commands from \tiny to \Huge and
-% initializes to \normalsize. The corresponding internal functions are not used
-% elsewhere in the code for compatibility with hooks such as
+% initializes to \normalsize. Their internal functions are not used elsewhere
+% in the code for compatibility with hooks such as
 % \AddToHook{cmd/<font size command>/after}{<code>}.
 \DeclareDocumentCommand \tiny { }
   {

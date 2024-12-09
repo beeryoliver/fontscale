@@ -7,6 +7,12 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v3.0.3] - 2024-12-09
+
+### Changed
+- The documentation now displays code in a light-gray background using the
+  `tcolorbox` package. This subtle contrast enhances readability.
+
 ## [v3.0.2] - 2024-11-25
 
 ### Changed

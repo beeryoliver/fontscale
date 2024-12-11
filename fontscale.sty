@@ -8,8 +8,8 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-11-25}
-  {3.0.2}
+  {2024-12-09}
+  {3.0.3}
   {A flexible interface for setting font sizes}
 
 % l3kernel version 2023-10-10 added many 'e'-variants.
@@ -296,7 +296,7 @@
 % Similar to \__fontscale_set_font_size:nn, except that it sets the font
 % baselineskip equal to the new font size times the baselineskip-size-ratio.
 \cs_new_protected:Npn \__fontscale_set_font_size:n #1
-  { \use:e { \__fontscale_set_font_size_aux:n { \dim_to_decimal:n {#1} } } }
+  { \exp_args:Ne \__fontscale_set_font_size_aux:n { \dim_to_decimal:n {#1} } }
 \cs_new_protected:Npn \__fontscale_set_font_size_aux:n #1
   {
     \dim_compare:nNnTF { #1 pt } > \c_zero_dim
@@ -385,13 +385,19 @@
 \dim_new:N \l__fontscale_musical_base_dim
 \int_new:N \l__fontscale_musical_notes_int
 
-\cs_new_protected:Npn \__fontscale_keys_code_name:n #1
+\cs_new_protected:Npn \__fontscale_keys_code_name:
   {
-    \tl_if_in:nnTF {#1} { / }
-      { \__fontscale_keys_code_name_split:ww #1 \q_stop }
-      { \tl_set:cn { l__fontscale_ \l_keys_key_str _size_tl } {#1} }
+    \tl_if_in:NnTF \l_keys_value_tl { / }
+      {
+        \exp_last_unbraced:NV \__fontscale_keys_code_name:ww \l_keys_value_tl
+          \q_stop
+      }
+      {
+        \tl_set_eq:cN { l__fontscale_ \l_keys_key_str _size_tl }
+          \l_keys_value_tl
+      }
   }
-\cs_new_protected:Npn \__fontscale_keys_code_name_split:ww #1 / #2 \q_stop
+\cs_new_protected:Npn \__fontscale_keys_code_name:ww #1 / #2 \q_stop
   {
     \tl_set:cn { l__fontscale_ \l_keys_key_str _size_tl } {#1}
     \tl_set:cn { l__fontscale_ \l_keys_key_str _baselineskip_tl } {#2}
@@ -542,34 +548,34 @@
   }
 \keys_define:nn { fontscale }
   {
-      tiny .code:n = \__fontscale_keys_code_name:n {#1}
+      tiny .code:n = \__fontscale_keys_code_name:
     , tiny .value_required:n = true
 
-    , scriptsize .code:n = \__fontscale_keys_code_name:n {#1}
+    , scriptsize .code:n = \__fontscale_keys_code_name:
     , scriptsize .value_required:n = true
 
-    , footnotesize .code:n = \__fontscale_keys_code_name:n {#1}
+    , footnotesize .code:n = \__fontscale_keys_code_name:
     , footnotesize .value_required:n = true
 
-    , small .code:n = \__fontscale_keys_code_name:n {#1}
+    , small .code:n = \__fontscale_keys_code_name:
     , small .value_required:n = true
 
-    , normalsize .code:n = \__fontscale_keys_code_name:n {#1}
+    , normalsize .code:n = \__fontscale_keys_code_name:
     , normalsize .value_required:n = true
 
-    , large .code:n = \__fontscale_keys_code_name:n {#1}
+    , large .code:n = \__fontscale_keys_code_name:
     , large .value_required:n = true
 
-    , Large .code:n = \__fontscale_keys_code_name:n {#1}
+    , Large .code:n = \__fontscale_keys_code_name:
     , Large .value_required:n = true
 
-    , LARGE .code:n = \__fontscale_keys_code_name:n {#1}
+    , LARGE .code:n = \__fontscale_keys_code_name:
     , LARGE .value_required:n = true
 
-    , huge .code:n = \__fontscale_keys_code_name:n {#1}
+    , huge .code:n = \__fontscale_keys_code_name:
     , huge .value_required:n = true
 
-    , Huge .code:n = \__fontscale_keys_code_name:n {#1}
+    , Huge .code:n = \__fontscale_keys_code_name:
     , Huge .value_required:n = true
   }
 

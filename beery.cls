@@ -4,7 +4,7 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplClass
   {beery}
-  {2024-12-09}
+  {2024-12-22}
   {}
   {}
 

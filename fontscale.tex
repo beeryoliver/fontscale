@@ -14,7 +14,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 3.0.3\quad{}9 December 2024
+Version 3.0.4\quad{}22 December 2024
 
 
 \section{Introduction}
@@ -204,7 +204,8 @@ Sets the font baselineskip set by \cs{SetFontStep}, \cs{SetFontScale}, and \cs{S
 \subsection{Overwriting the previous keys}
 \label{subsec:overwriting}
 
-This subsection documents keys for directly setting the font scales, font sizes, and font baselineskips of the font size commands from \cs{tiny} to \cs{Huge}.
+This subsection documents keys for directly setting the font sizes and font baselineskips of the font size commands from \cs{tiny} to \cs{Huge}.
+The font sizes can also be set by setting the font scale.
 
 The user should take care to ensure that the lengths of the font sizes remain correctly ordered from \cs{tiny} to \cs{Huge}.
 This is important for typographic and syntactic consistency.
@@ -366,7 +367,7 @@ Does nothing, except issue a warning, if used in math mode.
 \subsection{Testing and debugging}
 \label{subsec:debug}
 
-The commands documented here are intended primarily for testing and debugging.
+This subsection documents commands that are intended primarily for testing and debugging.
 I have used them often when developing this package so I think users will find them helpful.
 
 \begin{mydisplaycode}
@@ -374,14 +375,17 @@ I have used them often when developing this package so I think users will find t
 \end{mydisplaycode}
 
 Prints the current font size parameters\---the font step, font scale, font size, and font baselineskip.
-The current font step will be left blank if it is undefined (as explained for \cs{CurrentFontStep} in \S\ref{subsec:expandable}).
-\pagebreak%manual
+The printed font step and font scale are rounded to \num{5} decimal places.
+To print with more decimal places, use \cs{CurrentFontStep} and \cs{CurrentFontScale} (\S\ref{subsec:expandable}).
+The printed font step will be left blank if it is undefined (as explained for \cs{CurrentFontStep} in \S\ref{subsec:expandable}).
 
 \begin{mydisplaycode}
   \cs{PrintAllFontSizeParameters}
 \end{mydisplaycode}
 
 Prints the font step, font scale, font size, and font baselineskip of each font size command from \cs{tiny} to \cs{Huge}.
+The printed font scale is rounded to \num{5} decimal places.
+To print with more decimal places, use \cs{CurrentFontScale} (\S\ref{subsec:expandable}).
 
 \begin{mydisplaycode}
   \cs{PrintSampleText} \sarg{} \marg{text}

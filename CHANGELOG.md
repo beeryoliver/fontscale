@@ -7,6 +7,13 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v3.0.4] - 2024-12-22
+
+### Changed
+- `\PrintFontSizeParameters` and `\PrintAllFontSizeParamters` now print the
+  font step and font scale rounded to 5 decimal places. (`\CurrentFontStep` and
+  `\CurrentFontScale` are unchanged.)
+
 ## [v3.0.3] - 2024-12-09
 
 ### Changed

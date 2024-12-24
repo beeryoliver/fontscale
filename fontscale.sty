@@ -8,8 +8,8 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2024-12-09}
-  {3.0.3}
+  {2024-12-22}
+  {3.0.4}
   {A flexible interface for setting font sizes}
 
 % l3kernel version 2023-10-10 added many 'e'-variants.
@@ -195,21 +195,16 @@
       { \f@size / \l__fontscale_normalsize_size_fp }
     \str_if_eq:VnTF \l__fontscale_typographic_scale_str { musical }
       {
-        \dim_compare:nNnTF \l__fontscale_musical_base_dim =
-          \l_fontscale_normalsize_size_dim
+        \fp_set:Nn \l_fontscale_step_fp
           {
-            \fp_set:Nn \l_fontscale_step_fp
-              {
-                \l__fontscale_musical_selectfont_fp
-                * ln ( \l_fontscale_scale_fp )
-              }
-          }
-          {
-            \fp_set:Nn \l_fontscale_step_fp
-              {
-                \l__fontscale_musical_selectfont_fp
-                * ln ( \f@size / \l__fontscale_musical_base_fp )
-              }
+            \l__fontscale_musical_selectfont_fp
+            * ln
+              (
+                \dim_compare:nNnTF \l__fontscale_musical_base_dim =
+                  \l_fontscale_normalsize_size_dim
+                  { \l_fontscale_scale_fp }
+                  { \f@size / \l__fontscale_musical_base_fp }
+              )
           }
       }
       { \fp_set_eq:NN \l_fontscale_step_fp \c_nan_fp }
@@ -266,7 +261,8 @@
     \tl_set:NV \ProcessedArgument \l__fontscale_arg_process_skip
   }
 % Used to define \tiny to \Huge. Sets \@currsize only for compatibility. Need
-% \dim_use:N only for compatibility with the microtype package.
+% \dim_use:N only for compatibility with versions of the microtype package
+% older than v3.2 2024-12-12.
 \cs_new_protected:Npn \__fontscale_name:NNN #1#2#3
   {
     \cs_set_eq:NN \@currsize #1
@@ -277,8 +273,7 @@
 % unit of 'pt'.
 % (2) Avoids the issue where \f@size is set to the new font size before the
 % second argument is expanded.
-% (3) Issues a user-friendly error message if the font size is not a positive
-% length.
+% (3) Issues a user-friendly error message if the font size is not positive.
 \cs_new_protected:Npn \__fontscale_set_font_size:nn #1#2
   {
     \use:e
@@ -385,6 +380,16 @@
 \dim_new:N \l__fontscale_musical_base_dim
 \int_new:N \l__fontscale_musical_notes_int
 
+\cs_new_protected:Npn \__fontscale_keys_code_musical_base:
+  {
+    \__fontscale_dim_set_from_user:Nn \l__fontscale_musical_base_dim
+      { \l_keys_value_tl }
+  }
+\cs_new_protected:Npn \__fontscale_keys_code_musical_notes:
+  {
+    \__fontscale_int_set_from_user:Nn \l__fontscale_musical_notes_int
+      { \l_keys_value_tl }
+  }
 \cs_new_protected:Npn \__fontscale_keys_code_name:
   {
     \tl_if_in:NnTF \l_keys_value_tl { / }
@@ -428,15 +433,13 @@
   }
 \keys_define:nn { fontscale / musical }
   {
-      base .code:n =
-        \__fontscale_dim_set_from_user:Nn \l__fontscale_musical_base_dim {#1}
+      base .code:n = \__fontscale_keys_code_musical_base:
     , base .value_required:n = true
 
     , ratio .fp_set:N = \l__fontscale_musical_ratio_fp
     , ratio .value_required:n = true
 
-    , notes .code:n =
-        \__fontscale_int_set_from_user:Nn \l__fontscale_musical_notes_int {#1}
+    , notes .code:n = \__fontscale_keys_code_musical_notes:
     , notes .value_required:n = true
   }
 \keys_define:nn { fontscale / normalsize }
@@ -581,7 +584,7 @@
 
 % Pre-compiles the keys with their initial values and then sets the keys to
 % their initial values. This is significantly faster than using .initial:n and
-% \keys_precompile:nnN. The value of \q_no_value is used to test if the
+% \keys_precompile:nnN. The special value of \q_no_value is used to test if the
 % corresponding key has been set by the user.
 \cs_new_protected:Npn \__fontscale_keys_set_initial:
   {
@@ -1231,10 +1234,11 @@
   { \__fontscale_print_font_size_parameters: }
 \cs_new_protected:Npn \__fontscale_print_font_size_parameters:
   {
-    step         ~=~ \__fontscale_step:         ,~
-    scale        ~=~ \__fontscale_scale:        ,~
-    size         ~=~ \__fontscale_size:         ,~
-    baselineskip ~=~ \__fontscale_baselineskip:
+    step~ =~ \fp_if_nan:nF { \l_fontscale_step_fp }
+      { \fp_eval:n { round ( \l_fontscale_step_fp , 5 ) } } ,~
+    scale~ =~ \fp_eval:n { round ( \l_fontscale_scale_fp , 5 ) } ,~
+    size~ =~ \dim_use:N \l_fontscale_size_dim ,~
+    baselineskip~ =~ \skip_use:N \l_fontscale_baselineskip_skip
   }
 
 \NewDocumentCommand \PrintAllFontSizeParameters { }
@@ -1256,8 +1260,9 @@
       {
         \token_to_str:c {##1} \@ \c_colon_str \c_space_tl
         step~ =~ \fp_use:c { c_fontscale_##1_step_fp } ,~
-        scale~ =~ \str_if_eq:nnTF {##1} { normalsize }
-          { 1 } { \fp_use:c { l_fontscale_##1_scale_fp } } ,~
+        scale~ =~ \str_if_eq:nnTF {##1} { normalsize } { 1 }
+          { \fp_eval:n { round ( \use:c { l_fontscale_##1_scale_fp } , 5 ) } }
+          ,~
         size~ =~ \dim_use:c { l_fontscale_##1_size_dim } ,~
         baselineskip~ =~ \skip_use:c { l_fontscale_##1_baselineskip_skip }
         \str_if_eq:nnF {##1} { Huge } { \newline }

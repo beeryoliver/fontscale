@@ -7,6 +7,23 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v3.0.5] - 2025-01-03
+
+### Changed
+- Clarified some package functionalities in the documentation:
+  - The new font baselineskip set by `\ScaleFont` has no stretch and shrink
+    components.
+  - `\ScaleFont` is intended as a more robust alternative to `\scalefont` from
+    the `scalefnt` package.
+  - `\SetFontSizeBaselineskip` is intended as a more robust alternative to
+    `\fontsize` + `\selectfont`.
+  - `\PrintAllFontSizeParameters`, `\PrintSampleText`, and
+    `\PrintFontSizeCommand` cannot be used in math mode.
+- Code improvements:
+  - The package messages are now defined first.
+  - The package now regularly uses `\dim_to_fp:n` when handling dimensions
+    within floating point expressions.
+
 ## [v3.0.4] - 2024-12-22
 
 ### Changed

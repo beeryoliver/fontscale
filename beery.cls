@@ -4,7 +4,7 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplClass
   {beery}
-  {2024-12-22}
+  {2025-01-03}
   {}
   {}
 
@@ -20,6 +20,8 @@
 \RequirePackage [ shortcuts , allowbreakbefore ] { extdash }
 \RequirePackage { csquotes }
 \RequirePackage { lmodern }
+
+\RequirePackage { scaletextbullet }
 
 \RequirePackage { tcolorbox }
 \tcbuselibrary { breakable }
@@ -37,7 +39,8 @@
 
 \tl_const:Nn \c_beery_alphabet_tl { abcdefghijklmnopqrstuvwxyz }
 \NewExpandableDocumentCommand \alphabet { } { \c_beery_alphabet_tl }
-\NewDocumentCommand \Key { m o o }
+\NewDocumentCommand \Key
+  { >{ \TrimSpaces } m >{ \TrimSpaces } o >{ \TrimSpaces } o }
   {
     \mode_leave_vertical:
     \group_begin:
@@ -51,10 +54,12 @@
         { #1 $\,=\,$ #2 \hspace* { \fill } \hbox:n { initial $\,=\,$ #3 } }
     \group_end:
   }
-\NewDocumentCommand \Value { m } { \texttt {#1} }
-\NewDocumentCommand \cmd { m } { \texttt { \token_to_str:N #1 } \@ }
-\NewDocumentCommand \cs { m } { \texttt { \token_to_str:c {#1} } \@ }
-\NewDocumentCommand \marg { m }
+\NewDocumentCommand \Value { >{ \TrimSpaces } m } { \texttt {#1} }
+\NewDocumentCommand \cmd { >{ \TrimSpaces } m }
+  { \texttt { \token_to_str:N #1 } \@ }
+\NewDocumentCommand \cs { >{ \TrimSpaces } m }
+  { \texttt { \token_to_str:c {#1} } \@ }
+\NewDocumentCommand \marg { >{ \TrimSpaces } m }
   {
     \allowbreak
     \texttt { \c_left_brace_str }
@@ -63,7 +68,7 @@
     $\rangle$
     \texttt { \c_right_brace_str }
   }
-\NewDocumentCommand \oarg { m }
+\NewDocumentCommand \oarg { >{ \TrimSpaces } m }
   {
     \allowbreak
     \texttt { [ }
@@ -73,16 +78,16 @@
     \texttt { ] }
   }
 \NewDocumentCommand \sarg { } { $\langle$ \texttt {*} $\rangle$ }
-\NewDocumentCommand \meta { m }
+\NewDocumentCommand \meta { >{ \TrimSpaces } m }
   {
     $\langle$
     { \normalfont \itshape #1 }
     $\rangle$
   }
-\NewDocumentCommand \cls { m } { \textsf {#1} }
-\NewDocumentCommand \env { m } { \texttt {#1} }
-\NewDocumentCommand \pkg { m } { \textsf {#1} }
-\NewDocumentCommand \latin { m } { \textit {#1} }
+\NewDocumentCommand \cls { >{ \TrimSpaces } m } { \textsf {#1} }
+\NewDocumentCommand \env { >{ \TrimSpaces } m } { \texttt {#1} }
+\NewDocumentCommand \pkg { >{ \TrimSpaces } m } { \textsf {#1} }
+\NewDocumentCommand \latin { >{ \TrimSpaces } m } { \textit {#1} }
 
 % PAGE STYLE
 
@@ -91,19 +96,28 @@
 \dim_log:N \c_beery_alphabet_dim
 
 \dim_const:Nn \c_beery_big_dim { \l_fontscale_normalsize_baselineskip_skip }
-\dim_const:Nn \c_beery_medium_dim { \c_beery_big_dim / 2 }
-\dim_const:Nn \c_beery_small_dim  { \c_beery_big_dim / 4 }
+\dim_const:Nn \c_beery_medium_dim
+  { \fp_to_dim:n { \dim_to_fp:n { \c_beery_big_dim / 2 } } }
+\dim_const:Nn \c_beery_small_dim
+  { \fp_to_dim:n { \dim_to_fp:n { \c_beery_big_dim / 4 } } }
+\dim_log:N \c_beery_big_dim
+\dim_log:N \c_beery_medium_dim
+\dim_log:N \c_beery_small_dim
+
 \skip_const:Nn \c_beery_big_skip
   {
     \c_beery_big_dim
-    plus  \dim_eval:n { \c_beery_big_dim / 2 }
-    minus \dim_eval:n { \c_beery_big_dim / 3 }
+    plus  \fp_to_dim:n { \dim_to_fp:n { \c_beery_big_dim } / 2 }
+    minus \fp_to_dim:n { \dim_to_fp:n { \c_beery_big_dim } / 3 }
   }
 \skip_const:Nn \c_beery_medium_skip { \c_beery_big_skip / 2 }
 \skip_const:Nn \c_beery_small_skip  { \c_beery_big_skip / 4 }
 \skip_set_eq:NN \bigskipamount   \c_beery_big_skip
 \skip_set_eq:NN \medskipamount   \c_beery_medium_skip
 \skip_set_eq:NN \smallskipamount \c_beery_small_skip
+\skip_log:N \c_beery_big_skip
+\skip_log:N \c_beery_medium_skip
+\skip_log:N \c_beery_small_skip
 
 \raggedbottom
 \int_set:Nn \vbadness { 100 }
@@ -115,10 +129,10 @@
   {
       a4paper
     , textwidth =
-        \dim_eval:n { \fp_to_dim:n { \c_e_fp * \c_beery_alphabet_dim } }
+        \fp_to_dim:n { \c_e_fp * \dim_to_fp:n { \c_beery_alphabet_dim } }
     , textheight =
-        \dim_eval:n
-          { \fp_to_dim:n { 1.6180 * \c_e_fp * \c_beery_alphabet_dim } }
+        \fp_to_dim:n
+          { 1.6180 * \c_e_fp * \dim_to_fp:n { \c_beery_alphabet_dim } }
     , heightrounded
     , centering
     , headheight = \l_fontscale_footnotesize_baselineskip_skip
@@ -131,7 +145,7 @@
 \RequirePackage { fancyhdr }
 \pagestyle { fancy }
 \fancyhf { }
-\cs_set:Npn \headrulewidth { 0pt }
+\renewcommand \headrulewidth { 0pt }
 \fancyfoot [ C ]
   { \footnotesize \thepage \c_space_tl of~ \pageref { LastPage } }
 
@@ -139,8 +153,7 @@
 
 \nonfrenchspacing
 \linespread { 1 }
-\skip_set_eq:NN \parskip \c_beery_medium_skip
-\dim_zero:N \parindent
+\RequirePackage [ skip = \c_beery_medium_skip ] { parskip }
 \RequirePackage [ raggedrightboxes ] { ragged2e }
 \skip_set:Nn \RaggedRightRightskip { 0pt plus 0.5 \linewidth }
 \dim_zero:N \RaggedRightParindent
@@ -164,21 +177,19 @@
 \titlespacing* \section % section
   { 0pt } % indent
   {
-    - \parskip
-    + \c_beery_big_dim
-    plus  \fp_eval:n { 1 / 2 * 4 } \c_beery_big_dim
-    minus \fp_eval:n { 1 / 3 / 4 } \c_beery_big_dim
+    \c_beery_big_dim
+    plus  \fp_to_dim:n { 1 / 2 * 4 * \dim_to_fp:n { \c_beery_big_dim } }
+    minus \fp_to_dim:n { 1 / 3 / 4 * \dim_to_fp:n { \c_beery_big_dim } }
   } % before
-  { - \parskip + \c_beery_medium_skip } % after
+  { \c_beery_medium_skip } % after
 \titlespacing* \subsection
   { 0pt }
   {
-    - \parskip
-    + \fp_eval:n { 4 / 3 } \c_beery_medium_dim
-    plus  \fp_eval:n { 1 / 2 * 4 } \c_beery_medium_dim
-    minus \fp_eval:n { 1 / 3 / 4 } \c_beery_medium_dim
+    \fp_to_dim:n { 4 / 3 * \dim_to_fp:n { \c_beery_medium_dim } }
+    plus  \fp_to_dim:n { 1 / 2 * 4 * \dim_to_fp:n { \c_beery_medium_dim } }
+    minus \fp_to_dim:n { 1 / 3 / 4 * \dim_to_fp:n { \c_beery_medium_dim } }
   }
-  { - \parskip + \c_beery_medium_skip }
+  { \c_beery_medium_skip }
 
 \titleformat \section % section
   [ block ] % shape
@@ -210,7 +221,11 @@
     , itemsep   = 0pt
   }
 \setlist [ itemize   , 1 ] { label = \textbullet }
+\setlist [ itemize   , 2 ] { label = \ScaleTextBullets { 2 } }
+\setlist [ itemize   , 3 ] { label = \ScaleTextBullets { 3 } }
 \setlist [ enumerate , 1 ] { label = \arabic* . }
+\setlist [ enumerate , 2 ] { label = \theenumi  \arabic* . }
+\setlist [ enumerate , 3 ] { label = \theenumii \arabic* . }
 
 % list headings
 % https://tex.stackexchange.com/questions/2644/how-to-prevent-a-page-break-before-an-itemize-list
@@ -240,8 +255,9 @@
 \renewcommand \topfraction { 1 }
 \skip_set:Nn \textfloatsep
   {
-    \c_beery_big_dim plus \c_beery_big_dim minus
-    \dim_eval:n { \c_beery_big_dim / 3 }
+    \c_beery_big_dim
+    plus \c_beery_big_dim
+    minus \fp_to_dim:n { \dim_to_fp:n { \c_beery_big_dim } / 3 }
   }
 
 \RequirePackage { tabularray }
@@ -255,10 +271,14 @@
 \dim_set:Nn \footnotesep { \f@linespread \footnotesep }
 \coffin_new:N \l__beery_footnote_coffin
 % 1.2 = baselineskip-size-ratio
+% \f@linespread must not be empty here
 \dim_const:Nn \c_beery_footnote_baselineheight_dim
   {
     \fp_to_dim:n
-      { ( 1.2 * \f@linespread - 1 ) * \l_fontscale_footnotesize_size_dim }
+      {
+        ( 1.2 * \f@linespread - 1 )
+        * \dim_to_fp:n { \l_fontscale_footnotesize_size_dim }
+      }
   }
 \RenewDocumentCommand \@makefntext { +m }
   {
@@ -270,7 +290,8 @@
               {
                 \fp_to_dim:n
                   {
-                    ( 1 - \l_fontscale_footnotesize_scale_fp ) / 2 * \textwidth
+                    ( 1 - \l_fontscale_footnotesize_scale_fp ) / 2
+                    * \dim_to_fp:n { \textwidth }
                   }
               }
             \dim_set_eq:NN \rightmargin \leftmargin

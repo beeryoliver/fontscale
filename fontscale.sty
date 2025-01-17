@@ -8,8 +8,8 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2025-01-03}
-  {3.0.5}
+  {2025-01-17}
+  {3.0.6}
   {A flexible interface for setting font sizes}
 
 % l3kernel version 2023-10-10 added many 'e'-variants.
@@ -263,7 +263,7 @@
     \fp_set:Nn \l_fontscale_scale_fp
       {
         \dim_to_fp:n { \l_fontscale_size_dim }
-        * \l__fontscale_normalsize_size_reciprocal_fp
+        / \l__fontscale_normalsize_size_fp
       }
     \str_if_eq:VnTF \l__fontscale_typographic_scale_str { musical }
       {
@@ -277,7 +277,7 @@
                   { \l_fontscale_scale_fp }
                   {
                     \dim_to_fp:n { \l_fontscale_size_dim }
-                    * \l__fontscale_musical_base_reciprocal_fp
+                    / \l__fontscale_musical_base_fp
                   }
               )
           }
@@ -287,14 +287,12 @@
 
 % Used only to speed up floating point calculations.
 \fp_new:N \l__fontscale_normalsize_size_fp
-\fp_new:N \l__fontscale_normalsize_size_reciprocal_fp
+\fp_set:Nn \l__fontscale_normalsize_size_fp { 10 }
 \fp_new:N \l__fontscale_musical_base_fp
-\fp_new:N \l__fontscale_musical_base_reciprocal_fp
-\fp_new:N \l__fontscale_musical_notes_reciprocal_fp
+\fp_new:N \l__fontscale_musical_notes_fp
 \fp_new:N \l__fontscale_musical_selectfont_fp
 
-\fp_set:Nn \l__fontscale_normalsize_size_fp { 10 }
-\fp_set:Nn \l__fontscale_normalsize_size_reciprocal_fp { 0.1 }
+\fp_const:Nn \c__fontscale_five_fp { 5 }
 
 % Scratch variable
 \fp_new:N \l__fontscale_tmp_fp
@@ -386,6 +384,8 @@
       }
       { \msg_error:nnn { fontscale } { font-size-out-of-bounds } {#1} }
   }
+\cs_new:Npn \__fontscale_fp_eval_round:n #1
+  { \fp_eval:n { round ( #1 , \c__fontscale_five_fp ) } }
 
 % DEFINE KEYS
 
@@ -724,8 +724,6 @@
       }
     \fp_set:Nn \l__fontscale_normalsize_size_fp
       { \dim_to_fp:n { \l_fontscale_normalsize_size_dim } }
-    \fp_set:Nn \l__fontscale_normalsize_size_reciprocal_fp
-      { \c_one_fp / \l__fontscale_normalsize_size_fp }
     \quark_if_no_value:NTF \l__fontscale_normalsize_baselineskip_tl
       {
         \skip_set:Nn \l_fontscale_normalsize_baselineskip_skip
@@ -796,7 +794,7 @@
       {
         \l__fontscale_musical_base_fp * \l__fontscale_musical_ratio_fp
         ^ ( \use:c { c_fontscale_#1_step_fp }
-        * \l__fontscale_musical_notes_reciprocal_fp )
+        / \l__fontscale_musical_notes_fp )
       }
   }
 % Sets the font size, font scale, and font baselineskip of the other font size
@@ -824,22 +822,10 @@
         {
           \cs_set_eq:NN \__fontscale_keys_process_other_fn_aux:n
             \__fontscale_keys_process_other_musical:n
-          \dim_compare:nNnTF \l__fontscale_musical_base_dim =
-            \l_fontscale_normalsize_size_dim
-            {
-              \fp_set_eq:NN \l__fontscale_musical_base_fp
-                \l__fontscale_normalsize_size_fp
-              \fp_set_eq:NN \l__fontscale_musical_base_reciprocal_fp
-                \l__fontscale_normalsize_size_reciprocal_fp
-            }
-            {
-              \fp_set:Nn \l__fontscale_musical_base_fp
-                { \dim_to_fp:n { \l__fontscale_musical_base_dim } }
-              \fp_set:Nn \l__fontscale_musical_base_reciprocal_fp
-                { \c_one_fp / \l__fontscale_musical_base_fp }
-            }
-          \fp_set:Nn \l__fontscale_musical_notes_reciprocal_fp
-            { \c_one_fp / \int_use:N \l__fontscale_musical_notes_int }
+          \fp_set:Nn \l__fontscale_musical_base_fp
+            { \dim_to_fp:n { \l__fontscale_musical_base_dim } }
+          \fp_set:Nn \l__fontscale_musical_notes_fp
+            { \int_use:N \l__fontscale_musical_notes_int }
           \fp_set:Nn \l__fontscale_musical_selectfont_fp
             {
               \int_use:N \l__fontscale_musical_notes_int
@@ -903,7 +889,7 @@
     \fp_set:cn { l_fontscale_#1_scale_fp }
       {
         \dim_to_fp:n { \use:c { l_fontscale_#1_size_dim } }
-        * \l__fontscale_normalsize_size_reciprocal_fp
+        / \l__fontscale_normalsize_size_fp
       }
     \quark_if_no_value:cTF { l__fontscale_#1_baselineskip_tl }
       {
@@ -1124,8 +1110,8 @@
   }
 \cs_new_protected:Npn \__fontscale_set_font_step:n #1
   {
-    \fp_set:Nn \l__fontscale_tmp_fp { round ( #1 , 5 ) }
-    \str_case:enF { \fp_use:N \l__fontscale_tmp_fp }
+    \fp_set:Nn \l__fontscale_tmp_fp {#1}
+    \str_case:enF { \__fontscale_fp_eval_round:n { \l__fontscale_tmp_fp } }
       {
         { -4 } { \tiny         }
         { -3 } { \scriptsize   }
@@ -1147,8 +1133,7 @@
                   {
                     \l__fontscale_musical_base_fp
                     * \l__fontscale_musical_ratio_fp
-                    ^ ( \l__fontscale_tmp_fp
-                    * \l__fontscale_musical_notes_reciprocal_fp )
+                    ^ ( \l__fontscale_tmp_fp / \l__fontscale_musical_notes_fp )
                   }
               }
           }
@@ -1263,8 +1248,8 @@
 \cs_new_protected:Npn \__fontscale_print_font_size_parameters:
   {
     step~ =~ \fp_if_nan:nF { \l_fontscale_step_fp }
-      { \fp_eval:n { round ( \l_fontscale_step_fp , 5 ) } } ,~
-    scale~ =~ \fp_eval:n { round ( \l_fontscale_scale_fp , 5 ) } ,~
+      { \__fontscale_fp_eval_round:n { \l_fontscale_step_fp } } ,~
+    scale~ =~ \__fontscale_fp_eval_round:n { \l_fontscale_scale_fp } ,~
     size~ =~ \dim_use:N \l_fontscale_size_dim ,~
     baselineskip~ =~ \skip_use:N \l_fontscale_baselineskip_skip
   }
@@ -1289,7 +1274,10 @@
         \token_to_str:c {##1} \@ \c_colon_str \c_space_tl
         step~ =~ \fp_use:c { c_fontscale_##1_step_fp } ,~
         scale~ =~ \str_if_eq:nnTF {##1} { normalsize } { 1 }
-          { \fp_eval:n { round ( \use:c { l_fontscale_##1_scale_fp } , 5 ) } }
+          {
+            \__fontscale_fp_eval_round:n
+              { \use:c { l_fontscale_##1_scale_fp } }
+          }
           ,~
         size~ =~ \dim_use:c { l_fontscale_##1_size_dim } ,~
         baselineskip~ =~ \skip_use:c { l_fontscale_##1_baselineskip_skip }

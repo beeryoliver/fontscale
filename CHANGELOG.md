@@ -7,6 +7,13 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v3.0.6] - 2025-01-17
+
+### Changed
+- `\SetFontStep` now rounds the new font step to 5 decimal places only when
+  testing if it equals the font step of any font size commnad from `\tiny` to
+  `\Huge`.
+
 ## [v3.0.5] - 2025-01-03
 
 ### Changed

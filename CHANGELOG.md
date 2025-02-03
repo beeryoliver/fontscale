@@ -7,6 +7,12 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v3.1.0] - 2025-02-03
+
+### Added
+- `fontscale-code.tex`
+- `fontscale-code.pdf`
+
 ## [v3.0.6] - 2025-01-17
 
 ### Changed

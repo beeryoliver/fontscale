@@ -14,7 +14,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 3.0.6\quad{}17 January 2025
+Version 3.1.0\quad{}3 February 2025
 
 
 \section{Introduction}
@@ -77,18 +77,18 @@ For this reason, you may want to set the document class font size option close t
 \end{itemize}
 
 Unlike the standard \LaTeX{} document classes, the font size commands from \cs{tiny} to \cs{Huge} defined by this package do not change the vertical spacing for displayed math and list structures.
-If the user would like to add this functionality or perhaps other features to the font size commands, they can use hooks, which are documented in the \LaTeXe{} kernel.
+If the user would like to add this functionality or perhaps other features to the font size commands, they can use hooks, which are documented in \pkg{lthooks} and \pkg{ltcmdhooks}.
 
 \subsection{The font size parameters}
 \label{subsec:fontsizeparameters}
 
 When using the \pkg{fontscale} package, each font size, including the standard \LaTeX{} font size commands from \cs{tiny} to \cs{Huge}, has a font step, font scale, font size, and font baselineskip.
 The latter two parameters are the familiar first and second arguments to \cs{fontsize}\marg{dimen}\marg{skip}.
-(The font baselineskip, stored in the kernel command \cs{f@baselineskip}, should not be confused with the paragraph baselineskip \cs{baselineskip}.)
+(The font baselineskip should not be confused with the paragraph baselineskip \cs{baselineskip}.)
 The font scale and font step are different ways of describing the font size.
 The font scale is the relative font size; the ratio of the font size to \cs{normalsize}, which has a font scale of \num{1}.
 The font step is the number of font size gradations from \cs{normalsize}, which has a font step of \num{0}.
-Table~\ref{table:fontsteps} displays the font step of each font size command.
+Table \ref{table:fontsteps} displays the font step of each font size command.
 
 \input{./fontscale-table-font-steps.tex}
 
@@ -96,8 +96,7 @@ Table~\ref{table:fontsteps} displays the font step of each font size command.
 \label{subsec:syntax}
 
 This package defines some keys and commands that take as a value or argument a \meta{floating point expression}, \meta{integer expression}, \meta{dimen expression}, or \meta{skip expression}.
-This syntax has the same representation as the arguments to \cs{fpeval}, \cs{inteval}, \cs{dimeval}, and \cs{skipeval}, documented in \pkg{usrguide}.%
-\footnote{\url{https://ctan.org/pkg/usrguide}}
+This syntax has the same representation as the arguments to \cs{fpeval}, \cs{inteval}, \cs{dimeval}, and \cs{skipeval}, documented in \pkg{usrguide}.
 
 
 \section{Keys}
@@ -111,7 +110,7 @@ Set the package keys using \cs{fontscalesetup}\marg{key$\,=\,$value list} (\S\re
   {%
     The key
     \texorpdfstring
-      {\texttt{typographic-scale}}
+      {\Key{typographic-scale}}
       {typographic-scale}%
   }
 \label{subsec:typographicscale}
@@ -150,7 +149,7 @@ They have been used since the sixteenth century and are the default font sizes o
 Setting the value of the key \Key{typographic-scale} to \Key{classic-10pt}, \Key{classic-11pt}, or \Key{classic-12pt} sets the font size of each font size command from \cs{tiny} to \cs{Huge} to values based on their position in the classic typographic scale.
 The named point size\---\qtylist[list-final-separator={, or }]{10;11;12}{pt}\---is the font size of \cs{normalsize}.
 The font sizes of the other font size commands are the adjacent font sizes in the classic typographic scale.
-Table~\ref{table:classic} displays the font size of each font size command when using a classic typographic scale.
+Table \ref{table:classic} displays the font size of each font size command when using a classic typographic scale.
 
 \input{./fontscale-table-classic.tex}
 
@@ -173,7 +172,7 @@ The font sizes are calculated using the formula:%
 \begin{equation}\label{eq:musical}
   f_i = f_0 \times r ^ { i / n }
 \end{equation}
-$f_i$ is the font size with font step~$i$.
+$f_i$ is the font size with font step $i$.
 $f_0$ is the base font size.
 $n$ is the number of musical notes\---the number of font size gradations or steps above $f_0$.
 $r$ is the musical ratio, the ratio of the highest to the lowest note $ f_n / f_0 $.
@@ -185,7 +184,7 @@ The key \Key{musical\slash{}ratio} sets the musical ratio to the result of compu
 The initial value is \num{2}.
 The key \Key{musical\slash{}notes} sets the number of musical notes to the value of \meta{integer expression}.
 The initial value is \num{5}.
-Table~\ref{table:musical} displays the font size of each font size command when using a musical typographic scale with the initial values.
+Table \ref{table:musical} displays the font size of each font size command when using a musical typographic scale with the initial values.
 
 \input{./fontscale-table-musical.tex}
 
@@ -193,7 +192,7 @@ Table~\ref{table:musical} displays the font size of each font size command when 
   {%
     The key
     \texorpdfstring
-      {\texttt{baselineskip-size-ratio}}
+      {\Key{baselineskip-size-ratio}}
       {baselineskip-size-ratio}%
   }
 \label{subsec:baselineskipsizeratio}
@@ -278,7 +277,7 @@ Sets and processes the \pkg{fontscale} package keys (\S\ref{sec:keys}) in \meta{
 Adding the optional star \sarg{} first resets all the \pkg{fontscale} package keys to their initial values.
 The order of the keys in \meta{key$\,=\,$value list} does not affect how the keys are processed (unless a key is set more than once).
 Can be used mid\-/document.
-The effect is local to the current group.
+The scope of the effect is local to the current group.
 Does nothing, except issue a warning, if used in math mode.
 \cs{fontscalesetup} should typically be used only once in the preamble or omitted if the user is satisfied with the initial font sizes and font baselineskips.
 
@@ -299,8 +298,8 @@ This package provides expandable commands that expand to the current font step, 
 They can be used for printing or within calculations.
 
 For clarity, \cs{CurrentFontStep} will be explained in detail.
-If the current font size equals the font size of any font size command from \cs{tiny} to \cs{Huge}, then \cs{CurrentFontStep} expands to the font step of that font size command (Table~\ref{table:fontsteps}).
-If not and if the value of the key \Key{typographic-scale} is \Value{musical}, \cs{CurrentFontStep} expands to the font step calculated from the musical typographic scale (Equation~\ref{eq:musical}).
+If the current font size equals the font size of any font size command from \cs{tiny} to \cs{Huge}, then \cs{CurrentFontStep} expands to the font step of that font size command (Table \ref{table:fontsteps}).
+If not and if the value of the key \Key{typographic-scale} is \Value{musical}, \cs{CurrentFontStep} expands to the font step calculated from the musical typographic scale (Equation \ref{eq:musical}).
 Otherwise, the current font step is undefined and \cs{CurrentFontStep} expands to nothing.
 
 \subsection{More font size commands}
@@ -320,7 +319,7 @@ Sets the font baselineskip equal to the new font size \texttimes{} the value of 
 \listheading{Three exceptions:}
 \begin{itemize}
   \item
-  If the font step equals the font step of any font size command from \cs{tiny} to \cs{Huge} (Table~\ref{table:fontsteps}), then that font size command will be used directly.%
+  If the font step equals the font step of any font size command from \cs{tiny} to \cs{Huge} (Table \ref{table:fontsteps}), then that font size command will be used directly.%
   \footnote
     {%
       \label{fn:setfontstep}%
@@ -329,7 +328,7 @@ Sets the font baselineskip equal to the new font size \texttimes{} the value of 
   \item
   \cs{SetFontStep} will issue an error if the font step is undefined (as explained for \cs{CurrentFontStep} in \S\ref{subsec:expandable}).
   The font step must equal the font step of any font size command from \cs{tiny} to \cs{Huge} unless the value of the key \Key{typographic-scale} is \Value{musical}.%
-  \footnote{See Footnote~\ref{fn:setfontstep}.}
+  \footnote{See Footnote \ref{fn:setfontstep}.}
   \cs{SetFontStep*} will always issue an error if the current font step is undefined.
   \item
   Does nothing, except issue a warning, if used in math mode.
@@ -423,7 +422,7 @@ One useful way of printing sample text is \cs{PrintSampleText}\allowbreak\texttt
 \end{mydisplaycode}
 
 Tests if the current font size equals the font size of any font size command from \cs{tiny} to \cs{Huge}.
-If so, prints the name of that font size command, including the backslash character.
+If so, prints the name of that font size command.
 If not, prints \enquote{\string\undefined}.
 Cannot be used in math mode.
 

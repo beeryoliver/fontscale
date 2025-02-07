@@ -7,6 +7,13 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v3.1.1] - 2025-02-06
+
+### Changed
+- The package no longer removes extra trailing tokens from user input into an
+  integer expression. (This feature had relied on exploiting an implementation
+  detail.)
+
 ## [v3.1.0] - 2025-02-03
 
 ### Added

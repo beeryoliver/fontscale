@@ -6,7 +6,7 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplClass
   {beery}
-  {2025-02-03}
+  {2025-02-06}
   {0.0.0}
   {}
 
@@ -15,13 +15,13 @@
 % l3kernel version 2023-10-10 added many 'e'-variants.
 \IfExplAtLeastTF { 2023-10-10 } { }
   {
-    \msg_new:nnn { beery } { expl3-out-of-date }
+    \msg_new:nnn { beery } { l3kernel-out-of-date }
       {
         The~ beery~ class~ could~ not~ load.~
         This~ class~ requires~
         L3~ programming~ layer~ version~ 2023-10-10~ or~ newer.
       }
-    \msg_critical:nn { beery } { expl3-out-of-date }
+    \msg_critical:nn { beery } { l3kernel-out-of-date }
   }
 
 \sys_if_engine_luatex:F
@@ -101,16 +101,6 @@
       \hbox:n { initial \ensuremath { \,=\, } #3 }
     \group_end:
   }
-\NewDocumentCommand \Value { >{ \TrimSpaces } m }
-  {
-    \mode_if_math:TF
-      {
-        \msg_error:nne { beery } { math-mode-error }
-          { \token_to_str:N \Value }
-      }
-      { \__beery_print_value:n {#1} }
-  }
-\cs_new_protected:Npn \__beery_print_value:n #1 { \texttt {#1} \@ }
 \NewDocumentCommand \cs { >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
@@ -189,12 +179,12 @@
   }
 \cs_new_protected:Npn \__beery_print_latin:n #1 { \textit {#1} }
 
-\NewDocumentCommand \AllCaps { O { 50 } >{ \TrimSpaces } m }
+\NewDocumentCommand \allcaps { O { 50 } >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
       {
         \msg_error:nne { beery } { math-mode-error }
-          { \token_to_str:N \AllCaps }
+          { \token_to_str:N \allcaps }
       }
       { \__beery_text_all_caps:nn {#1} {#2} }
   }
@@ -203,13 +193,13 @@
     \textls [ \int_eval:n {#1} ] { \text_uppercase:n {#2} }
     \regex_match:NnT \c__beery_ends_in_letter_regex {#2} { \@ }
   }
-\NewDocumentCommand \AllSmallCaps
+\NewDocumentCommand \allsmallcaps
   { >{ \ReverseBoolean } s O { 50 } >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
       {
         \msg_error:nne { beery } { math-mode-error }
-          { \token_to_str:N \AllSmallCaps }
+          { \token_to_str:N \allsmallcaps }
       }
       {
         \IfBooleanTF #1
@@ -374,12 +364,12 @@
 
 % list headings
 % https://tex.stackexchange.com/questions/2644/how-to-prevent-a-page-break-before-an-itemize-list
-\NewDocumentCommand \KeepNextPar { > { \ReverseBoolean } s }
+\NewDocumentCommand \keepnextpar { > { \ReverseBoolean } s }
   {
     \mode_if_math:TF
       {
         \msg_error:nne { beery } { math-mode-error }
-          { \token_to_str:N \KeepNextPar }
+          { \token_to_str:N \keepnextpar }
       }
       {
         \IfBooleanTF #1

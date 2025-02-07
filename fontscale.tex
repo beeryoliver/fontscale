@@ -14,7 +14,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 3.1.0\quad{}3 February 2025
+Version 3.1.1\quad{}6 February 2025
 
 
 \section{Introduction}
@@ -136,8 +136,8 @@ The font sizes of the font size commands from \cs{tiny} to \cs{Huge} are initial
   \Key{musical}
 \end{mydisplaycode}
 
-The value of the key \Key{typographic-scale} must be \Value{classic-10pt}, \Value{classic-11pt}, \Value{classic-12pt}, or \Value{musical}.
-The initial value is \Value{classic-10pt}.
+The value of the key \Key{typographic-scale} must be \texttt{classic-10pt}, \texttt{classic-11pt}, \texttt{classic-12pt}, or \texttt{musical}.
+The initial value is \texttt{classic-10pt}.
 Sets the font size of each font size command from \cs{tiny} to \cs{Huge} using a classic or musical typographic scale.
 These are common methods of choosing a set of document font sizes.
 The keys \Key{classic-10pt}, \Key{classic-11pt}, \Key{classic-12pt}, and \Key{musical} set the key \Key{typographic-scale} to the corresponding value.
@@ -299,7 +299,7 @@ They can be used for printing or within calculations.
 
 For clarity, \cs{CurrentFontStep} will be explained in detail.
 If the current font size equals the font size of any font size command from \cs{tiny} to \cs{Huge}, then \cs{CurrentFontStep} expands to the font step of that font size command (Table \ref{table:fontsteps}).
-If not and if the value of the key \Key{typographic-scale} is \Value{musical}, \cs{CurrentFontStep} expands to the font step calculated from the musical typographic scale (Equation \ref{eq:musical}).
+If not and if the value of the key \Key{typographic-scale} is \texttt{musical}, \cs{CurrentFontStep} expands to the font step calculated from the musical typographic scale (Equation \ref{eq:musical}).
 Otherwise, the current font step is undefined and \cs{CurrentFontStep} expands to nothing.
 
 \subsection{More font size commands}
@@ -327,7 +327,7 @@ Sets the font baselineskip equal to the new font size \texttimes{} the value of 
     }
   \item
   \cs{SetFontStep} will issue an error if the font step is undefined (as explained for \cs{CurrentFontStep} in \S\ref{subsec:expandable}).
-  The font step must equal the font step of any font size command from \cs{tiny} to \cs{Huge} unless the value of the key \Key{typographic-scale} is \Value{musical}.%
+  The font step must equal the font step of any font size command from \cs{tiny} to \cs{Huge} unless the value of the key \Key{typographic-scale} is \texttt{musical}.%
   \footnote{See Footnote \ref{fn:setfontstep}.}
   \cs{SetFontStep*} will always issue an error if the current font step is undefined.
   \item

@@ -10,23 +10,21 @@
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage
   {fontscale}
-  {2025-02-03}
-  {3.1.0}
+  {2025-02-06}
+  {3.1.1}
   {A flexible interface for setting font sizes}
 
 % l3kernel version 2023-10-10 added many 'e'-variants.
 \IfExplAtLeastTF { 2023-10-10 } { }
   {
-    \msg_new:nnn { fontscale } { expl3-out-of-date }
+    \msg_new:nnn { fontscale } { l3kernel-out-of-date }
       {
         The~ fontscale~ package~ could~ not~ load.~
         This~ package~ requires~
         L3~ programming~ layer~ version~ 2023-10-10~ or~ newer.
       }
-    \msg_critical:nn { fontscale } { expl3-out-of-date }
+    \msg_critical:nn { fontscale } { l3kernel-out-of-date }
   }
-
-% This package does not require any other packages!
 
 %%> \section{Messages}
 
@@ -305,38 +303,31 @@
 
 % Variants of l3kernel functions
 \cs_generate_variant:Nn \msg_error:nnnn { nnv , nne }
-% Used to process user input. Sets an integer/dimen/skip variable from an
-% integer/dimen/skip expression and removes extra trailing tokens, if any. A
-% default unit of 'pt' is appended in the dimen and skip expressions.
-\cs_new_protected:Npn \__fontscale_int_set_from_user:Nn #1#2
-  {
-    \afterassignment \use_none_delimit_by_q_stop:w
-      #1 = \numexpr #2 \relax
-    \q_stop
-  }
-\cs_new_protected:Npn \__fontscale_dim_set_from_user:Nn #1#2
+% Sets a dimen/skip variable from a dimen/skip expression, appending a default
+% unit 'pt', and removes extra trailing tokens, if any.
+\cs_new_protected:Npn \__fontscale_dim_set_default_pt:Nn #1#2
   {
     \afterassignment \use_none_delimit_by_q_stop:w
       #1 = \dimexpr #2 pt \relax
     \q_stop
   }
-\cs_generate_variant:Nn \__fontscale_dim_set_from_user:Nn { c }
-\cs_new_protected:Npn \__fontscale_skip_set_from_user:Nn #1#2
+\cs_generate_variant:Nn \__fontscale_dim_set_default_pt:Nn { c }
+\cs_new_protected:Npn \__fontscale_skip_set_default_pt:Nn #1#2
   {
     \afterassignment \use_none_delimit_by_q_stop:w
       #1 = \glueexpr #2 pt \relax
     \q_stop
   }
-\cs_generate_variant:Nn \__fontscale_skip_set_from_user:Nn { c }
+\cs_generate_variant:Nn \__fontscale_skip_set_default_pt:Nn { c }
 % Argument processors
 \cs_new_protected:Npn \__fontscale_arg_process_dim:n #1
   {
-    \__fontscale_dim_set_from_user:Nn \l__fontscale_tmp_dim {#1}
+    \__fontscale_dim_set_default_pt:Nn \l__fontscale_tmp_dim {#1}
     \tl_set:NV \ProcessedArgument \l__fontscale_tmp_dim
   }
 \cs_new_protected:Npn \__fontscale_arg_process_skip:n #1
   {
-    \__fontscale_skip_set_from_user:Nn \l__fontscale_tmp_skip {#1}
+    \__fontscale_skip_set_default_pt:Nn \l__fontscale_tmp_skip {#1}
     \tl_set:NV \ProcessedArgument \l__fontscale_tmp_skip
   }
 % Used to define \tiny to \Huge. Sets \@currsize only for compatibility. Need
@@ -389,20 +380,12 @@
 
 %%> \section{Define keys}
 
-% Variables not defined with \keys_define:nn.
 \str_new:N \l__fontscale_typographic_scale_str
 \dim_new:N \l__fontscale_musical_base_dim
-\int_new:N \l__fontscale_musical_notes_int
 
-% Used to define .code:n keys.
 \cs_new_protected:Npn \__fontscale_keys_code_musical_base:
   {
-    \__fontscale_dim_set_from_user:Nn \l__fontscale_musical_base_dim
-      { \l_keys_value_tl }
-  }
-\cs_new_protected:Npn \__fontscale_keys_code_musical_notes:
-  {
-    \__fontscale_int_set_from_user:Nn \l__fontscale_musical_notes_int
+    \__fontscale_dim_set_default_pt:Nn \l__fontscale_musical_base_dim
       { \l_keys_value_tl }
   }
 \cs_new_protected:Npn \__fontscale_keys_code_name:
@@ -451,7 +434,7 @@
     , ratio .fp_set:N = \l__fontscale_musical_ratio_fp
     , ratio .value_required:n = true
 
-    , notes .code:n = \__fontscale_keys_code_musical_notes:
+    , notes .int_set:N = \l__fontscale_musical_notes_int
     , notes .value_required:n = true
   }
 \keys_define:nn { fontscale / normalsize }
@@ -717,7 +700,7 @@
           }
       }
       {
-        \__fontscale_dim_set_from_user:Nn \l_fontscale_normalsize_size_dim
+        \__fontscale_dim_set_default_pt:Nn \l_fontscale_normalsize_size_dim
           { \l__fontscale_normalsize_size_tl }
         \dim_compare:nNnF \l_fontscale_normalsize_size_dim > \c_zero_dim
           {
@@ -740,7 +723,7 @@
           }
       }
       {
-        \__fontscale_skip_set_from_user:Nn
+        \__fontscale_skip_set_default_pt:Nn
           \l_fontscale_normalsize_baselineskip_skip
           { \l__fontscale_normalsize_baselineskip_tl }
       }
@@ -868,7 +851,7 @@
       }
     \quark_if_no_value:cF { l__fontscale_#1_size_tl }
       {
-        \__fontscale_dim_set_from_user:cn { l_fontscale_#1_size_dim }
+        \__fontscale_dim_set_default_pt:cn { l_fontscale_#1_size_dim }
           { \use:c { l__fontscale_#1_size_tl } }
         \dim_compare:nNnF { \use:c { l_fontscale_#1_size_dim } } > \c_zero_dim
           {
@@ -906,7 +889,8 @@
           }
       }
       {
-        \__fontscale_skip_set_from_user:cn { l_fontscale_#1_baselineskip_skip }
+        \__fontscale_skip_set_default_pt:cn
+          { l_fontscale_#1_baselineskip_skip }
           { \use:c { l__fontscale_#1_baselineskip_tl } }
       }
   }

@@ -1,25 +1,23 @@
-% Note: This class is designed ONLY for 'fontscale.tex'. Compiled with LuaTeX.
+% Note: This class is designed ONLY for 'fontscale.tex'.
 
 % LOADING THE CLASS
 
-% LaTeX2e version 2023-11-01 added \IfExplAtLeastTF.
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplClass
   {beery}
-  {2025-02-06}
+  {2025-02-13}
   {0.0.0}
   {}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beery } { Class }
 
-% l3kernel version 2023-10-10 added many 'e'-variants.
-\IfExplAtLeastTF { 2023-10-10 } { }
+\IfExplAtLeastTF { 2023-11-09 } { }
   {
     \msg_new:nnn { beery } { l3kernel-out-of-date }
       {
-        The~ beery~ class~ could~ not~ load.~
+        The~ beery~ class~ could~ not~ load. \\
         This~ class~ requires~
-        L3~ programming~ layer~ version~ 2023-10-10~ or~ newer.
+        L3~ programming~ layer~ version~ 2023-11-09~ or~ newer.
       }
     \msg_critical:nn { beery } { l3kernel-out-of-date }
   }
@@ -27,7 +25,10 @@
 \sys_if_engine_luatex:F
   {
     \msg_new:nnn { beery } { luatex-required }
-      { The~ beery~ class~ could~ not~ load.~ This~ class~ requires~ LuaTeX. }
+      {
+        The~ beery~ class~ could~ not~ load. \\
+        This~ class~ requires~ LuaTeX.
+      }
     \msg_critical:nn { beery } { luatex-required }
   }
 
@@ -65,8 +66,8 @@
 \fp_const:Nn \c_beery_golden_ratio_fp { 1.6180 3398 8749 8948 }
 \tl_const:Nn \c_beery_alphabet_tl { abcdefghijklmnopqrstuvwxyz }
 \tl_const:Nn \c_beery_digits_tl { 0123456789 }
-
-\regex_const:Nn \c__beery_ends_in_letter_regex { ^.*[A-Za-z]$ }
+\tl_const:Nn \c_beery_pangram_tl
+  { The~ quick~ brown~ fox~ jumps~ over~ the~ lazy~ dog. }
 
 % Scratch variables
 \box_new:N \l__beery_tmp_box
@@ -74,9 +75,8 @@
 % CUSTOM MACROS
 
 \NewExpandableDocumentCommand \alphabet { } { \c_beery_alphabet_tl }
-\NewExpandableDocumentCommand \digits { } { \c_beery_digits_tl }
-\NewExpandableDocumentCommand \pangram { }
-  { The~ quick~ brown~ fox~ jumps~ over~ the~ lazy~ dog. }
+\NewExpandableDocumentCommand \digits   { } { \c_beery_digits_tl   }
+\NewExpandableDocumentCommand \pangram  { } { \c_beery_pangram_tl  }
 
 \NewDocumentCommand \Key
   { >{ \TrimSpaces } m >{ \TrimSpaces } o >{ \TrimSpaces } o }
@@ -189,10 +189,7 @@
       { \__beery_text_all_caps:nn {#1} {#2} }
   }
 \cs_new_protected:Npn \__beery_text_all_caps:nn #1#2
-  {
-    \textls [ \int_eval:n {#1} ] { \text_uppercase:n {#2} }
-    \regex_match:NnT \c__beery_ends_in_letter_regex {#2} { \@ }
-  }
+  { \textls [ \int_eval:n {#1} ] { \text_uppercase:n {#2} } }
 \NewDocumentCommand \allsmallcaps
   { >{ \ReverseBoolean } s O { 50 } >{ \TrimSpaces } m }
   {
@@ -354,9 +351,9 @@
     , itemsep   = \c_zero_skip
   }
 \setlist [ itemize   , 1 ] { label = \textbullet }
-\setlist [ itemize   , 2 ] { label = \ScaleTextBullets { 2 } }
-\setlist [ itemize   , 3 ] { label = \ScaleTextBullets { 3 } }
-\setlist [ itemize   , 4 ] { label = \ScaleTextBullets { 4 } }
+\setlist [ itemize   , 2 ] { label = \scaletextbullets { 2 } }
+\setlist [ itemize   , 3 ] { label = \scaletextbullets { 3 } }
+\setlist [ itemize   , 4 ] { label = \scaletextbullets { 4 } }
 \setlist [ enumerate , 1 ] { label = \arabic* . }
 \setlist [ enumerate , 2 ] { label = \theenumi   \arabic* . }
 \setlist [ enumerate , 3 ] { label = \theenumii  \arabic* . }
@@ -364,7 +361,7 @@
 
 % list headings
 % https://tex.stackexchange.com/questions/2644/how-to-prevent-a-page-break-before-an-itemize-list
-\NewDocumentCommand \keepnextpar { > { \ReverseBoolean } s }
+\NewDocumentCommand \keepnextpar { >{ \ReverseBoolean } s }
   {
     \mode_if_math:TF
       {
@@ -390,9 +387,9 @@
         \msg_error:nne { beery } { math-mode-error }
           { \token_to_str:N \listheading }
       }
-      { \__beery_typeset_list_heading:n {#1} }
+      { \__beery_list_heading:n {#1} }
   }
-\cs_new_protected:Npn \__beery_typeset_list_heading:n #1
+\cs_new_protected:Npn \__beery_list_heading:n #1
   {
     \par
     #1
@@ -451,7 +448,10 @@
 
 % REFERENCES
 
-\AddToHook { shipout / lastpage } { \label { LastPage } }
+\cs_new_protected:Npn \__beery_hook_code_shipout_last_page:
+  { \label { LastPage } }
+\hook_gput_code:nnn { shipout / last page } { beery }
+  { \__beery_hook_code_shipout_last_page: }
 \RequirePackage { xurl }
 \RequirePackage { hyperref }
 \hypersetup { bookmarksnumbered , hidelinks , linktoc = page }

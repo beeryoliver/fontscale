@@ -7,6 +7,11 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v3.1.2] - 2025-02-13
+
+### Fixed
+- The package now correctly requires `l3kernel` version 2023-11-09.
+
 ## [v3.1.1] - 2025-02-06
 
 ### Changed

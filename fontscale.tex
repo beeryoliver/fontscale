@@ -14,7 +14,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 3.1.1\quad{}6 February 2025
+Version 3.1.2\quad{}13 February 2025
 
 
 \section{Introduction}
@@ -45,7 +45,7 @@ Version 3.1.1\quad{}6 February 2025
 \listheading{Requirements:}
 \begin{itemize}
   \item \LaTeXe{} version 2023-11-01 or newer
-  \item \pkg{l3kernel} version 2023-10-10 or newer
+  \item \pkg{l3kernel} version 2023-11-09 or newer
 \end{itemize}
 
 You may need to ensure that your \LaTeX{} installation is up\-/to\-/date before using this package.
@@ -146,7 +146,7 @@ The classic typographic scale consists of the traditional font sizes
 \numlist{6;7;8;9;10;11;12;14;16;18;21;24;36;48;60;72}.%
 \footnote{See \S3.1 of \textit{The Elements of Typographic Style} by Robert Bringhurst.}
 They have been used since the sixteenth century and are the default font sizes on most computer software.
-Setting the value of the key \Key{typographic-scale} to \Key{classic-10pt}, \Key{classic-11pt}, or \Key{classic-12pt} sets the font size of each font size command from \cs{tiny} to \cs{Huge} to values based on their position in the classic typographic scale.
+Setting the value of the key \Key{typographic-scale} to \texttt{classic-10pt}, \texttt{classic-11pt}, or \texttt{classic-12pt} sets the font size of each font size command from \cs{tiny} to \cs{Huge} to values based on their position in the classic typographic scale.
 The named point size\---\qtylist[list-final-separator={, or }]{10;11;12}{pt}\---is the font size of \cs{normalsize}.
 The font sizes of the other font size commands are the adjacent font sizes in the classic typographic scale.
 Table \ref{table:classic} displays the font size of each font size command when using a classic typographic scale.

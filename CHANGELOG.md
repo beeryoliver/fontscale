@@ -7,6 +7,39 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v4.0.0] - 2025-03-02
+
+### Added
+- `fontscale` version 3 can be used by declaring `\usepackage{fontscale}[=v3]`.
+- `fontscale-v3.sty`
+
+### Removed
+- The package keys and commands that take a dimen or skip expression as a value
+  or argument no longer append a default unit of `pt` and remove extra trailing
+  tokens, if any. (This feature had relied on exploiting `expl3` implementation
+  details.)
+
+### Changed
+- `fontscale` is no longer compatible with the `scalefnt` package.
+- The keys `<font size command>` are now shortcuts for the keys
+  `<font size command>/size`. (The previous functionality no longer makes
+  syntactic sense given the removal of default unit support.)
+- Renamed the document commands using the recommended all-lowercase convention:
+  - `\CurrentFontStep` to `\currentfontstep`
+  - `\CurrentFontScale` to `\currentfontscale`
+  - `\CurrentFontSize` to `\currentfontsize`
+  - `\CurrentFontBaselineskip` to `\currentfontbaselineskip`
+  - `\SetFontStep` to `\setfontstep`
+  - `\SetFontScale` to `\setfontscale`
+  - `\SetFontSize` to `\setfontsize`
+  - `\ScaleFont` to `\scalefont`
+  - `\SetFontSizeBaselineskip` to `\setfontsizebaselineskip`
+  - `\SetFontBaselineskip` to `\setfontbaselineskip`
+  - `\PrintFontSizeParameters` to `\printfontsizeparameters`
+  - `\PrintAllFontSizeParameters` to `\printallfontsizeparameters`
+  - `\PrintSampleText` to `\printsampletext`
+  - `\PrintFontSizeCommand` to `\printfontsizecommand`
+
 ## [v3.1.2] - 2025-02-13
 
 ### Fixed

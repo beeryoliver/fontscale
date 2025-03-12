@@ -321,7 +321,7 @@
   }
 \cs_new_protected:Npn \__fontscale_set_font_size_aux:nn #1#2
   {
-    \dim_compare:nTF { \c_zero_dim < #1 2048pt }
+    \dim_compare:nTF { \c_zero_dim < #1 < 2048pt }
       { \fontsize {#1} {#2} \selectfont }
       { \msg_error:nnn { fontscale } { font-size-invalid } {#1} }
   }
@@ -331,7 +331,7 @@
   { \exp_args:Ne \__fontscale_set_font_size_aux:n { \dim_eval:n {#1} } }
 \cs_new_protected:Npn \__fontscale_set_font_size_aux:n #1
   {
-    \dim_compare:nTF { \c_zero_dim < #1 2048pt }
+    \dim_compare:nTF { \c_zero_dim < #1 < 2048pt }
       {
         \fontsize {#1}
           {

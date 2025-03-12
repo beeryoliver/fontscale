@@ -7,6 +7,17 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v4.0.1] - 2025-03-11
+
+### Changed
+- The package now issues a package error if the font size would be 2048pt or
+  greater.
+
+### Fixed
+- Fixed a rare issue where `\fontscalesetup` would not issue a package error if
+  the font size of a font size command was `0pt` and the value of the key
+  `typographic-scale` was `musical`.
+
 ## [v4.0.0] - 2025-03-02
 
 ### Added

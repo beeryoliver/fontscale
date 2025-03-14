@@ -9,8 +9,8 @@
 % LaTeX2e version 2023-11-01 added \IfExplAtLeastTF.
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \DeclareRelease{v3}{2025-02-13}{fontscale-v3.sty}
-\DeclareCurrentRelease{}{2025-03-02}
-\ProvidesExplPackage{fontscale}{2025-03-02}{4.0.0}
+\DeclareCurrentRelease{}{2025-03-11}
+\ProvidesExplPackage{fontscale}{2025-03-11}{4.0.1}
   {A flexible interface for setting font sizes}
 
 % l3kernel version 2023-11-09 added documentation for \c_nan_fp.
@@ -28,12 +28,12 @@
 % fontscale defines \scalefont.
 \cs_new_protected:Npn \__fontscale_hook_scalefnt:
   {
-    \msg_new:nnn { fontscale } { package-scalefnt-incompatible }
+    \msg_new:nnn { fontscale } { package-scalefnt }
       {
         The~ fontscale~ package~ is~ incompatible~ with~ the~ 'scalefnt'~
         package.
       }
-    \msg_error:nn { fontscale } { package-scalefnt-incompatible }
+    \msg_error:nn { fontscale } { package-scalefnt }
   }
 \hook_gput_code:nnn { package / scalefnt / before } { fontscale }
   { \__fontscale_hook_scalefnt: }
@@ -43,7 +43,8 @@
 \msg_new:nnn { fontscale } { key-musical-base-invalid }
   {
     Invalid~ value~ '#1'~ \msg_line_context:. \\
-    The~ value~ of~ the~ key~ 'musical / base'~ must~ be~ a~ positive~ length.
+    The~ value~ of~ the~ key~ 'musical / base'~ must~ be~ a~ positive~ length~
+    and~ less~ than~ 2048pt.
   }
 \msg_new:nnn { fontscale } { key-musical-ratio-invalid }
   {
@@ -56,17 +57,12 @@
     The~ value~ of~ the~ key~ 'musical / notes'~ must~ be~ a~ positive~
     integer.
   }
-\msg_new:nnn { fontscale } { key-font-scale-invalid }
+\msg_new:nnn { fontscale } { name-font-size-invalid }
   {
-    Invalid~ value~ '#2'~ \msg_line_context:. \\
-    The~ value~ of~ the~ key~ '#1 / scale'~ must~ be~ positive.
+    Invalid~ font~ size~ of~ \iow_char:N \\#1~ '#2'~ \msg_line_context:. \\
+    The~ font~ size~ must~ be~ a~ positive~ length~ and~ less~ than~ 2048pt.
   }
-\msg_new:nnn { fontscale } { key-font-size-invalid }
-  {
-    Invalid~ value~ '#2'~ \msg_line_context:. \\
-    The~ value~ of~ the~ key~ '#1 / size'~ must~ be~ a~ positive~ length.
-  }
-\msg_new:nnn { fontscale } { key-font-scale-overwritten }
+\msg_new:nnn { fontscale } { key-name-scale-overwritten }
   {
     The~ font~ size~ set~ by~ the~ key~ '#1 / scale'~
     has~ been~ overwritten~ by~ the~ key~ '#1 / size'~ \msg_line_context:.
@@ -90,7 +86,7 @@
 \msg_new:nnn { fontscale } { font-size-invalid }
   {
     Invalid~ font~ size~ '#1'~ \msg_line_context:. \\
-    The~ font~ size~ must~ be~ a~ positive~ length.
+    The~ font~ size~ must~ be~ a~ positive~ length~ and~ less~ than~ 2048pt.
   }
 \msg_new:nnn { fontscale } { font-step-invalid }
   {
@@ -325,7 +321,7 @@
   }
 \cs_new_protected:Npn \__fontscale_set_font_size_aux:nn #1#2
   {
-    \dim_compare:nNnTF {#1} > \c_zero_dim
+    \dim_compare:nTF { \c_zero_dim < #1 < 2048pt }
       { \fontsize {#1} {#2} \selectfont }
       { \msg_error:nnn { fontscale } { font-size-invalid } {#1} }
   }
@@ -335,7 +331,7 @@
   { \exp_args:Ne \__fontscale_set_font_size_aux:n { \dim_eval:n {#1} } }
 \cs_new_protected:Npn \__fontscale_set_font_size_aux:n #1
   {
-    \dim_compare:nNnTF {#1} > \c_zero_dim
+    \dim_compare:nTF { \c_zero_dim < #1 < 2048pt }
       {
         \fontsize {#1}
           {
@@ -532,7 +528,7 @@
   }
 \cs_new_protected:Npn \__fontscale_keys_process_start:
   {
-    \dim_compare:nNnF \l__fontscale_musical_base_dim > \c_zero_dim
+    \dim_compare:nF { \c_zero_dim < \l__fontscale_musical_base_dim < 2048pt }
       {
         \msg_error:nnV { fontscale } { key-musical-base-invalid }
           \l__fontscale_musical_base_dim
@@ -571,9 +567,10 @@
       {
         \dim_set:Nn \l_fontscale_normalsize_size_dim
           { \l__fontscale_normalsize_size_tl }
-        \dim_compare:nNnF \l_fontscale_normalsize_size_dim > \c_zero_dim
+        \dim_compare:nF
+          { \c_zero_dim < \l_fontscale_normalsize_size_dim < 2048pt }
           {
-            \msg_error:nnnV { fontscale } { key-font-size-invalid }
+            \msg_error:nnnV { fontscale } { name-font-size-invalid }
               { normalsize } \l_fontscale_normalsize_size_dim
             \prg_break:
           }
@@ -593,59 +590,82 @@
           { \l__fontscale_normalsize_baselineskip_tl }
       }
   }
-% Auxiliary functions that expand to the font size depending on the name of the
-% font size command.
-\cs_new:Npn \__fontscale_keys_process_other_classic_xpt:n #1
+% Auxiliary functions that set the font size depending on the name of the font
+% size command.
+\cs_new_protected:Npn \__fontscale_keys_process_other_classic_xpt:n #1
   {
-    \str_case:nn {#1}
+    \dim_set:cn { l_fontscale_#1_size_dim }
       {
-        { tiny         } {  6pt }
-        { scriptsize   } {  7pt }
-        { footnotesize } {  8pt }
-        { small        } {  9pt }
-        { large        } { 11pt }
-        { Large        } { 12pt }
-        { LARGE        } { 14pt }
-        { huge         } { 16pt }
-        { Huge         } { 18pt }
+        \str_case:nn {#1}
+          {
+            { tiny         } {  6pt }
+            { scriptsize   } {  7pt }
+            { footnotesize } {  8pt }
+            { small        } {  9pt }
+            { large        } { 11pt }
+            { Large        } { 12pt }
+            { LARGE        } { 14pt }
+            { huge         } { 16pt }
+            { Huge         } { 18pt }
+          }
       }
   }
-\cs_new:Npn \__fontscale_keys_process_other_classic_xipt:n #1
+\cs_new_protected:Npn \__fontscale_keys_process_other_classic_xipt:n #1
   {
-    \str_case:nn {#1}
+    \dim_set:cn { l_fontscale_#1_size_dim }
       {
-        { tiny         } {  7pt }
-        { scriptsize   } {  8pt }
-        { footnotesize } {  9pt }
-        { small        } { 10pt }
-        { large        } { 12pt }
-        { Large        } { 14pt }
-        { LARGE        } { 16pt }
-        { huge         } { 18pt }
-        { Huge         } { 21pt }
+        \str_case:nn {#1}
+          {
+            { tiny         } {  7pt }
+            { scriptsize   } {  8pt }
+            { footnotesize } {  9pt }
+            { small        } { 10pt }
+            { large        } { 12pt }
+            { Large        } { 14pt }
+            { LARGE        } { 16pt }
+            { huge         } { 18pt }
+            { Huge         } { 21pt }
+          }
       }
   }
-\cs_new:Npn \__fontscale_keys_process_other_classic_xiipt:n #1
+\cs_new_protected:Npn \__fontscale_keys_process_other_classic_xiipt:n #1
   {
-    \str_case:nn {#1}
+    \dim_set:cn { l_fontscale_#1_size_dim }
       {
-        { tiny         } {  8pt }
-        { scriptsize   } {  9pt }
-        { footnotesize } { 10pt }
-        { small        } { 11pt }
-        { large        } { 14pt }
-        { Large        } { 16pt }
-        { LARGE        } { 18pt }
-        { huge         } { 21pt }
-        { Huge         } { 24pt }
+        \str_case:nn {#1}
+          {
+            { tiny         } {  8pt }
+            { scriptsize   } {  9pt }
+            { footnotesize } { 10pt }
+            { small        } { 11pt }
+            { large        } { 14pt }
+            { Large        } { 16pt }
+            { LARGE        } { 18pt }
+            { huge         } { 21pt }
+            { Huge         } { 24pt }
+          }
       }
   }
-\cs_new:Npn \__fontscale_keys_process_other_musical:n #1
+\cs_new_protected:Npn \__fontscale_keys_process_other_musical:n #1
   {
-    \fp_to_dim:n
+    \dim_set:cn { l_fontscale_#1_size_dim }
       {
-        \l__fontscale_musical_base_fp * \l__fontscale_musical_ratio_fp ^
-        ( \use:c { c_fontscale_#1_step_fp } / \l__fontscale_musical_notes_fp )
+        \fp_to_dim:n
+          {
+            \l__fontscale_musical_base_fp * \l__fontscale_musical_ratio_fp ^
+            ( \use:c { c_fontscale_#1_step_fp } /
+            \l__fontscale_musical_notes_fp )
+          }
+      }
+    \dim_compare:nF
+      { \c_zero_dim < \use:c { l_fontscale_#1_size_dim } < 2048pt }
+      {
+        \tl_map_break:n
+          {
+            \msg_error:nnnv { fontscale } { name-font-size-invalid } {#1}
+              { l_fontscale_#1_size_dim }
+            \prg_break:
+          }
       }
   }
 % Sets the font size, font scale, and font baselineskip of the other font size
@@ -703,12 +723,13 @@
                 ( \use:c { l__fontscale_#1_scale_tl } )
               }
           }
-        \dim_compare:nNnF { \use:c { l_fontscale_#1_size_dim } } > \c_zero_dim
+        \dim_compare:nF
+          { \c_zero_dim < \use:c { l_fontscale_#1_size_dim } < 2048pt }
           {
             \tl_map_break:n
               {
-                \msg_error:nnne { fontscale } { key-font-scale-invalid } {#1}
-                  { \fp_eval:n { \use:c { l__fontscale_#1_scale_tl } } }
+                \msg_error:nnnv { fontscale } { name-font-size-invalid } {#1}
+                  { l_fontscale_#1_size_dim }
                 \prg_break:
               }
           }
@@ -718,23 +739,23 @@
       {
         \dim_set:cn { l_fontscale_#1_size_dim }
           { \use:c { l__fontscale_#1_size_tl } }
-        \dim_compare:nNnF { \use:c { l_fontscale_#1_size_dim } } > \c_zero_dim
+        \dim_compare:nF
+          { \c_zero_dim < \use:c { l_fontscale_#1_size_dim } < 2048pt }
           {
             \tl_map_break:n
               {
-                \msg_error:nnnv { fontscale } { key-font-size-invalid } {#1}
+                \msg_error:nnnv { fontscale } { name-font-size-invalid } {#1}
                   { l_fontscale_#1_size_dim }
                 \prg_break:
               }
           }
         \quark_if_no_value:cF { l__fontscale_#1_scale_tl }
           {
-            \msg_warning:nnn { fontscale } { key-font-scale-overwritten } {#1}
+            \msg_warning:nnn { fontscale } { key-name-scale-overwritten } {#1}
           }
         \prg_break:
       }
-    \dim_set:cn { l_fontscale_#1_size_dim }
-      { \__fontscale_keys_process_other_aux:n {#1} }
+    \__fontscale_keys_process_other_aux:n {#1}
     \prg_break:
     \prg_break_point:
     \fp_set:cn { l_fontscale_#1_scale_fp }

@@ -3,7 +3,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beery}{2025-03-02}{0.0.0}{}
+\ProvidesExplClass{beery}{2025-03-11}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beery } { Class }
 
@@ -283,19 +283,19 @@
   }
 \skip_const:Nn \c_beery_medium_skip { \c_beery_big_skip / 2 }
 \skip_const:Nn \c_beery_small_skip  { \c_beery_big_skip / 4 }
-\skip_set_eq:NN \bigskipamount   \c_beery_big_skip
-\skip_set_eq:NN \medskipamount   \c_beery_medium_skip
-\skip_set_eq:NN \smallskipamount \c_beery_small_skip
+\setlength \bigskipamount   { \skip_use:N \c_beery_big_skip    }
+\setlength \medskipamount   { \skip_use:N \c_beery_medium_skip }
+\setlength \smallskipamount { \skip_use:N \c_beery_small_skip  }
 \skip_log:N \c_beery_big_skip
 \skip_log:N \c_beery_medium_skip
 \skip_log:N \c_beery_small_skip
 
 % \flushbottom
 \raggedbottom
-\int_set:Nn \vbadness { 100 }
+\vbadness = 100
 
-\skip_set:Nn \topskip { \l_fontscale_normalsize_size_dim }
-\skip_set_eq:NN \splittopskip \topskip
+\setlength \topskip { \dim_use:N \l_fontscale_normalsize_size_dim }
+\setlength \splittopskip { \topskip }
 
 \RequirePackage { geometry }
 \dim_const:Nn \c_beery_textwidth_dim
@@ -310,13 +310,13 @@
 \geometry
   {
       a4paper
-    , textwidth = \c_beery_textwidth_dim
-    , textheight = \c_beery_textheight_dim
+    , textwidth = \dim_use:N \c_beery_textwidth_dim
+    , textheight = \dim_use:N \c_beery_textheight_dim
     , heightrounded
     , centering
-    , headheight = \l_fontscale_footnotesize_baselineskip_skip
-    , headsep = \c_beery_big_dim
-    , footskip = \c_beery_footskip_dim
+    , headheight = \skip_use:N \l_fontscale_footnotesize_baselineskip_skip
+    , headsep = \dim_use:N \c_beery_big_dim
+    , footskip = \dim_use:N \c_beery_footskip_dim
   }
 
 \RequirePackage { fancyhdr }
@@ -331,24 +331,24 @@
 % \frenchspacing
 \nonfrenchspacing
 \linespread { 1 }
-\RequirePackage [ skip = \c_beery_medium_skip ] { parskip }
+\RequirePackage [ skip = \skip_use:N \c_beery_medium_skip ] { parskip }
 \RequirePackage [ raggedrightboxes ] { ragged2e }
-\skip_set:Nn \RaggedRightRightskip { \c_zero_dim plus \c_beery_alphabet_dim }
-\dim_zero:N \RaggedRightParindent
-\dim_set_eq:NN \JustifyingParindent \RaggedRightParindent
+\setlength \RaggedRightRightskip { 0pt plus \dim_use:N \c_beery_alphabet_dim }
+\setlength \RaggedRightParindent { 0pt }
+\setlength \JustifyingParindent { \RaggedRightParindent }
 \RaggedRight
 % \justifying
 \RequirePackage { microtype }
 \microtypesetup { protrusion = false , expansion = false }
-\int_set:Nn \pretolerance { -1 }
-\int_set:Nn \tolerance { 200 }
-\dim_zero:N \emergencystretch
-\int_set:Nn \widowpenalty { 10000 }
-\int_set_eq:NN \clubpenalty \widowpenalty
-\int_set_eq:NN \displaywidowpenalty \widowpenalty
+\pretolerance = -1
+\tolerance = 200
+\setlength \emergencystretch { 0pt }
+\widowpenalty = 10000
+\clubpenalty = \widowpenalty
+\displaywidowpenalty = \widowpenalty
 % hyphenation
-\int_set:Nn \hyphenpenalty { 99 }
-\int_set_eq:NN \exhyphenpenalty \hyphenpenalty
+\hyphenpenalty = 50
+\exhyphenpenalty = \hyphenpenalty
 
 % HEADINGS, TABLE OF CONTENTS
 
@@ -357,21 +357,27 @@
 \setcounter { tocdepth } { 2 }
 
 \titlespacing* \section % section
-  { \c_zero_dim } % indent
+  { 0pt } % indent
   {
-    \c_beery_big_dim
-    plus  \fp_to_dim:n { 1 / 2 * 4 * \dim_to_fp:n { \c_beery_big_dim } }
-    minus \fp_to_dim:n { 1 / 3 / 4 * \dim_to_fp:n { \c_beery_big_dim } }
+    \skip_eval:n
+      {
+        \c_beery_big_dim
+        plus  \dim_eval:n { \c_beery_big_dim / 2 * 4 }
+        minus \dim_eval:n { \c_beery_big_dim / 3 / 4 }
+      }
   } % before
-  { \c_beery_medium_skip } % after
+  { \skip_use:N \c_beery_medium_skip } % after
 \titlespacing* \subsection
-  { \c_zero_dim }
+  { 0pt }
   {
-    \fp_to_dim:n { 4 / 3 * \dim_to_fp:n { \c_beery_medium_dim } }
-    plus  \fp_to_dim:n { 1 / 2 * 4 * \dim_to_fp:n { \c_beery_medium_dim } }
-    minus \fp_to_dim:n { 1 / 3 / 4 * \dim_to_fp:n { \c_beery_medium_dim } }
+    \skip_eval:n
+      {
+        \dim_eval:n { \c_beery_medium_dim * 4 / 3 }
+        plus  \dim_eval:n { \c_beery_medium_dim / 2 * 4 }
+        minus \dim_eval:n { \c_beery_medium_dim / 3 / 4 }
+      }
   }
-  { \c_beery_medium_skip }
+  { \skip_use:N \c_beery_medium_skip }
 
 \titleformat \section % section
   [ block ] % shape
@@ -397,10 +403,10 @@
       leftmargin = *
     , labelsep  = 0.5em
       % vertical spacing
-    , topsep    = \c_zero_skip
-    , partopsep = \c_zero_skip
-    , parsep    = \c_beery_small_skip
-    , itemsep   = \c_zero_skip
+    , topsep    = 0pt
+    , partopsep = 0pt
+    , parsep    = \skip_use:N \c_beery_small_skip
+    , itemsep   = 0pt
   }
 \setlist [ itemize   , 1 ] { label = \textbullet }
 \setlist [ itemize   , 2 ] { label = \scaletextbullets { 2 } }
@@ -461,7 +467,7 @@
 \RequirePackage [ bottom ] { footmisc }
 \cs_set_protected:Npn \footnoterule { }
 % \setlength { \skip \footins } { \c_beery_big_skip }
-\dim_set:Nn \footnotesep { \f@linespread \footnotesep }
+\setlength \footnotesep { \f@linespread \footnotesep }
 \coffin_new:N \l__beery_footnote_coffin
 % 1.2 = baselineskip-size-ratio
 % \f@linespread must not be empty here
@@ -479,7 +485,7 @@
       {
         \list { \@thefnmark . }
           {
-            \dim_set:Nn \leftmargin
+            \setlength \leftmargin
               {
                 \fp_to_dim:n
                   {
@@ -487,10 +493,10 @@
                     \dim_to_fp:n { \textwidth }
                   }
               }
-            \dim_set_eq:NN \rightmargin \leftmargin
-            \dim_set:Nn \labelsep { 0.5em }
-            \skip_zero:N \topsep
-            \skip_zero:N \partopsep
+            \setlength \rightmargin { \leftmargin }
+            \setlength \labelsep { 0.5em }
+            \setlength \topsep { 0pt }
+            \setlength \partopsep { 0pt }
           }
         \item \tl_trim_spaces:n {#1} \endlist
       }

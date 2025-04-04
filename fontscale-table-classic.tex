@@ -1,10 +1,10 @@
-\ProvidesFile{fontscale-table-classic.tex}[2025-03-11]
+\ProvidesFile{fontscale-table-classic.tex}[2025-04-04]
 
 \begin{table}
   \centering
   \caption
     {%
-      The font size of each font size command from \cs{tiny} to \cs{Huge} in units of \unit{pt} when using a classic typographic scale.%
+      The font size of each font size command from \cs{tiny} to \cs{Huge} in units of \unit{pt}, \unit{bp}, \unit{dd}, or \unit{nd} when using a classic typographic scale.%
       \label{table:classic}%
     }
   \bigskip
@@ -19,10 +19,12 @@
           }
       , cell{1}{2-Z}={guard}
       , cell{2-Z}{1}={cmd=\cs}
-      , cell{1}{2-Z}={cmd=\key}
     }
     \toprule
-      font size command & classic-10pt & classic-11pt & classic-12pt \\
+      font size command
+      & {\key{classic-10pt} \\ \key{classic-10bp} \\ \key{classic-10dd} \\ \key{classic-10nd}}
+      & {\key{classic-11pt} \\ \key{classic-11bp} \\ \key{classic-11dd} \\ \key{classic-11nd}}
+      & {\key{classic-12pt} \\ \key{classic-12bp} \\ \key{classic-12dd} \\ \key{classic-12nd}} \\
     \midrule
       tiny         &  6 &  7 &  8 \\
       scriptsize   &  7 &  8 &  9 \\

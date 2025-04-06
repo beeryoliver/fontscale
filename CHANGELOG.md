@@ -7,6 +7,52 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v4.1.0] - 2025-04-04
+
+### Added
+- New keys:
+  - `typographic-scale/classic-10bp`
+  - `typographic-scale/classic-11bp`
+  - `typographic-scale/classic-12bp`
+  - `typographic-scale/classic-10dd`
+  - `typographic-scale/classic-11dd`
+  - `typographic-scale/classic-12dd`
+  - `typographic-scale/classic-10nd`
+  - `typographic-scale/classic-11nd`
+  - `typographic-scale/classic-12nd`
+  - `classic-10bp`
+  - `classic-11bp`
+  - `classic-12bp`
+  - `classic-10dd`
+  - `classic-11dd`
+  - `classic-12dd`
+  - `classic-10nd`
+  - `classic-11nd`
+  - `classic-12nd`
+  - `<font size command>/baselineskip-size-ratio`
+- `\currentnormalsize`
+
+### Changed
+- Improved performance in the package code added to the `selectfont` hook.
+- The documentation now states that `fontscale` does not load any other
+  packages.
+- The documentation now states that `\currentfontstep`, `\currentfontscale`,
+  and `\currentfontsize` do not expand `\f@size`.
+
+### Fixed
+- The documentation now correctly states that the classic typographic scale
+  includes font size `30`. (`30` was not included in some older versions of The
+  Elements of Typographic Style by Robert Bringhurst.)
+- The package now correctly uses `\dim_use:N` and `\skip_use:N` when using
+  `expl3` `dim` and `skip` variables in `LaTeX2e` commands.
+- Removed incorrect code comment regarding compatibility with the `microtype`
+  package.
+- The internal commands that store the value of the keys
+  `<font size command>/scale`, `<font size command>/size`, and
+  `<font size command>/baselineskip` now correctly store the value of the
+  evaluated floating point/dimen/skip expression. This should result in more
+  consistent behavior if `\fontscalesetup` is used again.
+
 ## [v4.0.1] - 2025-03-11
 
 ### Changed
@@ -153,13 +199,6 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 - `\CurrentFontSizeCommand` (redundant with `\CurrentFontSize` and
   `\CurrentFontBaselineskip`)
 
-### Fixed
-- The error message for `\SetFontStep*` when the current font step is undefined
-  no longer writes `\SetFontStep*`. This would be incorrect if its
-  corresponding internal function was used instead of `\SetFontStep*`.
-- The internal functions of `\PrintSampleText` now correctly enclose their
-  contents within a group.
-
 ## [v2.4.0] - 2024-09-10
 
 ### Changed
@@ -208,7 +247,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 - `\fontscalesetup` is now removed in `\text_purify:n`.
 
 ### Removed
-- Keys `typographic-scale=modular` and `modular`.
+- Keys `typographic-scale/modular` and `modular`.
 - Key `ignore-order` (no support for using `\tiny` to `\Huge` in the wrong
   order).
 - Key `reset` (very rarely used).
@@ -256,7 +295,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 ### Fixed
 - The documentation no longer incorrectly compares `\ScaleFont` with
   `\scalefont` from the `scalefnt` package.
-- The internal function for the key `reset=preamble` now correctly initializes
+- The internal function for the key `reset/preamble` now correctly initializes
   to `\prg_do_nothing:`.
 
 ## [v1.2.1] - 2024-04-21
@@ -278,7 +317,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 - Documentation improvements.
 
 ### Fixed
-- The key `reset=preamble` and `\SetFontStep` no longer rely on undocumented
+- The key `reset/preamble` and `\SetFontStep` no longer rely on undocumented
   `expl3` features.
 - Corrected typo in the documentation.
 
@@ -306,8 +345,8 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 - Performance and code improvements.
 
 ### Fixed
-- Fixed issue where the key `reset=preamble` relied on an unsupported `V`-type
-  `bool` argument.
+- The key `reset/preamble` no longer relies on an unsupported `V`-type `bool`
+  argument.
 
 ## [v1.0.1] - 2024-03-08
 

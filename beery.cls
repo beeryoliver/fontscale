@@ -3,7 +3,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beery}{2025-04-04}{0.0.0}{}
+\ProvidesExplClass{beery}{2025-04-30}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beery } { Class }
 
@@ -353,8 +353,8 @@
 % HEADINGS, TABLE OF CONTENTS
 
 \RequirePackage { titlesec , titletoc }
-\setcounter { secnumdepth } { 2 }
-\setcounter { tocdepth } { 2 }
+\setcounter { secnumdepth } { 3 }
+\setcounter { tocdepth } { 3 }
 
 \titlespacing* \section % section
   { 0pt } % indent
@@ -378,6 +378,17 @@
       }
   }
   { \skip_use:N \c_beery_medium_skip }
+\titlespacing* \subsubsection
+  { 0pt }
+  {
+    \skip_eval:n
+      {
+        \dim_eval:n { \c_beery_medium_dim * 4 / 3 }
+        plus  \dim_eval:n { \c_beery_medium_dim / 2 * 4 }
+        minus \dim_eval:n { \c_beery_medium_dim / 3 / 4 }
+      }
+  }
+  { \skip_use:N \c_beery_medium_skip }
 
 \titleformat \section % section
   [ block ] % shape
@@ -390,6 +401,13 @@
   [ block ]
   { \raggedright \normalsize \bfseries }
   { \thesubsection }
+  { 1em }
+  { }
+  { }
+\titleformat \subsubsection
+  [ block ]
+  { \raggedright \normalsize \bfseries }
+  { \thesubsubsection }
   { 1em }
   { }
   { }

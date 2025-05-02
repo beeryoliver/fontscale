@@ -7,10 +7,23 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v4.2.0] - 2025-04-30
+
+### Added
+- Key `magscale`
+
+### Changed
+- The documentation now states that:
+  - The key `<font size command>/size` issues a warning when overwriting the
+    font size set by the key `<font size command>/scale`.
+  - The key `<font size command>/baselineskip` issues a warning when
+    overwriting the font baselineskip set by the key
+    `<font size command>/baselineskip-size-ratio`.
+
 ## [v4.1.0] - 2025-04-04
 
 ### Added
-- New keys:
+- Keys:
   - `typographic-scale/classic-10bp`
   - `typographic-scale/classic-11bp`
   - `typographic-scale/classic-12bp`
@@ -34,10 +47,10 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ### Changed
 - Improved performance in the package code added to the `selectfont` hook.
-- The documentation now states that `fontscale` does not load any other
-  packages.
-- The documentation now states that `\currentfontstep`, `\currentfontscale`,
-  and `\currentfontsize` do not expand `\f@size`.
+- The documentation now states that:
+  - `fontscale` does not load any other packages.
+  - `\currentfontstep`, `\currentfontscale`, and `\currentfontsize` do not
+    expand `\f@size`.
 
 ### Fixed
 - The documentation now correctly states that the classic typographic scale
@@ -47,7 +60,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   `expl3` `dim` and `skip` variables in `LaTeX2e` commands.
 - Removed incorrect code comment regarding compatibility with the `microtype`
   package.
-- The internal commands that store the value of the keys
+- The internal variables that store the value of the keys
   `<font size command>/scale`, `<font size command>/size`, and
   `<font size command>/baselineskip` now correctly store the value of the
   evaluated floating point/dimen/skip expression. This should result in more

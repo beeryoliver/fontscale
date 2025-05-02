@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 4.1.0\quad{}4 April 2025
+Version 4.2.0\quad{}30 April 2025
 
 
 \section{Introduction}
@@ -57,11 +57,14 @@ You may need to ensure that your \LaTeX{} installation is up-to-date before usin
 
 This package lets the user set arbitrary font sizes.
 This works with most fonts produced today, but, for historical reasons, the default Computer Modern font is available only in a number of discrete font sizes.
-If you get a warning that Computer Modern is not available in the requested font size, you may need to add the code \cs{RequirePackage}\allowbreak|{fix-cm}| before \cs{documentclass} to make Computer Modern available at arbitrary font sizes.
+If you get a warning that Computer Modern is not available in the requested font size, you may need to add the following code before \cs{documentclass} to make Computer Modern available at arbitrary font sizes:
+\begin{verbatim}
+\RequirePackage{fix-cm}
+\end{verbatim}
 Alternatively, you can use the Latin Modern font by loading the \pkg{lmodern} package.
 
 The \pkg{fontscale} package has no package options.
-Instead, this package provides the command \cs{fontscalesetup}\marg{keys} (\S\ref{subsec:fontscalesetup}) which sets the package keys (\S\ref{sec:keys}).
+Instead, this package provides the command \cs{fontscalesetup}\marg{key-value list} (\S\ref{subsec:fontscalesetup}) which sets the package keys (\S\ref{sec:keys}).
 
 When loaded, this package uses \cs{normalsize} after defining and initializing the font size commands from \cs{tiny} to \cs{Huge}.
 
@@ -82,7 +85,7 @@ For this reason, you may want to set the document class font size option close t
 \end{itemize}
 
 Unlike the standard \LaTeX{} document classes, the font size commands from \cs{tiny} to \cs{Huge} defined by this package do not change the vertical spacing for displayed math and list structures.
-If the user would like to add this functionality or perhaps other features to the font size commands, they can use hooks, which are documented in \pkg{lthooks} and \pkg{ltcmdhooks}.
+If the user would like to add this functionality or perhaps other features to the font size commands, then they can use hooks, which are documented in \pkg{lthooks} and \pkg{ltcmdhooks}.
 
 \subsection{The font size parameters}
 \label{subsec:fontsizeparameters}
@@ -101,7 +104,7 @@ Table \ref{table:fontsteps} displays the font step of each font size command.
 \label{subsec:syntax}
 
 This package defines some keys and commands that take as a value or argument a \meta{floating point expression}, \meta{integer expression}, \meta{dimen expression}, or \meta{skip expression}.
-This syntax has the same representation as the arguments to \cs{fpeval}, \cs{inteval}, \cs{dimeval}, and \cs{skipeval}, documented in \pkg{usrguide}.
+This syntax has the same representation as the arguments to \cs{fpeval}, \cs{inteval}, \cs{dimeval}, and \cs{skipeval}, respectively, documented in \pkg{usrguide}.
 
 
 \section{Keys}
@@ -109,7 +112,7 @@ This syntax has the same representation as the arguments to \cs{fpeval}, \cs{int
 
 This section documents the keys provided by the \pkg{fontscale} package.
 This package has no package options.
-Set the package keys using \cs{fontscalesetup}\marg{keys} (\S\ref{subsec:fontscalesetup}).
+Set the package keys using \cs{fontscalesetup}\marg{key-value list} (\S\ref{subsec:fontscalesetup}).
 
 \subsection{The key \key{typographic-scale}}
 \label{subsec:typographicscale}
@@ -120,7 +123,7 @@ The font sizes of the font size commands from \cs{tiny} to \cs{Huge} are initial
   \displaykey{typographic-scale}[\meta{choice}][classic-10pt]
 \end{displaycode}
 
-\meta{choice} must be \keyvalue{classic-10pt}, \keyvalue{classic-11pt}, \keyvalue{classic-12pt}, \keyvalue{classic-10bp}, \keyvalue{classic-11bp}, \keyvalue{classic-12bp}, \keyvalue{classic-10dd}, \keyvalue{classic-11dd}, \keyvalue{classic-12dd}, \keyvalue{classic-10nd}, \keyvalue{classic-11nd}, \keyvalue{classic-12nd}, or \keyvalue{musical}.
+\meta{choice} must be any of the following: \keyvalue{classic-10pt}, \keyvalue{classic-11pt}, \keyvalue{classic-12pt}, \keyvalue{classic-10bp}, \keyvalue{classic-11bp}, \keyvalue{classic-12bp}, \keyvalue{classic-10dd}, \keyvalue{classic-11dd}, \keyvalue{classic-12dd}, \keyvalue{classic-10nd}, \keyvalue{classic-11nd}, \keyvalue{classic-12nd}, \keyvalue{musical}.
 
 Sets the font size of each font size command from \cs{tiny} to \cs{Huge} using a classic or musical typographic scale.
 These are common methods of choosing a set of document font sizes.
@@ -128,15 +131,21 @@ The initial value is \keyvalue{classic-10pt}.
 As a shortcut, each \meta{choice} is also available as a standalone key.
 For example, the key \key{classic-10pt} is equivalent to the key \key{typographic-scale=classic-10pt} and the key \key{musical} is equivalent to the key \key{typographic-scale=musical}.
 
+\subsubsection{The classic typographic scale}
+\label{subsubsec:classictypographicscale}
+
 The classic typographic scale consists of the traditional font sizes in points:
 \numlist{6;7;8;9;10;11;12;14;16;18;21;24;30;36;48;60;72}.%
 \footnote{See \textit{The Elements of Typographic Style} by Robert Bringhurst.}
 They have been used since the sixteenth century and are the default font sizes on most computer software.
-The named point size is the font size of \cs{normalsize}.
-The font sizes of the other font size commands are the adjacent font sizes in the classic typographic scale.
+The named font size is the font size of \cs{normalsize}.
+The font sizes of the other font size commands are the adjacent font sizes in the classic typographic scale in the named unit of measurement.
 Table \ref{table:classic} displays the font size of each font size command when using a classic typographic scale.
 
 \input{./fontscale-table-classic.tex}
+
+\subsubsection{The musical typographic scale}
+\label{subsubsec:musicaltypographicscale}
 
 \begin{displaycode}
   \displaykey{musical/base}[\meta{dimen expression}][10pt]%
@@ -192,10 +201,9 @@ This subsection documents keys for setting the font sizes and font baselineskips
 
 The user should take care to ensure that the lengths of the font sizes remain correctly ordered from \cs{tiny} to \cs{Huge}.
 This is important for typographic and syntactic consistency.
-If the font sizes are in the wrong order, \cs{fontscalesetup} will issue a warning and some package features may not work correctly.
+If the font sizes are in the wrong order, then \cs{fontscalesetup} will issue a warning and some package features may not work correctly.
 
 The syntax \meta{font size command} represents the name of a font size command from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
-\pagebreak%manual
 
 \begin{displaycode}
   \displaykey{\meta{font size command}/scale}[\meta{floating point expression}][\meta{not set}]
@@ -212,6 +220,7 @@ The key \key{normalsize/scale} is not defined.
 
 Sets the font size of \meta{font size command} to the value of \meta{dimen expression}.
 Overwrites the font size set by the keys \key{typographic-scale} and \key{\meta{font size command}/scale}.
+Issues a warning when overwriting the font size set by the latter key.
 These keys are initially not set.
 
 \begin{displaycode}
@@ -237,7 +246,20 @@ These keys are initially not set.
 
 Sets the font baselineskip of \meta{font size command} to the value of \meta{skip expression}.
 Overwrites the font baselineskip set by the keys \key{baselineskip-size-ratio} and \key{\meta{font size command}/baselineskip-size-ratio}.
+Issues a warning when overwriting the font baselineskip set by the latter key.
 These keys are initially not set.
+
+\subsection{The key \key{magscale}}
+\label{subsec:magscale}
+
+\begin{displaycode}
+  \displaykey{magscale}[\meta{floating point expression}][\meta{not set}]
+\end{displaycode}
+
+Scales the font size and font baselineskip of each font size command from \cs{tiny} to \cs{Huge} by a factor equal to the result of computing the \meta{floating point expression}.
+The new font baselineskips have no stretch and shrink components.
+This key is applied after all the other keys.
+This key is initially not set.
 
 
 \section{Commands}
@@ -249,11 +271,11 @@ This section documents the commands provided by the \pkg{fontscale} package.
 \label{subsec:fontscalesetup}
 
 \begin{displaycode}
-  \cs{fontscalesetup} \sarg{} \marg{keys}
+  \cs{fontscalesetup} \sarg{} \marg{key-value list}
 \end{displaycode}
 
-Sets and processes the \pkg{fontscale} package keys (\S\ref{sec:keys}) in \meta{keys} and then uses \cs{normalsize}.
-Adding the optional star \sarg{} first resets all the \pkg{fontscale} package keys to their initial values.
+Sets and processes the \pkg{fontscale} package keys (\S\ref{sec:keys}) in \meta{key-value list} and then uses \cs{normalsize}.
+Adding the optional star \sarg{} first resets all the keys to their initial values.
 Can be used mid-document.
 The scope of the effect is local to the current group.
 Does nothing, except issue a warning, if used in math mode.
@@ -278,13 +300,13 @@ Expands to the current font size of \cs{normalsize}.
   \cs{currentfontbaselineskip}
 \end{displaycode}
 
-Expands to the current font step, font scale, font size, or font baselineskip.
-\cs{currentfontstep}, \cs{currentfontscale}, and \cs{currentfontsize} do not expand the kernel command \cs{f@size}.
+Expands to the current font step, font scale, font size, and font baselineskip, respectively.
+These commands do not expand the kernel command \cs{f@size}.
 They can be used for printing or within calculations.
 
 For clarity, \cs{currentfontstep} will be explained in detail.
 If the current font size equals the font size of any font size command from \cs{tiny} to \cs{Huge}, then \cs{currentfontstep} expands to the font step of that font size command (Table \ref{table:fontsteps}).
-If not and if the value of the key \key{typographic-scale} is \keyvalue{musical}, \cs{currentfontstep} expands to the font step calculated from the musical typographic scale (Equation \ref{eq:musical}).
+If not and if the value of the key \key{typographic-scale} is \keyvalue{musical}, then \cs{currentfontstep} expands to the font step calculated from the musical typographic scale (Equation \ref{eq:musical}).
 Otherwise, the current font step is undefined and \cs{currentfontstep} expands to nothing.
 
 \subsection{More font size commands}
@@ -301,7 +323,7 @@ Sets the font size by setting the font step to the result of computing the \meta
 Adding the optional star \sarg{} instead sets the font step equal to the current font step + the result of computing the \meta{floating point expression}.
 Sets the font baselineskip equal to the new font size \texttimes{} the value of the key \key{baselineskip-size-ratio}.
 
-\listheading{Three exceptions:}
+\listheading{Some exceptions:}
 \begin{itemize}
   \item
   If the font step, rounded to \num{5} decimal places, equals the font step of any font size command from \cs{tiny} to \cs{Huge} (Table \ref{table:fontsteps}), then that font size command will be used directly.
@@ -335,8 +357,7 @@ Does nothing, except issue a warning, if used in math mode.
   \cs{scalefont} \marg{floating point expression}
 \end{displaycode}
 
-Sets the font size equal to the current font size \texttimes{} the result of computing the \meta{floating point expression}.
-Sets the font baselineskip equal to the current font baselineskip \texttimes{} the result of computing the \meta{floating point expression}.
+Scales the font size and font baselineskip by a factor equal to the result of computing the \meta{floating point expression}.
 The new font baselineskip has no stretch and shrink components.
 Does nothing, except issue a warning, if used in math mode.
 This command is intended as a more robust alternative to \cs{scalefont} from the \pkg{scalefnt} package.
@@ -345,8 +366,7 @@ This command is intended as a more robust alternative to \cs{scalefont} from the
   \cs{setfontsizebaselineskip} \marg{dimen expression} \marg{skip expression}
 \end{displaycode}
 
-Sets the font size to the value of \meta{dimen expression}.
-Sets the font baselineskip to the value of \meta{skip expression}.
+Sets the font size and font baselineskip to the value of \meta{dimen expression} and \meta{skip expression}, respectively.
 Does nothing, except issue a warning, if used in math mode.
 This command is intended as a more robust alternative to \cs{fontsize} + \cs{selectfont}.
 
@@ -376,7 +396,6 @@ Prints the current font step, font scale, font size, and font baselineskip.
 The printed font step and font scale are rounded to \num{5} decimal places.
 To print with more decimal places, use \cs{currentfontstep} and \cs{currentfontscale} (\S\ref{subsec:expandable}).
 The printed font step will be left blank if it is undefined (as explained for \cs{currentfontstep} in \S\ref{subsec:expandable}).
-\pagebreak%manual
 
 \begin{displaycode}
   \cs{printallfontsizeparameters}
@@ -391,7 +410,7 @@ Cannot be used in math mode.
   \cs{printsampletext} \sarg{} \marg{text}
 \end{displaycode}
 
-Prints \meta{text} in each font size ordered from \cs{tiny} to \cs{Huge} each followed by a paragraph break.
+Prints \meta{text} in each font size ordered from \cs{tiny} to \cs{Huge} each followed by \cs{par}.
 \meta{text} can contain \cs{par} tokens.
 Adding the optional star \sarg{} reverses the order of the font sizes.
 Cannot be used in math mode.
@@ -430,6 +449,7 @@ This package does not define any public \pkg{expl3} functions.
 This package defines some public \pkg{expl3} variables.
 They are set either by \cs{fontscalesetup} or in the \hook{selectfont} hook.
 They should never be modified directly.
+
 The syntax \meta{font size command} represents the name of a font size command from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{displaycode}
@@ -458,7 +478,7 @@ The local variables are set by \cs{fontscalesetup}.
   \cs{l_fontscale_baselineskip_skip}
 \end{displaycode}
 
-Stores the current font step, font scale, font size, and font baselineskip.
+Stores the current font step, font scale, font size, and font baselineskip, respectively.
 \cs{l_fontscale_step_fp} equals \cs{c_nan_fp} if the current font step is undefined (as explained for \cs{currentfontstep} in \S\ref{subsec:expandable}).
 These variables are set in the \hook{selectfont} hook.
 

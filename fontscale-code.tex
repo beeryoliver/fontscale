@@ -2,8 +2,23 @@
 
 \usepackage{parskip}
 \usepackage{geometry}
-\geometry{a4paper,heightrounded,centering}
+\geometry{a4paper,heightrounded,centering,textwidth=420pt}
 \raggedbottom\raggedright
+
+\usepackage{fontscale}
+\fontscalesetup
+  {
+      tiny         = 5pt
+    , scriptsize   = 7pt
+    , footnotesize = 8pt
+    , small        = 9pt
+    , normalsize   = 10pt
+    , large        = 12pt
+    , Large        = 14.4pt
+    , LARGE        = 17.28pt
+    , huge         = 20.74pt
+    , Huge         = 24.88pt
+  }
 
 \usepackage{codehigh}
 
@@ -14,13 +29,13 @@
 \begin{document}
 
 
-\section*{\Large The \textsf{fontscale} package}
+\section*{\stepfontsize{1}The \textsf{fontscale} package}
 
 A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 4.2.0\quad{}30 April 2025
+Version 5.0.0\quad 7 September 2025
 
 \dochighinput[language=latex/latex3]{fontscale.sty}
 

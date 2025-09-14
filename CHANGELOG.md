@@ -7,10 +7,11 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2025-09-07
+## [v5.0.0] - 2025-09-13
 
 ### Changed
 - This update includes many changes that are backwards incompatible.
+- The package now requires `l3kernel` version 2023-11-01.
 - The documentation no longer uses the terms "font step" and "font scale" to
   describe the font size.
 - The documentation has been completely rewritten.

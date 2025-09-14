@@ -7,22 +7,22 @@
 %%> \section{Loading the package}
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2025-09-07}{5.0.0}
+\ProvidesExplPackage{fontscale}{2025-09-13}{5.0.0}
   {A flexible interface for setting font sizes}
 
-\msg_new:nnn { fontscale } { l3kernel-out-of-date }
+\msg_new:nnn { fontscale } { l3kernel }
   {
     The~ fontscale~ package~ could~ not~ load. \\
     This~ package~ requires~
-    L3~ programming~ layer~ version~ 2023-11-09~ or~ newer.
+    L3~ programming~ layer~ version~ 2023-11-01~ or~ newer.
   }
-\msg_new:nnn { fontscale } { incompatible-package }
-  { The~ fontscale~ package~ is~ incompatible~ with~ the~ '#1'~ package. }
+\msg_new:nnn { fontscale } { scalefnt }
+  { The~ fontscale~ package~ is~ incompatible~ with~ the~ scalefnt~ package. }
 
-\IfExplAtLeastTF { 2023-11-09 } { }
-  { \msg_critical:nn { fontscale } { l3kernel-out-of-date } }
+\IfExplAtLeastTF { 2023-11-01 } { }
+  { \msg_critical:nn { fontscale } { l3kernel } }
 \hook_gput_code:nnn { package / scalefnt / before } { fontscale }
-  { \msg_error:nnn { fontscale } { incompatible-package } { scalefnt } }
+  { \msg_error:nn { fontscale } { scalefnt } }
 
 %%> \section{Messages}
 
@@ -73,8 +73,8 @@
   }
 
 % Messages used elsewhere.
-\msg_new:nnn { fontscale } { math-mode-error }
-  { '\iow_char:N \\#1'~ cannot~ be~ used~ in~ math~ mode~ \msg_line_context:. }
+\msg_new:nnn { fontscale } { math-mode-invalid }
+  { '\iow_char:N \\#1'~ invalid~ in~ math~ mode~ \msg_line_context:. }
 \msg_new:nnn { fontscale } { font-size-invalid }
   {
     Invalid~ font~ size~ '#1'~ \msg_line_context:. \\
@@ -398,7 +398,7 @@
 \NewDocumentCommand \fontscalesetup { s m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { fontscale } { math-mode-error } { fontscalesetup } }
+      { \msg_error:nnn { fontscale } { math-mode-invalid } { fontscalesetup } }
       {
         \IfBooleanTF #1
           { \__fontscale_keys_reset:n {#2} }
@@ -412,6 +412,7 @@
     \keys_set:nn { fontscale } {#1}
     \__fontscale_keys_process:
     \normalsize
+    \prg_break_point:
   }
 \cs_new_protected:Npn \__fontscale_keys_process:
   {
@@ -421,26 +422,25 @@
     \__fontscale_keys_process_baselineskips:
     \__fontscale_keys_process_end:
   }
-\cs_new:Npn \__fontscale_keys_process_break: #1 \normalsize { }
 \cs_new_protected:Npn \__fontscale_keys_process_start:
   {
     \dim_compare:nF { \c_zero_dim < \l__fontscale_musical_base_dim < 2048pt }
       {
         \msg_error:nnV { fontscale } { musical-base-invalid }
           \l__fontscale_musical_base_dim
-        \__fontscale_keys_process_break:
+        \prg_break:
       }
     \fp_compare:nNnF \l__fontscale_musical_ratio_fp > \c_one_fp
       {
         \msg_error:nne { fontscale } { musical-ratio-invalid }
           { \fp_to_tl:N \l__fontscale_musical_ratio_fp }
-        \__fontscale_keys_process_break:
+        \prg_break:
       }
     \int_compare:nNnF \l__fontscale_musical_notes_int > 0
       {
         \msg_error:nnV { fontscale } { musical-notes-invalid }
           \l__fontscale_musical_notes_int
-        \__fontscale_keys_process_break:
+        \prg_break:
       }
     \str_if_eq:VnT \l__fontscale_typographic_scale_str { musical }
       {
@@ -457,7 +457,7 @@
           {
             \msg_error:nne { fontscale } { magscale-invalid }
               { \fp_to_tl:N \l__fontscale_tmp_fp }
-            \__fontscale_keys_process_break:
+            \prg_break:
           }
       }
   }
@@ -499,7 +499,7 @@
       {
         \msg_error:nnnV { fontscale } { name-font-size-invalid } { normalsize }
           \l_fontscale_normalsize_size_dim
-        \__fontscale_keys_process_break:
+        \prg_break:
       }
   }
 \cs_new_protected:Npn \__fontscale_keys_process_sizes_other:
@@ -656,7 +656,7 @@
           {
             \msg_error:nnnv { fontscale } { name-font-size-invalid } {#1}
               { l_fontscale_#1_size_dim }
-            \__fontscale_keys_process_break:
+            \prg_break:
           }
       }
   }
@@ -758,7 +758,7 @@
         \DeclareDocumentCommand \exp_not:c {#1} { }
           {
             \exp_not:N \mode_if_math:TF
-              { \msg_error:nnn { fontscale } { math-mode-error } {#1} }
+              { \msg_error:nnn { fontscale } { math-mode-invalid } {#1} }
               { \exp_not:c { __fontscale_#1: } }
           }
       }
@@ -783,7 +783,7 @@
 \NewDocumentCommand \setfontsize { o m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { fontscale } { math-mode-error } { setfontsize } }
+      { \msg_error:nnn { fontscale } { math-mode-invalid } { setfontsize } }
       {
         \IfNoValueTF {#1}
           { \__fontscale_set_font_size:n {#2} }
@@ -794,7 +794,7 @@
 \NewDocumentCommand \scalefont { m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { fontscale } { math-mode-error } { scalefont } }
+      { \msg_error:nnn { fontscale } { math-mode-invalid } { scalefont } }
       { \__fontscale_scale_font:n {#1} }
   }
 \cs_new_protected:Npn \__fontscale_scale_font:n #1
@@ -817,7 +817,7 @@
 \NewDocumentCommand \stepfontsize { m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { fontscale } { math-mode-error } { stepfontsize } }
+      { \msg_error:nnn { fontscale } { math-mode-invalid } { stepfontsize } }
       { \__fontscale_step_font_size:n {#1} }
   }
 \cs_new_protected:Npn \__fontscale_step_font_size:n #1
@@ -886,7 +886,7 @@
   {
     \mode_if_math:TF
       {
-        \msg_error:nnn { fontscale } { math-mode-error }
+        \msg_error:nnn { fontscale } { math-mode-invalid }
           { setfontbaselineskip }
       }
       { \__fontscale_set_font_baselineskip:n {#1} }
@@ -897,7 +897,9 @@
 \NewDocumentCommand \printsampletext { s +m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { fontscale } { math-mode-error } { printsampletext } }
+      {
+        \msg_error:nnn { fontscale } { math-mode-invalid } { printsampletext }
+      }
       {
         \IfBooleanTF #1
           { \__fontscale_print_sample_text_descending_order:n {#2} }
@@ -931,7 +933,7 @@
   {
     \mode_if_math:TF
       {
-        \msg_error:nnn { fontscale } { math-mode-error }
+        \msg_error:nnn { fontscale } { math-mode-invalid }
           { printfontsizecommand }
       }
       { \__fontscale_print_name: }

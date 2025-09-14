@@ -3,32 +3,32 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beery}{2025-09-07}{0.0.0}{}
+\ProvidesExplClass{beery}{2025-09-13}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beery } { Class }
 
-\msg_new:nnn { beery } { l3kernel-out-of-date }
+\msg_new:nnn { beery } { l3kernel }
   {
     The~ beery~ class~ could~ not~ load. \\
     This~ class~ requires~
-    L3~ programming~ layer~ version~ 2023-11-09~ or~ newer.
+    L3~ programming~ layer~ version~ 2023-11-01~ or~ newer.
   }
-\msg_new:nnn { beery } { luatex-required }
+\msg_new:nnn { beery } { luatex }
   {
     The~ beery~ class~ could~ not~ load. \\
     This~ class~ requires~ LuaTeX.
   }
 
-\IfExplAtLeastTF { 2023-11-09 } { }
-  { \msg_critical:nn { beery } { l3kernel-out-of-date } }
-\sys_if_engine_luatex:F { \msg_critical:nn { beery } { luatex-required } }
+\IfExplAtLeastTF { 2023-11-01 } { }
+  { \msg_critical:nn { beery } { l3kernel } }
+\sys_if_engine_luatex:F { \msg_critical:nn { beery } { luatex } }
 
 \LoadClass { article }
 
 % MESSAGES
 
-\msg_new:nnn { beery } { math-mode-error }
-  { '\iow_char:N \\#1'~ cannot~ be~ used~ in~ math~ mode~ \msg_line_context:. }
+\msg_new:nnn { beery } { math-mode-invalid }
+  { '\iow_char:N \\#1'~ invalid~ in~ math~ mode~ \msg_line_context:. }
 
 \RequirePackage { fontscale }
 \fontscalesetup { musical }
@@ -78,7 +78,7 @@
 \NewDocumentCommand \key { >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { key } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { key } }
       { \__beery_print_key:n {#1} }
   }
 \cs_new_protected:Npn \__beery_print_key:n #1
@@ -113,7 +113,7 @@
 \NewDocumentCommand \choices { m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { choices } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { choices } }
       { \__beery_print_key_choices:n {#1} }
   }
 \cs_new_protected:Npn \__beery_print_key_choices:n #1
@@ -123,7 +123,7 @@
 \NewDocumentCommand \cs { >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { cs } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { cs } }
       { \__beery_print_cs:n {#1} }
   }
 \cs_new_protected:Npn \__beery_print_cs:n #1
@@ -136,7 +136,7 @@
 \NewDocumentCommand \meta { >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { meta } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { meta } }
       { \__beery_print_meta:n {#1} }
   }
 \cs_new_protected:Npn \__beery_print_meta:n #1
@@ -158,7 +158,7 @@
 \NewDocumentCommand \marg { >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { marg } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { marg } }
       { \__beery_print_m_arg:n {#1} }
   }
 \cs_new_protected:Npn \__beery_print_m_arg:n #1
@@ -171,7 +171,7 @@
 \NewDocumentCommand \oarg { >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { oarg } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { oarg } }
       { \__beery_print_o_arg:n {#1} }
   }
 \cs_new_protected:Npn \__beery_print_o_arg:n #1
@@ -184,7 +184,7 @@
 \NewDocumentCommand \sarg { }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { sarg } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { sarg } }
       { \__beery_print_s_arg: }
   }
 \cs_new_protected:Npn \__beery_print_s_arg:
@@ -192,42 +192,42 @@
 \NewDocumentCommand \cls { >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { cls } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { cls } }
       { \__beery_print_cls:n {#1} }
   }
 \cs_new_protected:Npn \__beery_print_cls:n #1 { \textsf {#1} \@ }
 \NewDocumentCommand \env { >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { env } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { env } }
       { \__beery_print_env:n {#1} }
   }
 \cs_new_protected:Npn \__beery_print_env:n #1 { \texttt {#1} \@ }
 \NewDocumentCommand \pkg { >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { pkg } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { pkg } }
       { \__beery_print_pkg:n {#1} }
   }
 \cs_new_protected:Npn \__beery_print_pkg:n #1 { \textsf {#1} \@ }
 \NewDocumentCommand \latin { >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { latin } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { latin } }
       { \__beery_print_latin:n {#1} }
   }
 \cs_new_protected:Npn \__beery_print_latin:n #1 { \textit {#1} }
 \NewDocumentCommand \honorific { >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { honorific } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { honorific } }
       { \__beery_print_honorific:n {#1} }
   }
 \cs_new_protected:Npn \__beery_print_honorific:n #1 { #1 \@ }
 \NewDocumentCommand \allcaps { O { 50 } >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { allcaps } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { allcaps } }
       { \__beery_text_all_caps:nn {#1} {#2} }
   }
 \cs_new_protected:Npn \__beery_text_all_caps:nn #1#2
@@ -236,7 +236,7 @@
   { >{ \ReverseBoolean } s O { 50 } >{ \TrimSpaces } m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { allsmallcaps } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { allsmallcaps } }
       {
         \IfBooleanTF #1
           { \__beery_text_small_caps:nn {#2} {#3} }
@@ -247,6 +247,7 @@
   { \textls [ \int_eval:n {#1} ] { \scshape #2 } }
 \cs_new_protected:Npn \__beery_text_lowercase_small_caps:nn #1#2
   { \textls [ \int_eval:n {#1} ] { \scshape \text_lowercase:n {#2} } }
+\RenewDocumentCommand \slash { } { / \allowbreak }
 
 % CUSTOM ENVIRONMENTS
 
@@ -343,7 +344,7 @@
 
 % \frenchspacing
 \nonfrenchspacing
-\linespread { 1 }
+% \linespread { 1 }
 \RequirePackage [ skip = \skip_use:N \c_beery_medium_skip ] { parskip }
 \RequirePackage [ raggedrightboxes ] { ragged2e }
 \setlength \RaggedRightRightskip { 0pt plus \dim_use:N \c_beery_alphabet_dim }
@@ -453,7 +454,7 @@
 \NewDocumentCommand \keepnextpar { >{ \ReverseBoolean } s }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { keepnextpar } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { keepnextpar } }
       {
         \IfBooleanTF #1
           { \__beery_keep_next_par: }
@@ -469,7 +470,7 @@
 \NewDocumentCommand \listheading { m }
   {
     \mode_if_math:TF
-      { \msg_error:nnn { beery } { math-mode-error } { listheading } }
+      { \msg_error:nnn { beery } { math-mode-invalid } { listheading } }
       { \__beery_list_heading:n {#1} }
   }
 \cs_new_protected:Npn \__beery_list_heading:n #1
@@ -494,14 +495,10 @@
 % \setlength { \skip \footins } { \c_beery_big_skip }
 \setlength \footnotesep { \f@linespread \footnotesep }
 \coffin_new:N \l__beery_footnote_coffin
-% \f@linespread must not be empty here
 \dim_const:Nn \c_beery_footnote_baselineheight_dim
   {
-    \fp_to_dim:n
-      {
-        \dim_to_fp:n { \l_fontscale_footnotesize_baselineskip_skip } *
-        \f@linespread - \dim_to_fp:n { \l_fontscale_footnotesize_size_dim }
-      }
+    \f@linespread \l_fontscale_footnotesize_baselineskip_skip
+    - \l_fontscale_footnotesize_size_dim
   }
 \cs_set_protected:Npn \@makefntext #1
   {
@@ -527,8 +524,8 @@
           }
         \item #1 \endlist
       }
-    \coffin_typeset:Nnnnn \l__beery_footnote_coffin { l } { b }
-      { \c_zero_dim } { - \c_beery_footnote_baselineheight_dim }
+    \coffin_typeset:Nnnnn \l__beery_footnote_coffin { l } { b } { \c_zero_dim }
+      { - \c_beery_footnote_baselineheight_dim }
   }
 
 % REFERENCES

@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 7 September 2025
+Version 5.0.0\quad 13 September 2025
 
 
 \section{Introduction}
@@ -39,11 +39,9 @@ Version 5.0.0\quad 7 September 2025
 \listheading{Requirements:}
 \begin{itemize}
   \item \LaTeXe{} version 2023-11-01 or newer
-  \item \pkg{l3kernel} version 2023-11-09 or newer
+  \item \pkg{l3kernel} version 2023-11-01 or newer
   \item \pkg{fontscale} is incompatible with the \pkg{scalefnt} package.
 \end{itemize}
-
-You may need to ensure that your \LaTeX{} installation is up-to-date before using this package.
 
 For historical reasons, the default Computer Modern font is available only in a number of discrete font sizes.
 If you get a warning that Computer Modern is not available in the requested size, you may need to add the following code before \cs{documentclass} to make Computer Modern available at arbitrary font sizes:
@@ -121,6 +119,7 @@ The font sizes of the font size commands from \cs{tiny} to \cs{Huge} are initial
     \key{classic/base=\choices{10,11,12}}
     \key{classic/point=\choices{pt,bp,dd,nd}}
   \end{syntax}
+  Setting the key \key{typographic-scale=classic} sets the font size of each font size command from \cs{tiny} to \cs{Huge} using the classic typographic scale.
   The classic typographic scale consists of the traditional font sizes in points:
   \numlist{6;7;8;9;10;11;12;14;16;18;21;24;30;36;48;60;72}.\footnotemark{}
   They have been used since the sixteenth century and are the default font sizes on most computer software.
@@ -328,6 +327,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
   Adding the optional star first resets all the package keys to their initial values.
   Can be used mid-document.
   The scope of the effect is local to the current group.
+  Cannot be used in math mode.
 \end{function}
 
 \subsection{Lengths}

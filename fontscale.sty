@@ -7,7 +7,7 @@
 %%> \section{Loading the package}
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2025-09-13}{5.0.0}
+\ProvidesExplPackage{fontscale}{2025-09-22}{5.0.0}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -845,39 +845,39 @@
   }
 \cs_new_protected:Npn \__fontscale_step_font_size:nn #1#2
   {
-    \bool_case:nF
+    \tl_if_empty:nTF {#1}
       {
-        { \tl_if_empty_p:n {#1} }
-        {
-          \msg_warning:nnV { fontscale } { current-font-step-invalid }
-            \l_fontscale_size_dim
-        }
-        { \int_compare_p:nNn { \int_abs:n {#2} } > 9 }
-        { \msg_error:nnn { fontscale } { change-in-font-step-invalid } {#2} }
-        { \int_compare_p:nNn { #1 + #2 } < { -4 } }
-        {
-          \msg_warning:nn { fontscale } { font-step-too-small }
-          \tiny
-        }
-        { \int_compare_p:nNn { #1 + #2 } > 5 }
-        {
-          \msg_warning:nn { fontscale } { font-step-too-large }
-          \Huge
-        }
+        \msg_warning:nnV { fontscale } { current-font-step-invalid }
+          \l_fontscale_size_dim
       }
       {
-        \int_case:nn { #1 + #2 }
+        \int_compare:nNnTF { \int_abs:n {#2} } > 9
+          { \msg_error:nnn { fontscale } { change-in-font-step-invalid } {#2} }
           {
-            { -4 } { \tiny         }
-            { -3 } { \scriptsize   }
-            { -2 } { \footnotesize }
-            { -1 } { \small        }
-            {  0 } { \normalsize   }
-            {  1 } { \large        }
-            {  2 } { \Large        }
-            {  3 } { \LARGE        }
-            {  4 } { \huge         }
-            {  5 } { \Huge         }
+            \int_case:nnF { #1 + #2 }
+              {
+                { -4 } { \tiny         }
+                { -3 } { \scriptsize   }
+                { -2 } { \footnotesize }
+                { -1 } { \small        }
+                {  0 } { \normalsize   }
+                {  1 } { \large        }
+                {  2 } { \Large        }
+                {  3 } { \LARGE        }
+                {  4 } { \huge         }
+                {  5 } { \Huge         }
+              }
+              {
+                \int_compare:nNnTF { #1 + #2 } > 5
+                  {
+                    \msg_warning:nn { fontscale } { font-step-too-large }
+                    \Huge
+                  }
+                  {
+                    \msg_warning:nn { fontscale } { font-step-too-small }
+                    \tiny
+                  }
+              }
           }
       }
   }
@@ -908,25 +908,21 @@
   }
 \cs_new_protected:Npn \__fontscale_print_sample_text_ascending_order:n #1
   {
-    \group_begin:
-      \tl_map_inline:nn
-        {
-          \tiny \scriptsize \footnotesize \small \normalsize
-          \large \Large \LARGE \huge \Huge
-        }
-        { ##1 #1 \par }
-    \group_end:
+    \tl_map_inline:nn
+      {
+        \tiny \scriptsize \footnotesize \small \normalsize
+        \large \Large \LARGE \huge \Huge
+      }
+      { \group_begin: ##1 #1 \par \group_end: }
   }
 \cs_new_protected:Npn \__fontscale_print_sample_text_descending_order:n #1
   {
-    \group_begin:
-      \tl_map_inline:nn
-        {
-          \Huge \huge \LARGE \Large \large
-          \normalsize \small \footnotesize \scriptsize \tiny
-        }
-        { ##1 #1 \par }
-    \group_end:
+    \tl_map_inline:nn
+      {
+        \Huge \huge \LARGE \Large \large
+        \normalsize \small \footnotesize \scriptsize \tiny
+      }
+      { \group_begin: ##1 #1 \par \group_end: }
   }
 
 \NewDocumentCommand \printfontsizecommand { }

@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 13 September 2025
+Version 5.0.0\quad 22 September 2025
 
 
 \section{Introduction}
@@ -81,8 +81,8 @@ For this reason, you may want to set the class font size option close to the fon
 \subsection{Syntax}
 \label{subsec:syntax}
 
-This package defines some keys and commands that take as a value or argument a \meta{floating point expression}, \meta{integer expression}, \meta{dimen expression}, or \meta{skip expression}.
-This syntax has the same meaning as the arguments to \cs{fpeval}, \cs{inteval}, \cs{dimeval}, and \cs{skipeval}, respectively, which are documented in \pkg{usrguide}.
+This documentation uses the syntaxes \meta{fp expr}, \meta{int expr}, \meta{dim expr}, and \meta{skip expr}.
+These syntaxes have the same meaning as the arguments to \cs{fpeval}, \cs{inteval}, \cs{dimeval}, and \cs{skipeval}, respectively, which are documented in \pkg{usrguide}.
 
 
 \section{Keys}
@@ -138,9 +138,9 @@ The font sizes of the font size commands from \cs{tiny} to \cs{Huge} are initial
 
 \begin{variable}{musical/base, musical/ratio, musical/notes}
   \begin{syntax}
-    \key{musical/base=\meta{dimen expression}}
-    \key{musical/ratio=\meta{floating point expression}}
-    \key{musical/notes=\meta{integer expression}}
+    \key{musical/base=\meta{dim expr}}
+    \key{musical/ratio=\meta{fp expr}}
+    \key{musical/notes=\meta{int expr}}
   \end{syntax}
   Setting the key \key{typographic-scale=musical} calculates the font size of each font size command from \cs{tiny} to \cs{Huge} using the formula for the musical typographic scale:\footnotemark
   \begin{equation*}
@@ -151,12 +151,12 @@ The font sizes of the font size commands from \cs{tiny} to \cs{Huge} are initial
   $n$ is the number of notes, the number of font sizes above $f_0$.
   $r$ is the musical ratio, the ratio of the highest to the lowest note $ f_n / f_0 $.
 
-  The key \key{musical/base} sets the base font size $f_0$ to the result of evaluating the \meta{dimen expression}.
+  The key \key{musical/base} sets the base font size $f_0$ to the result of evaluating the \meta{dim expr}.
   The base font size is the font size of \cs{normalsize}.
   The initial value is \qty{10}{pt}.
-  The key \key{musical/ratio} sets the musical ratio $r$ to the result of evaluating the \meta{floating point expression}.
+  The key \key{musical/ratio} sets the musical ratio $r$ to the result of evaluating the \meta{fp expr}.
   The initial value is \num{2}.
-  The key \key{musical/notes} sets the number of notes $n$ to the result of evaluating the \meta{integer expression}.
+  The key \key{musical/notes} sets the number of notes $n$ to the result of evaluating the \meta{int expr}.
   The initial value is \num{5}.
   Table \ref{table:musical} displays the font size of each font size command from \cs{tiny} to \cs{Huge} when setting the key \key{typographic-scale=musical}.
 \end{variable}
@@ -176,9 +176,9 @@ The font baselineskips of the font size commands from \cs{tiny} to \cs{Huge} are
 
 \begin{variable}{baselineskip-size-ratio}
   \begin{syntax}
-    \key{baselineskip-size-ratio=\meta{floating point expression}}
+    \key{baselineskip-size-ratio=\meta{fp expr}}
   \end{syntax}
-  Sets the font baselineskip of each font size command from \cs{tiny} to \cs{Huge} equal to its font size \texttimes{} the result of evaluating the \meta{floating point expression}.
+  Sets the font baselineskip of each font size command from \cs{tiny} to \cs{Huge} equal to its font size \texttimes{} the result of evaluating the \meta{fp expr}.
   The initial value is \num{1.2}.
   This key also affects the behavior of \cs{setfontsize} (\S\ref{subsec:fontsize}).
 \end{variable}
@@ -207,9 +207,9 @@ The syntax \meta{font size command} represents the name of a font size command f
     Huge/size-normalsize-ratio
   }
   \begin{syntax}
-    \key{\meta{font size command}/size-normalsize-ratio=\meta{floating point expression}}
+    \key{\meta{font size command}/size-normalsize-ratio=\meta{fp expr}}
   \end{syntax}
-  Sets the font size of \cs{\meta{font size command}} equal to the font size of \cs{normalsize} \texttimes{} the result of evaluating the \meta{floating point expression}.
+  Sets the font size of \cs{\meta{font size command}} equal to the font size of \cs{normalsize} \texttimes{} the result of evaluating the \meta{fp expr}.
   Overwrites the font size set by the key \key{typographic-scale}.
   These keys are initially not set.
   The key \key{normalsize/size-normalsize-ratio} is not defined.
@@ -229,9 +229,9 @@ The syntax \meta{font size command} represents the name of a font size command f
     Huge/size
   }
   \begin{syntax}
-    \key{\meta{font size command}/size=\meta{dimen expression}}
+    \key{\meta{font size command}/size=\meta{dim expr}}
   \end{syntax}
-  Sets the font size of \cs{\meta{font size command}} to the result of evaluating the \meta{dimen expression}.
+  Sets the font size of \cs{\meta{font size command}} to the result of evaluating the \meta{dim expr}.
   Overwrites the font size set by the keys \key{typographic-scale} and \key{\meta{font size command}/size-normalsize-ratio}.
   These keys are initially not set.
 \end{variable}
@@ -250,9 +250,9 @@ The syntax \meta{font size command} represents the name of a font size command f
     Huge
   }
   \begin{syntax}
-    \key{\meta{font size command}=\meta{dimen expression}}
+    \key{\meta{font size command}=\meta{dim expr}}
   \end{syntax}
-  Equivalent to \key{\meta{font size command}/size=\meta{dimen expression}}.
+  Equivalent to \key{\meta{font size command}/size=\meta{dim expr}}.
 \end{variable}
 
 \begin{variable}
@@ -269,9 +269,9 @@ The syntax \meta{font size command} represents the name of a font size command f
     Huge/baselineskip-size-ratio
   }
   \begin{syntax}
-    \key{\meta{font size command}/baselineskip-size-ratio=\meta{floating point expression}}
+    \key{\meta{font size command}/baselineskip-size-ratio=\meta{fp expr}}
   \end{syntax}
-  Sets the font baselineskip of \cs{\meta{font size command}} equal to its font size \texttimes{} the result of evaluating the \meta{floating point expression}.
+  Sets the font baselineskip of \cs{\meta{font size command}} equal to its font size \texttimes{} the result of evaluating the \meta{fp expr}.
   Overwrites the font baselineskip set by the key \key{baselineskip-size-ratio}.
   These keys are initially not set.
 \end{variable}
@@ -290,9 +290,9 @@ The syntax \meta{font size command} represents the name of a font size command f
     Huge/baselineskip
   }
   \begin{syntax}
-    \key{\meta{font size command}/baselineskip=\meta{skip expression}}
+    \key{\meta{font size command}/baselineskip=\meta{skip expr}}
   \end{syntax}
-  Sets the font baselineskip of \cs{\meta{font size command}} to the result of evaluating the \meta{skip expression}.
+  Sets the font baselineskip of \cs{\meta{font size command}} to the result of evaluating the \meta{skip expr}.
   Overwrites the font baselineskip set by the keys \key{baselineskip-size-ratio} and \key{\meta{font size command}/baselineskip-size-ratio}.
   These keys are initially not set.
 \end{variable}
@@ -302,9 +302,9 @@ The syntax \meta{font size command} represents the name of a font size command f
 
 \begin{variable}{magscale}
   \begin{syntax}
-    \key{magscale=\meta{floating point expression}}
+    \key{magscale=\meta{fp expr}}
   \end{syntax}
-  Scales the font size and font baselineskip of each font size command from \cs{tiny} to \cs{Huge} by a factor equal to the result of evaluating the \meta{floating point expression}.
+  Scales the font size and font baselineskip of each font size command from \cs{tiny} to \cs{Huge} by a factor equal to the result of evaluating the \meta{fp expr}.
   The new font baselineskips have no stretch and shrink components.
   This key is applied after all the other package keys.
   This key is initially not set.
@@ -363,20 +363,20 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\setfontsize}
   \begin{syntax}
-    \cs{setfontsize} \oarg{skip expression} \marg{dimen expression}
+    \cs{setfontsize} \oarg{skip expr} \marg{dim expr}
   \end{syntax}
-  Sets the font size to the result of evaluating the \meta{dimen expression}.
+  Sets the font size to the result of evaluating the \meta{dim expr}.
   Sets the font baselineskip equal to the new font size \texttimes{} the value of the key \key{baselineskip-size-ratio} (\S\ref{subsec:baselineskipsizeratio}).
-  Adding the optional argument instead sets the font baselineskip to the result of evaluating the \meta{skip expression}.
+  Adding the optional argument instead sets the font baselineskip to the result of evaluating the \meta{skip expr}.
   Cannot be used in math mode.
   This command is a more robust alternative to \cs{fontsize} + \cs{selectfont}.
 \end{function}
 
 \begin{function}{\scalefont}
   \begin{syntax}
-    \cs{scalefont} \marg{floating point expression}
+    \cs{scalefont} \marg{fp expr}
   \end{syntax}
-  Scales the font size and font baselineskip by a factor equal to the result of evaluating the \meta{floating point expression}.
+  Scales the font size and font baselineskip by a factor equal to the result of evaluating the \meta{fp expr}.
   The new font baselineskip has no stretch and shrink components.
   Cannot be used in math mode.
   This command is a more robust alternative to \cs{scalefont} from the \pkg{scalefnt} package.
@@ -384,12 +384,12 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\stepfontsize}
   \begin{syntax}
-    \cs{stepfontsize} \marg{integer expression}
+    \cs{stepfontsize} \marg{int expr}
   \end{syntax}
-  Increases the font size by a number of \enquote{steps} equal to the result of evaluating the \meta{integer expression}.
+  Increases the font size by a number of \enquote{steps} equal to the result of evaluating the \meta{int expr}.
   Changing the font size by one step means incrementing\slash decrementing from a font size equal to the font size of a font size command from \cs{tiny} to \cs{Huge} to the next larger\slash smaller \cs{\meta{font size command}} by using \cs{\meta{font size command}}.
   Changing the font size by more than one step does not use any intermediate \cs{\meta{font size command}}.
-  If the result of evaluating the \meta{integer expression} is zero and the current font size equals the font size of any \cs{\meta{font size command}}, then \cs{stepfontsize} uses \cs{\meta{font size command}}.
+  If the result of evaluating the \meta{int expr} is zero and the current font size equals the font size of any \cs{\meta{font size command}}, then \cs{stepfontsize} uses \cs{\meta{font size command}}.
 
   \listheading{Some exceptions:}
   \begin{itemize}
@@ -411,9 +411,9 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\setfontbaselineskip}
   \begin{syntax}
-    \cs{setfontbaselineskip} \marg{skip expression}
+    \cs{setfontbaselineskip} \marg{skip expr}
   \end{syntax}
-  Sets the font baselineskip to the result of evaluating the \meta{skip expression}.
+  Sets the font baselineskip to the result of evaluating the \meta{skip expr}.
   Does not change the font size.
   Cannot be used in math mode.
 \end{function}

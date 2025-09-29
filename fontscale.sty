@@ -7,7 +7,7 @@
 %%> \section{Loading the package}
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2025-09-22}{5.0.0}
+\ProvidesExplPackage{fontscale}{2025-09-28}{5.0.0}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -412,15 +412,15 @@
     \keys_set:nn { fontscale } {#1}
     \__fontscale_keys_process:
     \normalsize
-    \prg_break_point:
   }
 \cs_new_protected:Npn \__fontscale_keys_process:
   {
     \__fontscale_keys_process_start:
     \__fontscale_keys_process_sizes_normalsize:
-    \__fontscale_keys_process_sizes_other:
+    \__fontscale_keys_process_sizes:
     \__fontscale_keys_process_baselineskips:
     \__fontscale_keys_process_end:
+    \prg_break_point:
   }
 \cs_new_protected:Npn \__fontscale_keys_process_start:
   {
@@ -502,11 +502,11 @@
         \prg_break:
       }
   }
-\cs_new_protected:Npn \__fontscale_keys_process_sizes_other:
+\cs_new_protected:Npn \__fontscale_keys_process_sizes:
   {
-    \cs_set_eq:Nc \__fontscale_keys_process_sizes_other_aux:n
+    \cs_set_eq:Nc \__fontscale_keys_process_sizes_aux:n
       {
-        __fontscale_keys_process_sizes_other_
+        __fontscale_keys_process_sizes_
         \str_case:Vn \l__fontscale_typographic_scale_str
           {
             { classic } { classic_ \l__fontscale_classic_base_str :n }
@@ -518,9 +518,9 @@
         {tiny} {scriptsize} {footnotesize} {small}
         {large} {Large} {LARGE} {huge} {Huge}
       }
-      \__fontscale_keys_process_sizes_other:n
+      \__fontscale_keys_process_sizes:n
   }
-\cs_new_protected:cpn { __fontscale_keys_process_sizes_other_classic_10:n } #1
+\cs_new_protected:cpn { __fontscale_keys_process_sizes_classic_10:n } #1
   {
     \dim_set:cn { l_fontscale_#1_size_dim }
       {
@@ -539,7 +539,7 @@
         \l__fontscale_classic_point_str
       }
   }
-\cs_new_protected:cpn { __fontscale_keys_process_sizes_other_classic_11:n } #1
+\cs_new_protected:cpn { __fontscale_keys_process_sizes_classic_11:n } #1
   {
     \dim_set:cn { l_fontscale_#1_size_dim }
       {
@@ -558,7 +558,7 @@
         \l__fontscale_classic_point_str
       }
   }
-\cs_new_protected:cpn { __fontscale_keys_process_sizes_other_classic_12:n } #1
+\cs_new_protected:cpn { __fontscale_keys_process_sizes_classic_12:n } #1
   {
     \dim_set:cn { l_fontscale_#1_size_dim }
       {
@@ -577,7 +577,7 @@
         \l__fontscale_classic_point_str
       }
   }
-\cs_new_protected:Npn \__fontscale_keys_process_sizes_other_musical:n #1
+\cs_new_protected:Npn \__fontscale_keys_process_sizes_musical:n #1
   {
     \dim_set:cn { l_fontscale_#1_size_dim }
       {
@@ -602,7 +602,7 @@
           }
       }
   }
-\cs_new_protected:Npn \__fontscale_keys_process_sizes_other:n #1
+\cs_new_protected:Npn \__fontscale_keys_process_sizes:n #1
   {
     \quark_if_no_value:cF { l__fontscale_#1_size_normalsize_ratio_tl }
       {
@@ -633,7 +633,7 @@
           }
         \prg_break:n { \use:n }
       }
-    \__fontscale_keys_process_sizes_other_aux:n {#1}
+    \__fontscale_keys_process_sizes_aux:n {#1}
     \use_ii:nn
     \prg_break_point:
     {

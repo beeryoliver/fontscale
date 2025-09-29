@@ -7,7 +7,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2025-09-22
+## [v5.0.0] - 2025-09-28
 
 ### Changed
 - This update includes many changes that are backwards incompatible.

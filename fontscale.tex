@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 22 September 2025
+Version 5.0.0\quad 28 September 2025
 
 
 \section{Introduction}
@@ -321,7 +321,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\fontscalesetup}
   \begin{syntax}
-    \cs{fontscalesetup} \sarg{} \marg{key-value list}
+    \cs{fontscalesetup}\sarg\marg{key-value list}
   \end{syntax}
   Sets and processes the \pkg{fontscale} package keys (\S\ref{sec:keys}) in \meta{key-value list} and then uses \cs{normalsize}.
   Adding the optional star first resets all the package keys to their initial values.
@@ -363,7 +363,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\setfontsize}
   \begin{syntax}
-    \cs{setfontsize} \oarg{skip expr} \marg{dim expr}
+    \cs{setfontsize}\oarg{skip expr}\marg{dim expr}
   \end{syntax}
   Sets the font size to the result of evaluating the \meta{dim expr}.
   Sets the font baselineskip equal to the new font size \texttimes{} the value of the key \key{baselineskip-size-ratio} (\S\ref{subsec:baselineskipsizeratio}).
@@ -374,7 +374,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\scalefont}
   \begin{syntax}
-    \cs{scalefont} \marg{fp expr}
+    \cs{scalefont}\marg{fp expr}
   \end{syntax}
   Scales the font size and font baselineskip by a factor equal to the result of evaluating the \meta{fp expr}.
   The new font baselineskip has no stretch and shrink components.
@@ -384,7 +384,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\stepfontsize}
   \begin{syntax}
-    \cs{stepfontsize} \marg{int expr}
+    \cs{stepfontsize}\marg{int expr}
   \end{syntax}
   Increases the font size by a number of \enquote{steps} equal to the result of evaluating the \meta{int expr}.
   Changing the font size by one step means incrementing\slash decrementing from a font size equal to the font size of a font size command from \cs{tiny} to \cs{Huge} to the next larger\slash smaller \cs{\meta{font size command}} by using \cs{\meta{font size command}}.
@@ -411,7 +411,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\setfontbaselineskip}
   \begin{syntax}
-    \cs{setfontbaselineskip} \marg{skip expr}
+    \cs{setfontbaselineskip}\marg{skip expr}
   \end{syntax}
   Sets the font baselineskip to the result of evaluating the \meta{skip expr}.
   Does not change the font size.
@@ -423,7 +423,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\printsampletext}
   \begin{syntax}
-    \cs{printsampletext} \sarg{} \marg{text}
+    \cs{printsampletext}\sarg\marg{text}
   \end{syntax}
   Prints \meta{text} in each font size ordered from \cs{tiny} to \cs{Huge} each followed by \cs{par}.
   \meta{text} can contain \cs{par} tokens.

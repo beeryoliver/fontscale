@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 28 September 2025
+Version 5.0.0\quad 5 October 2025
 
 
 \section{Introduction}
@@ -28,7 +28,7 @@ Version 5.0.0\quad 28 September 2025
   \item
   Defines lengths that store the current font size, font baselineskip, and the font size of \cs{normalsize} (\S\ref{subsec:lengths}).
   \item
-  Set the font size relative to the current font size using more robust tools than the \pkg{scalefnt} and \pkg{relsize} packages (\S\ref{subsec:fontsize}).
+  Set the font size relative to the current font size using more robust tools than the \pkg{scalefnt} and \pkg{relsize} packages (\S\S\ref{subsec:lengths}--\ref{subsec:fontsize}).
   \item
   Defines \pkg{expl3} variables that store the font size and font baselineskip of each font size command from \cs{tiny} to \cs{Huge} and the current font size and font baselineskip (\S\S\ref{subsec:variablesfontscalesetup}--\ref{subsec:variablesselectfont}).
 \end{itemize}
@@ -211,7 +211,7 @@ The syntax \meta{font size command} represents the name of a font size command f
   \end{syntax}
   Sets the font size of \cs{\meta{font size command}} equal to the font size of \cs{normalsize} \texttimes{} the result of evaluating the \meta{fp expr}.
   Overwrites the font size set by the key \key{typographic-scale}.
-  These keys are initially not set.
+  The initial value is \meta{not set}.
   The key \key{normalsize/size-normalsize-ratio} is not defined.
 \end{variable}
 
@@ -233,7 +233,7 @@ The syntax \meta{font size command} represents the name of a font size command f
   \end{syntax}
   Sets the font size of \cs{\meta{font size command}} to the result of evaluating the \meta{dim expr}.
   Overwrites the font size set by the keys \key{typographic-scale} and \key{\meta{font size command}/size-normalsize-ratio}.
-  These keys are initially not set.
+  The initial value is \meta{not set}.
 \end{variable}
 
 \begin{variable}
@@ -273,7 +273,7 @@ The syntax \meta{font size command} represents the name of a font size command f
   \end{syntax}
   Sets the font baselineskip of \cs{\meta{font size command}} equal to its font size \texttimes{} the result of evaluating the \meta{fp expr}.
   Overwrites the font baselineskip set by the key \key{baselineskip-size-ratio}.
-  These keys are initially not set.
+  The initial value is \meta{not set}.
 \end{variable}
 
 \begin{variable}
@@ -294,7 +294,7 @@ The syntax \meta{font size command} represents the name of a font size command f
   \end{syntax}
   Sets the font baselineskip of \cs{\meta{font size command}} to the result of evaluating the \meta{skip expr}.
   Overwrites the font baselineskip set by the keys \key{baselineskip-size-ratio} and \key{\meta{font size command}/baselineskip-size-ratio}.
-  These keys are initially not set.
+  The initial value is \meta{not set}.
 \end{variable}
 
 \subsection{The key \key{magscale}}
@@ -307,7 +307,7 @@ The syntax \meta{font size command} represents the name of a font size command f
   Scales the font size and font baselineskip of each font size command from \cs{tiny} to \cs{Huge} by a factor equal to the result of evaluating the \meta{fp expr}.
   The new font baselineskips have no stretch and shrink components.
   This key is applied after all the other package keys.
-  This key is initially not set.
+  The initial value is \meta{not set}.
 \end{variable}
 
 

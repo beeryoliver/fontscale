@@ -7,7 +7,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2025-09-28
+## [v5.0.0] - 2025-10-05
 
 ### Changed
 - This update includes many changes that are backwards incompatible.
@@ -20,36 +20,16 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   `<font size command>/size-normalsize-ratio`.
 - All font size commands defined by this package now issue an error instead of
   a warning if used in math mode.
+- Improved the warning message in `\fontscalesetup` when the font sizes are in
+  the wrong order.
 - `\currentfontsize`, `\currentfontbaselineskip`, and `\currentnormalsize` are
   now lengths instead of expandable commands.
 
 ### Removed
 - `fontscale-v3.sty`
 - Keys:
-  - `typographic-scale/classic-10pt`
-  - `typographic-scale/classic-11pt`
-  - `typographic-scale/classic-12pt`
-  - `typographic-scale/classic-10bp`
-  - `typographic-scale/classic-11bp`
-  - `typographic-scale/classic-12bp`
-  - `typographic-scale/classic-10dd`
-  - `typographic-scale/classic-11dd`
-  - `typographic-scale/classic-12dd`
-  - `typographic-scale/classic-10nd`
-  - `typographic-scale/classic-11nd`
-  - `typographic-scale/classic-12nd`
-  - `classic-10pt`
-  - `classic-11pt`
-  - `classic-12pt`
-  - `classic-10bp`
-  - `classic-11bp`
-  - `classic-12bp`
-  - `classic-10dd`
-  - `classic-11dd`
-  - `classic-12dd`
-  - `classic-10nd`
-  - `classic-11nd`
-  - `classic-12nd`
+  - `typographic-scale/classic-<base font size>`
+  - `classic-<base font size>`
 - `\currentfontstep`
 - `\currentfontscale`
 - `\setfontstep`

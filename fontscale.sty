@@ -6,8 +6,9 @@
 
 %%> \section{Loading the package}
 
+% LaTeX2e version 2023-11-01 added \IfExplAtLeastTF.
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2025-09-28}{5.0.0}
+\ProvidesExplPackage{fontscale}{2025-10-05}{5.0.0}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -19,6 +20,7 @@
 \msg_new:nnn { fontscale } { scalefnt }
   { The~ fontscale~ package~ is~ incompatible~ with~ the~ scalefnt~ package. }
 
+% l3kernel version 2023-11-01 fixed \str_case:en.
 \IfExplAtLeastTF { 2023-11-01 } { }
   { \msg_critical:nn { fontscale } { l3kernel } }
 \hook_gput_code:nnn { package / scalefnt / before } { fontscale }
@@ -26,6 +28,13 @@
 
 %%> \section{Messages}
 
+\msg_new:nnn { fontscale } { math-mode-invalid }
+  { '\iow_char:N \\#1'~ invalid~ in~ math~ mode~ \msg_line_context:. }
+\msg_new:nnn { fontscale } { font-size-invalid }
+  {
+    Invalid~ font~ size~ '#1'~ \msg_line_context:. \\
+    The~ font~ size~ must~ be~ a~ positive~ length~ and~ less~ than~ 2048pt.
+  }
 % Messages used in \fontscalesetup.
 \msg_new:nnn { fontscale } { musical-base-invalid }
   {
@@ -67,19 +76,12 @@
   }
 \msg_new:nnn { fontscale } { font-sizes-wrong-order }
   {
-    The~ font~ sizes~ are~ not~ in~ the~ correct~ order~ \msg_line_context:. \\
+    Some~ package~ features~ may~ not~ work~ correctly~ because~
+    the~ font~ sizes~ are~ not~ in~ the~ correct~ order~ \msg_line_context:. \\
     The~ lengths~ of~ the~ font~ sizes~ should~ be~ ordered~ from~
     \iow_char:N \\tiny~ to~ \iow_char:N \\Huge.
   }
-
-% Messages used elsewhere.
-\msg_new:nnn { fontscale } { math-mode-invalid }
-  { '\iow_char:N \\#1'~ invalid~ in~ math~ mode~ \msg_line_context:. }
-\msg_new:nnn { fontscale } { font-size-invalid }
-  {
-    Invalid~ font~ size~ '#1'~ \msg_line_context:. \\
-    The~ font~ size~ must~ be~ a~ positive~ length~ and~ less~ than~ 2048pt.
-  }
+% Messages used in \stepfontsize.
 \msg_new:nnn { fontscale } { change-in-font-step-invalid }
   {
     Invalid~ change~ in~ font~ step~ '#1'~ \msg_line_context:. \\
@@ -154,8 +156,7 @@
 \skip_set:Nn \l_fontscale_huge_baselineskip_skip         { 19.2pt }
 \skip_set:Nn \l_fontscale_Huge_baselineskip_skip         { 21.6pt }
 
-% Stores the current font size and font baselineskip. They are set in the
-% selectfont hook.
+% Stores the current font size and font baselineskip.
 \dim_new:N \l_fontscale_size_dim
 \skip_new:N \l_fontscale_baselineskip_skip
 \hook_gput_code:nnn { selectfont } { fontscale }
@@ -168,7 +169,7 @@
 \fp_new:N \l__fontscale_musical_base_fp
 \fp_new:N \l__fontscale_musical_notes_fp
 
-% Scratch variable
+% Scratch variable that is also used to speed up floating point computations.
 \fp_new:N \l__fontscale_tmp_fp
 
 %%> \section{Some functions}
@@ -416,7 +417,6 @@
 \cs_new_protected:Npn \__fontscale_keys_process:
   {
     \__fontscale_keys_process_start:
-    \__fontscale_keys_process_sizes_normalsize:
     \__fontscale_keys_process_sizes:
     \__fontscale_keys_process_baselineskips:
     \__fontscale_keys_process_end:
@@ -461,7 +461,7 @@
           }
       }
   }
-\cs_new_protected:Npn \__fontscale_keys_process_sizes_normalsize:
+\cs_new_protected:Npn \__fontscale_keys_process_sizes:
   {
     \quark_if_no_value:NTF \l__fontscale_normalsize_size_tl
       {
@@ -501,9 +501,6 @@
           \l_fontscale_normalsize_size_dim
         \prg_break:
       }
-  }
-\cs_new_protected:Npn \__fontscale_keys_process_sizes:
-  {
     \cs_set_eq:Nc \__fontscale_keys_process_sizes_aux:n
       {
         __fontscale_keys_process_sizes_

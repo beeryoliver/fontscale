@@ -7,7 +7,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2025-10-05
+## [v5.0.0] - 2025-10-13
 
 ### Changed
 - This update includes many changes that are backwards incompatible.
@@ -20,8 +20,8 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   `<font size command>/size-normalsize-ratio`.
 - All font size commands defined by this package now issue an error instead of
   a warning if used in math mode.
-- Improved the warning message in `\fontscalesetup` when the font sizes are in
-  the wrong order.
+- Improved the warning message in `\fontscalesetup` when the lengths of the
+  font sizes are not correctly ordered from `\tiny` to `\Huge`.
 - `\currentfontsize`, `\currentfontbaselineskip`, and `\currentnormalsize` are
   now lengths instead of expandable commands.
 
@@ -30,6 +30,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 - Keys:
   - `typographic-scale/classic-<base font size>`
   - `classic-<base font size>`
+  - `magscale`
 - `\currentfontstep`
 - `\currentfontscale`
 - `\setfontstep`

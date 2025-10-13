@@ -8,7 +8,7 @@
 
 % LaTeX2e version 2023-11-01 added \IfExplAtLeastTF.
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2025-10-05}{5.0.0}
+\ProvidesExplPackage{fontscale}{2025-10-13}{5.0.0}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -53,11 +53,6 @@
     The~ value~ of~ the~ key~ 'musical / notes'~ must~ be~ a~ positive~
     integer.
   }
-\msg_new:nnn { fontscale } { magscale-invalid }
-  {
-    Invalid~ value~ '#1'~ \msg_line_context:. \\
-    The~ value~ of~ the~ key~ 'magscale'~ must~ be~ positive.
-  }
 \msg_new:nnn { fontscale } { name-font-size-invalid }
   {
     Invalid~ font~ size~ of~ \iow_char:N \\#1~ '#2'~ \msg_line_context:. \\
@@ -76,10 +71,26 @@
   }
 \msg_new:nnn { fontscale } { font-sizes-wrong-order }
   {
-    Some~ package~ features~ may~ not~ work~ correctly~ because~
-    the~ font~ sizes~ are~ not~ in~ the~ correct~ order~ \msg_line_context:. \\
-    The~ lengths~ of~ the~ font~ sizes~ should~ be~ ordered~ from~
-    \iow_char:N \\tiny~ to~ \iow_char:N \\Huge.
+    Some~ package~ features~ may~ not~ work~ correctly~ because~ the~ lengths~
+    of~ the~ font~ sizes~ are~ not~ correctly~ ordered~ from~
+    \iow_char:N \\tiny~ to~ \iow_char:N \\Huge~ \msg_line_context:.~
+    The~ lengths~ of~ the~ font~ sizes~ are: \\ \\
+    \iow_indent:n
+      {
+        \iow_char:N \\tiny:~ \dim_use:N \l_fontscale_tiny_size_dim \\
+        \iow_char:N \\scriptsize:~
+          \dim_use:N \l_fontscale_scriptsize_size_dim \\
+        \iow_char:N \\footnotesize:~
+          \dim_use:N \l_fontscale_footnotesize_size_dim \\
+        \iow_char:N \\small:~ \dim_use:N \l_fontscale_small_size_dim \\
+        \iow_char:N \\normalsize:~
+          \dim_use:N \l_fontscale_normalsize_size_dim \\
+        \iow_char:N \\large:~ \dim_use:N \l_fontscale_large_size_dim \\
+        \iow_char:N \\Large:~ \dim_use:N \l_fontscale_Large_size_dim \\
+        \iow_char:N \\LARGE:~ \dim_use:N \l_fontscale_LARGE_size_dim \\
+        \iow_char:N \\huge:~ \dim_use:N \l_fontscale_huge_size_dim \\
+        \iow_char:N \\Huge:~ \dim_use:N \l_fontscale_Huge_size_dim
+      }
   }
 % Messages used in \stepfontsize.
 \msg_new:nnn { fontscale } { change-in-font-step-invalid }
@@ -156,7 +167,8 @@
 \skip_set:Nn \l_fontscale_huge_baselineskip_skip         { 19.2pt }
 \skip_set:Nn \l_fontscale_Huge_baselineskip_skip         { 21.6pt }
 
-% Stores the current font size and font baselineskip.
+% Stores the current font size and font baselineskip. These variables will be
+% initialized when \normalsize is used.
 \dim_new:N \l_fontscale_size_dim
 \skip_new:N \l_fontscale_baselineskip_skip
 \hook_gput_code:nnn { selectfont } { fontscale }
@@ -223,10 +235,7 @@
 
 \keys_define:nn { fontscale }
   {
-      magscale .tl_set:N = \l__fontscale_magscale_tl
-    , magscale .value_required:n = true
-
-    , baselineskip-size-ratio .fp_set:N =
+      baselineskip-size-ratio .fp_set:N =
         \l__fontscale_baselineskip_size_ratio_fp
     , baselineskip-size-ratio .value_required:n = true
 
@@ -387,8 +396,6 @@
         \l__fontscale_LARGE_baselineskip_tl
         \l__fontscale_huge_baselineskip_tl
         \l__fontscale_Huge_baselineskip_tl
-
-        \l__fontscale_magscale_tl
       }
       { \tl_set:Nn ##1 { \q_no_value } }
   }
@@ -449,17 +456,6 @@
         \fp_set:Nn \l__fontscale_musical_notes_fp
           { \int_use:N \l__fontscale_musical_notes_int }
       }
-    \quark_if_no_value:NF \l__fontscale_magscale_tl
-      {
-        \fp_set:Nn \l__fontscale_tmp_fp { \l__fontscale_magscale_tl }
-        \tl_set:NV \l__fontscale_magscale_tl \l__fontscale_tmp_fp
-        \fp_compare:nNnF \l__fontscale_tmp_fp > \c_zero_fp
-          {
-            \msg_error:nne { fontscale } { magscale-invalid }
-              { \fp_to_tl:N \l__fontscale_tmp_fp }
-            \prg_break:
-          }
-      }
   }
 \cs_new_protected:Npn \__fontscale_keys_process_sizes:
   {
@@ -483,17 +479,6 @@
           { \l__fontscale_normalsize_size_tl }
         \tl_set:NV \l__fontscale_normalsize_size_tl
           \l_fontscale_normalsize_size_dim
-      }
-    \quark_if_no_value:NF \l__fontscale_magscale_tl
-      {
-        \dim_set:Nn \l_fontscale_normalsize_size_dim
-          {
-            \fp_to_dim:n
-              {
-                \dim_to_fp:n { \l_fontscale_normalsize_size_dim } *
-                \l__fontscale_magscale_tl
-              }
-          }
       }
     \dim_compare:nF { \c_zero_dim < \l_fontscale_normalsize_size_dim < 2048pt }
       {
@@ -615,8 +600,7 @@
                 \l__fontscale_tmp_fp
               }
           }
-        \quark_if_no_value:cT { l__fontscale_#1_size_tl }
-          { \prg_break:n { \use_none:n } }
+        \quark_if_no_value:cT { l__fontscale_#1_size_tl } { \prg_break: }
       }
     \quark_if_no_value:cF { l__fontscale_#1_size_tl }
       {
@@ -628,24 +612,10 @@
             \msg_warning:nnn { fontscale }
               { size-normalsize-ratio-overwritten } {#1}
           }
-        \prg_break:n { \use:n }
+        \prg_break:
       }
     \__fontscale_keys_process_sizes_aux:n {#1}
-    \use_ii:nn
     \prg_break_point:
-    {
-      \quark_if_no_value:NF \l__fontscale_magscale_tl
-        {
-          \dim_set:cn { l_fontscale_#1_size_dim }
-            {
-              \fp_to_dim:n
-                {
-                  \dim_to_fp:n { \use:c { l_fontscale_#1_size_dim } } *
-                  \l__fontscale_magscale_tl
-                }
-            }
-        }
-    }
     \dim_compare:nF
       { \c_zero_dim < \use:c { l_fontscale_#1_size_dim } < 2048pt }
       {
@@ -696,18 +666,6 @@
             \msg_warning:nnn { fontscale }
               { baselineskip-size-ratio-overwritten } {#1}
           }
-        \quark_if_no_value:NF \l__fontscale_magscale_tl
-          {
-            \skip_set:cn { l_fontscale_#1_baselineskip_skip }
-              {
-                \fp_to_dim:n
-                  {
-                    \dim_to_fp:n
-                      { \use:c { l_fontscale_#1_baselineskip_skip } }
-                    * \l__fontscale_magscale_tl
-                  }
-              }
-          }
         \prg_break:
       }
     \skip_set:cn { l_fontscale_#1_baselineskip_skip }
@@ -741,9 +699,9 @@
 %%> \section{Document commands}
 
 % Defines the font size commands from \tiny to \Huge and initializes to
-% \normalsize. Sets \@currsize only for compatibility. The internal functions
-% are not used elsewhere for compatibility with hooks such
-% as \AddToHook{cmd/<font size command>/after}{<code>}.
+% \normalsize. Their corresponding internal functions are not used elsewhere
+% in this package for compatibility with hooks such as
+% \AddToHook{cmd/<font size command>/after}{<code>}.
 \tl_map_inline:nn
   {
     {tiny} {scriptsize} {footnotesize} {small} {normalsize}
@@ -773,6 +731,7 @@
   }
 \normalsize
 
+% Defines a few user-level lengths by abusing \cs_new_eq:NN.
 \cs_new_eq:NN \currentfontsize \l_fontscale_size_dim
 \cs_new_eq:NN \currentfontbaselineskip \l_fontscale_baselineskip_skip
 \cs_new_eq:NN \currentnormalsize \l_fontscale_normalsize_size_dim

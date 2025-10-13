@@ -3,7 +3,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beery}{2025-10-05}{0.0.0}{}
+\ProvidesExplClass{beery}{2025-10-13}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beery } { Class }
 
@@ -14,10 +14,7 @@
     L3~ programming~ layer~ version~ 2023-11-01~ or~ newer.
   }
 \msg_new:nnn { beery } { luatex }
-  {
-    The~ beery~ class~ could~ not~ load. \\
-    This~ class~ requires~ LuaTeX.
-  }
+  { The~ beery~ class~ could~ not~ load. \\ This~ class~ requires~ LuaTeX. }
 
 \IfExplAtLeastTF { 2023-11-01 } { } { \msg_critical:nn { beery } { l3kernel } }
 \sys_if_engine_luatex:F { \msg_critical:nn { beery } { luatex } }
@@ -174,7 +171,7 @@
   }
 \cs_new_protected:Npn \__beery_print_meta_replace_subscript:
   {
-    \tl_map_inline:nn { {8} {11} {12} {13} }
+    \tl_map_inline:nn { {8} {11} {12} }
       {
         \tl_replace_all:Nen \l__beery_print_meta_tl
           { \char_generate:nn { `_ } {##1} }
@@ -368,7 +365,7 @@
     \ttfamily
     \obeylines
   }
-\NewDocumentEnvironment { function } { m }
+\NewDocumentEnvironment { function } { >{ \TrimSpaces } m }
   {
     \par
     \begin { minipage } [ b ] { \textwidth }
@@ -459,7 +456,7 @@
 \RequirePackage [ raggedrightboxes ] { ragged2e }
 \setlength \RaggedRightRightskip { 0pt plus \dim_use:N \c_beery_alphabet_dim }
 \setlength \RaggedRightParindent { 0pt }
-\setlength \JustifyingParindent { \RaggedRightParindent }
+\setlength \JustifyingParindent { 1.5em }
 \RaggedRight
 % \justifying
 \RequirePackage { microtype }
@@ -650,8 +647,7 @@
 \RequirePackage { xurl }
 \RequirePackage { hyperref }
 \hypersetup { bookmarksnumbered , hidelinks , linktoc = page }
-\cs_new:Npn \__beery_pdfstring_print_cs:n #1
-  { \textbackslash \tl_to_str:e { \tl_trim_spaces:n {#1} } }
+
 \cs_new:Npn \__beery_pdfstring_print_key_value:n #1
   {
     \exp_args:Ne \__beery_pdfstring_print_key_value_aux:n
@@ -663,12 +659,17 @@
       { \tl_to_str:e { \tl_range:nnn {#1} { 2 } { -1 } } }
       { \tl_to_str:n {#1} }
   }
-\cs_new:Npn \__beery_pdfstring_meta:n #1
+\cs_new:Npn \__beery_pdfstring_print_cs:n #1
+  { \textbackslash \tl_to_str:e { \tl_trim_spaces:n {#1} } }
+\cs_new:Npn \__beery_pdfstring_print_meta:n #1
   { < \tl_to_str:e { \tl_trim_spaces:n {#1} } > }
+\cs_new:Npn \__beery_pdfstring_print_pkg:n #1
+  { \tl_to_str:e { \tl_trim_spaces:n {#1} } }
 \pdfstringdefDisableCommands
   {
     \cs_set_eq:NN \key  \__beery_pdfstring_print_key_value:n
     \cs_set_eq:NN \cs   \__beery_pdfstring_print_cs:n
     \cs_set_eq:NN \meta \__beery_pdfstring_print_meta:n
     \cs_set_eq:NN \__beery_print_meta:n \__beery_pdfstring_print_meta:n
+    \cs_set_eq:NN \pkg  \__beery_pdfstring_print_pkg:n
   }

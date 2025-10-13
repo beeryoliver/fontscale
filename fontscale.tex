@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 5 October 2025
+Version 5.0.0\quad 13 October 2025
 
 
 \section{Introduction}
@@ -297,19 +297,6 @@ The syntax \meta{font size command} represents the name of a font size command f
   The initial value is \meta{not set}.
 \end{variable}
 
-\subsection{The key \key{magscale}}
-\label{subsec:magscale}
-
-\begin{variable}{magscale}
-  \begin{syntax}
-    \key{magscale=\meta{fp expr}}
-  \end{syntax}
-  Scales the font size and font baselineskip of each font size command from \cs{tiny} to \cs{Huge} by a factor equal to the result of evaluating the \meta{fp expr}.
-  The new font baselineskips have no stretch and shrink components.
-  This key is applied after all the other package keys.
-  The initial value is \meta{not set}.
-\end{variable}
-
 
 \section{Commands}
 \label{sec:commands}
@@ -324,7 +311,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
     \cs{fontscalesetup}\sarg\marg{key-value list}
   \end{syntax}
   Sets and processes the \pkg{fontscale} package keys (\S\ref{sec:keys}) in \meta{key-value list} and then uses \cs{normalsize}.
-  Adding the optional star first resets all the package keys to their initial values.
+  Adding the optional star first resets all the \pkg{fontscale} package keys to their initial values.
   Can be used mid-document.
   The scope of the effect is local to the current group.
   Cannot be used in math mode.

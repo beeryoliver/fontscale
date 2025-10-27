@@ -7,11 +7,13 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2025-10-13
+## [v5.0.0] - 2025-10-27
 
 ### Changed
 - This update includes many changes that are backwards incompatible.
-- The package now requires `l3kernel` version 2023-11-01.
+- Updated requirements:
+  - Now requires `l3kernel` version 2023-11-01.
+  - No longer incompatible with the `scalefnt` package.
 - The documentation no longer uses the terms "font step" and "font scale" to
   describe the font size.
 - The documentation has been completely rewritten.
@@ -24,6 +26,8 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   font sizes are not correctly ordered from `\tiny` to `\Huge`.
 - `\currentfontsize`, `\currentfontbaselineskip`, and `\currentnormalsize` are
   now lengths instead of expandable commands.
+- `\setfontsize` now has an `o`- instead of an `s`-type argument with a new
+  functionality.
 
 ### Removed
 - `fontscale-v3.sty`
@@ -31,20 +35,17 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   - `typographic-scale/classic-<base font size>`
   - `classic-<base font size>`
   - `magscale`
-- `\currentfontstep`
-- `\currentfontscale`
-- `\setfontstep`
-- `\setfontscale`
-- `\setfontsize` `s`-type argument
-- `\setfontsizebaselineskip`
-- `\setfontbaselineskip` `s`-type argument
-- `\printfontsizeparameters`
-- `\printallfontsizeparameters`
+- `\currentfontstep`, `\currentfontscale`
+- `\setfontstep`, `\setfontscale`
+- `\scalefont` (redundant with `\setfontsize` and `\currentfontsize`)
+- `\setfontsizebaselineskip` (redundant with `\setfontsize`)
+- `\setfontbaselineskip` `s`-type argument (redundant with
+  `\currentfontbaselineskip`)
+- `\printfontsizeparameters`, `\printallfontsizeparameters`
 - `\c_fontscale_<font size command>_step_fp`
-- `\c_fontscale_normalsize_scale_fp`
-- `\l_fontscale_<font size command>_scale_fp`
-- `\l_fontscale_step_fp`
-- `\l_fontscale_scale_fp`
+- `\c_fontscale_normalsize_scale_fp`,
+  `\l_fontscale_<font size command>_scale_fp`
+- `\l_fontscale_step_fp`, `\l_fontscale_scale_fp`
 
 ### Added
 - Keys:
@@ -52,12 +53,13 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   - `classic`
   - `classic/base`
   - `classic/point`
-- `\setfontsize` `o`-type argument
 - `\stepfontsize`
 
 ### Fixed
 - The package now correctly uses `\fp_to_tl:` to display floating point
   numbers.
+- Added a space after every `\iow_char:N \\` in `fontscale.sty` to make the
+  `codehigh` package typeset the code with the correct color syntax.
 
 ## [v4.2.0] - 2025-04-30
 

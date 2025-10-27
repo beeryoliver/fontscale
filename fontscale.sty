@@ -6,9 +6,8 @@
 
 %%> \section{Loading the package}
 
-% LaTeX2e version 2023-11-01 added \IfExplAtLeastTF.
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2025-10-13}{5.0.0}
+\ProvidesExplPackage{fontscale}{2025-10-27}{5.0.0}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -17,106 +16,8 @@
     This~ package~ requires~
     L3~ programming~ layer~ version~ 2023-11-01~ or~ newer.
   }
-\msg_new:nnn { fontscale } { scalefnt }
-  { The~ fontscale~ package~ is~ incompatible~ with~ the~ scalefnt~ package. }
-
-% l3kernel version 2023-11-01 fixed \str_case:en.
 \IfExplAtLeastTF { 2023-11-01 } { }
   { \msg_critical:nn { fontscale } { l3kernel } }
-\hook_gput_code:nnn { package / scalefnt / before } { fontscale }
-  { \msg_error:nn { fontscale } { scalefnt } }
-
-%%> \section{Messages}
-
-\msg_new:nnn { fontscale } { math-mode-invalid }
-  { '\iow_char:N \\#1'~ invalid~ in~ math~ mode~ \msg_line_context:. }
-\msg_new:nnn { fontscale } { font-size-invalid }
-  {
-    Invalid~ font~ size~ '#1'~ \msg_line_context:. \\
-    The~ font~ size~ must~ be~ a~ positive~ length~ and~ less~ than~ 2048pt.
-  }
-% Messages used in \fontscalesetup.
-\msg_new:nnn { fontscale } { musical-base-invalid }
-  {
-    Invalid~ value~ '#1'~ \msg_line_context:. \\
-    The~ value~ of~ the~ key~ 'musical / base'~ must~ be~ a~ positive~ length~
-    and~ less~ than~ 2048pt.
-  }
-\msg_new:nnn { fontscale } { musical-ratio-invalid }
-  {
-    Invalid~ value~ '#1'~ \msg_line_context:. \\
-    The~ value~ of~ the~ key~ 'musical / ratio'~ must~ be~ greater~ than~ 1.
-  }
-\msg_new:nnn { fontscale } { musical-notes-invalid }
-  {
-    Invalid~ value~ '#1'~ \msg_line_context:. \\
-    The~ value~ of~ the~ key~ 'musical / notes'~ must~ be~ a~ positive~
-    integer.
-  }
-\msg_new:nnn { fontscale } { name-font-size-invalid }
-  {
-    Invalid~ font~ size~ of~ \iow_char:N \\#1~ '#2'~ \msg_line_context:. \\
-    The~ font~ size~ must~ be~ a~ positive~ length~ and~ less~ than~ 2048pt.
-  }
-\msg_new:nnn { fontscale } { size-normalsize-ratio-overwritten }
-  {
-    The~ font~ size~ set~ by~ the~ key~ '#1 / size-normalsize-ratio'~
-    has~ been~ overwritten~ by~ the~ key~ '#1 / size'~ \msg_line_context:.
-  }
-\msg_new:nnn { fontscale } { baselineskip-size-ratio-overwritten }
-  {
-    The~ font~ baselineskip~ set~ by~ the~ key~ '#1 / baselineskip-size-ratio'~
-    has~ been~ overwritten~ by~ the~ key~ '#1 / baselineskip'~
-    \msg_line_context:.
-  }
-\msg_new:nnn { fontscale } { font-sizes-wrong-order }
-  {
-    Some~ package~ features~ may~ not~ work~ correctly~ because~ the~ lengths~
-    of~ the~ font~ sizes~ are~ not~ correctly~ ordered~ from~
-    \iow_char:N \\tiny~ to~ \iow_char:N \\Huge~ \msg_line_context:.~
-    The~ lengths~ of~ the~ font~ sizes~ are: \\ \\
-    \iow_indent:n
-      {
-        \iow_char:N \\tiny:~ \dim_use:N \l_fontscale_tiny_size_dim \\
-        \iow_char:N \\scriptsize:~
-          \dim_use:N \l_fontscale_scriptsize_size_dim \\
-        \iow_char:N \\footnotesize:~
-          \dim_use:N \l_fontscale_footnotesize_size_dim \\
-        \iow_char:N \\small:~ \dim_use:N \l_fontscale_small_size_dim \\
-        \iow_char:N \\normalsize:~
-          \dim_use:N \l_fontscale_normalsize_size_dim \\
-        \iow_char:N \\large:~ \dim_use:N \l_fontscale_large_size_dim \\
-        \iow_char:N \\Large:~ \dim_use:N \l_fontscale_Large_size_dim \\
-        \iow_char:N \\LARGE:~ \dim_use:N \l_fontscale_LARGE_size_dim \\
-        \iow_char:N \\huge:~ \dim_use:N \l_fontscale_huge_size_dim \\
-        \iow_char:N \\Huge:~ \dim_use:N \l_fontscale_Huge_size_dim
-      }
-  }
-% Messages used in \stepfontsize.
-\msg_new:nnn { fontscale } { change-in-font-step-invalid }
-  {
-    Invalid~ change~ in~ font~ step~ '#1'~ \msg_line_context:. \\
-    The~ change~ in~ font~ step~ cannot~ be~
-    greater~ than~ 9~ or~ less~ than~ -9.
-  }
-\msg_new:nnn { fontscale } { current-font-step-invalid }
-  {
-    The~ font~ size~ could~ not~ be~ stepped~ \msg_line_context:. \\
-    The~ current~ font~ size~ '#1'~ does~ not~ equal~ the~ font~ size~ of~ any~
-    font~ size~ command~ from~ \iow_char:N \\tiny~ to~ \iow_char:N \\Huge.
-  }
-\msg_new:nnn { fontscale } { font-step-too-small }
-  {
-    Using~ \iow_char:N \\tiny~ \msg_line_context:. \\
-    The~ font~ size~ cannot~ be~ stepped~ to~ a~ size~ smaller~ than~
-    \iow_char:N \\tiny.
-  }
-\msg_new:nnn { fontscale } { font-step-too-large }
-  {
-    Using~ \iow_char:N \\Huge~ \msg_line_context:. \\
-    The~ font~ size~ cannot~ be~ stepped~ to~ a~ size~ larger~ than~
-    \iow_char:N \\Huge.
-  }
 
 %%> \section{Some variables}
 
@@ -181,51 +82,8 @@
 \fp_new:N \l__fontscale_musical_base_fp
 \fp_new:N \l__fontscale_musical_notes_fp
 
-% Scratch variable that is also used to speed up floating point computations.
+% Scratch variable
 \fp_new:N \l__fontscale_tmp_fp
-
-%%> \section{Some functions}
-
-% Variants of l3kernel functions
-\cs_generate_variant:Nn \msg_error:nnnn { nnnv }
-% Similar to \fontsize + \selectfont, except that it:
-% (1) Takes dimen and skip expressions as arguments without appending a default
-% unit of 'pt'.
-% (2) Avoids the issue where \f@size is set to the new font size before the
-% second argument is expanded.
-% (3) Issues a user-friendly error message if the font size is invalid.
-\cs_new_protected:Npn \__fontscale_set_font_size:nn #1#2
-  {
-    \use:e
-      {
-        \__fontscale_set_font_size_aux:nn { \dim_eval:n {#1} }
-          { \skip_eval:n {#2} }
-      }
-  }
-\cs_new_protected:Npn \__fontscale_set_font_size_aux:nn #1#2
-  {
-    \dim_compare:nTF { \c_zero_dim < #1 < 2048pt }
-      { \fontsize {#1} {#2} \selectfont }
-      { \msg_error:nnn { fontscale } { font-size-invalid } {#1} }
-  }
-% Similar to \__fontscale_set_font_size:nn, except that it sets the font
-% baselineskip equal to the new font size times
-% \l__fontscale_baselineskip_size_ratio_fp.
-\cs_new_protected:Npn \__fontscale_set_font_size:n #1
-  { \exp_args:Ne \__fontscale_set_font_size_aux:n { \dim_eval:n {#1} } }
-\cs_new_protected:Npn \__fontscale_set_font_size_aux:n #1
-  {
-    \dim_compare:nTF { \c_zero_dim < #1 < 2048pt }
-      {
-        \fontsize {#1}
-          {
-            \fp_to_dim:n
-              { \dim_to_fp:n {#1} * \l__fontscale_baselineskip_size_ratio_fp }
-          }
-        \selectfont
-      }
-      { \msg_error:nnn { fontscale } { font-size-invalid } {#1} }
-  }
 
 %%> \section{Define keys}
 
@@ -338,10 +196,9 @@
     , Huge .value_required:n = true
   }
 
-% Pre-compiles the keys with their initial values and then sets the keys to
-% their initial values. This is significantly faster than using .initial:n and
-% \keys_precompile:nnN. The special value of \q_no_value is used to test if the
-% key has been set by the user.
+% Sets the keys to their initial values. This is significantly faster than
+% using .initial:n and \keys_precompile:nnN. The special value of \q_no_value
+% is used to test if the key has been set by the user.
 \cs_new_protected:Npn \__fontscale_keys_set_initial:
   {
     \str_set:Nn \l__fontscale_typographic_scale_str      { classic }
@@ -397,7 +254,7 @@
         \l__fontscale_huge_baselineskip_tl
         \l__fontscale_Huge_baselineskip_tl
       }
-      { \tl_set:Nn ##1 { \q_no_value } }
+      { \tl_set_eq:NN ##1 \q_no_value }
   }
 \__fontscale_keys_set_initial:
 
@@ -433,28 +290,18 @@
   {
     \dim_compare:nF { \c_zero_dim < \l__fontscale_musical_base_dim < 2048pt }
       {
-        \msg_error:nnV { fontscale } { musical-base-invalid }
-          \l__fontscale_musical_base_dim
+        \msg_error:nn { fontscale } { musical-base-invalid }
         \prg_break:
       }
     \fp_compare:nNnF \l__fontscale_musical_ratio_fp > \c_one_fp
       {
-        \msg_error:nne { fontscale } { musical-ratio-invalid }
-          { \fp_to_tl:N \l__fontscale_musical_ratio_fp }
+        \msg_error:nn { fontscale } { musical-ratio-invalid }
         \prg_break:
       }
     \int_compare:nNnF \l__fontscale_musical_notes_int > 0
       {
-        \msg_error:nnV { fontscale } { musical-notes-invalid }
-          \l__fontscale_musical_notes_int
+        \msg_error:nn { fontscale } { musical-notes-invalid }
         \prg_break:
-      }
-    \str_if_eq:VnT \l__fontscale_typographic_scale_str { musical }
-      {
-        \fp_set:Nn \l__fontscale_musical_base_fp
-          { \dim_to_fp:n { \l__fontscale_musical_base_dim } }
-        \fp_set:Nn \l__fontscale_musical_notes_fp
-          { \int_use:N \l__fontscale_musical_notes_int }
       }
   }
 \cs_new_protected:Npn \__fontscale_keys_process_sizes:
@@ -482,18 +329,28 @@
       }
     \dim_compare:nF { \c_zero_dim < \l_fontscale_normalsize_size_dim < 2048pt }
       {
-        \msg_error:nnnV { fontscale } { name-font-size-invalid } { normalsize }
-          \l_fontscale_normalsize_size_dim
+        \msg_error:nnn { fontscale } { name-font-size-invalid } { normalsize }
         \prg_break:
       }
-    \cs_set_eq:Nc \__fontscale_keys_process_sizes_aux:n
+    \str_case:Vn \l__fontscale_typographic_scale_str
       {
-        __fontscale_keys_process_sizes_
-        \str_case:Vn \l__fontscale_typographic_scale_str
-          {
-            { classic } { classic_ \l__fontscale_classic_base_str :n }
-            { musical } { musical:n }
-          }
+        { classic }
+        {
+          \cs_set_eq:Nc \__fontscale_keys_process_sizes_aux:n
+            {
+              __fontscale_keys_process_sizes_classic_
+              \l__fontscale_classic_base_str :n
+            }
+        }
+        { musical }
+        {
+          \cs_set_eq:NN \__fontscale_keys_process_sizes_aux:n
+            \__fontscale_keys_process_sizes_musical:n
+          \fp_set:Nn \l__fontscale_musical_base_fp
+            { \dim_to_fp:n { \l__fontscale_musical_base_dim } }
+          \fp_set:Nn \l__fontscale_musical_notes_fp
+            { \int_use:N \l__fontscale_musical_notes_int }
+        }
       }
     \tl_map_function:nN
       {
@@ -596,8 +453,8 @@
           {
             \fp_to_dim:n
               {
-                \dim_to_fp:n { \l_fontscale_normalsize_size_dim } *
-                \l__fontscale_tmp_fp
+                \l__fontscale_tmp_fp *
+                \dim_to_fp:n { \l_fontscale_normalsize_size_dim }
               }
           }
         \quark_if_no_value:cT { l__fontscale_#1_size_tl } { \prg_break: }
@@ -621,8 +478,7 @@
       {
         \tl_map_break:n
           {
-            \msg_error:nnnv { fontscale } { name-font-size-invalid } {#1}
-              { l_fontscale_#1_size_dim }
+            \msg_error:nnn { fontscale } { name-font-size-invalid } {#1}
             \prg_break:
           }
       }
@@ -648,8 +504,8 @@
           {
             \fp_to_dim:n
               {
-                \dim_to_fp:n { \use:c { l_fontscale_#1_size_dim } } *
-                \l__fontscale_tmp_fp
+                \l__fontscale_tmp_fp *
+                \dim_to_fp:n { \use:c { l_fontscale_#1_size_dim } }
               }
           }
         \quark_if_no_value:cT { l__fontscale_#1_baselineskip_tl }
@@ -746,28 +602,43 @@
           { \__fontscale_set_font_size:nn {#2} {#1} }
       }
   }
-
-\NewDocumentCommand \scalefont { m }
+% Similar to \fontsize + \selectfont, except that it:
+% (1) Takes dimen and skip expressions as arguments without appending a default
+% unit of 'pt'.
+% (2) Avoids the issue where \f@size is set to the new font size before the
+% second argument is expanded.
+% (3) Issues a user-friendly error message if the font size is invalid.
+\cs_new_protected:Npn \__fontscale_set_font_size:nn #1#2
   {
-    \mode_if_math:TF
-      { \msg_error:nnn { fontscale } { math-mode-invalid } { scalefont } }
-      { \__fontscale_scale_font:n {#1} }
+    \use:e
+      {
+        \__fontscale_set_font_size_aux:nn { \dim_eval:n {#1} }
+          { \skip_eval:n {#2} }
+      }
   }
-\cs_new_protected:Npn \__fontscale_scale_font:n #1
+\cs_new_protected:Npn \__fontscale_set_font_size_aux:nn #1#2
   {
-    \fp_set:Nn \l__fontscale_tmp_fp {#1}
-    \__fontscale_set_font_size:nn
+    \dim_compare:nTF { \c_zero_dim < #1 < 2048pt }
+      { \fontsize {#1} {#2} \selectfont }
+      { \msg_error:nnn { fontscale } { font-size-invalid } {#1} }
+  }
+% Similar to \__fontscale_set_font_size:nn, except that it sets the font
+% baselineskip equal to the new font size times
+% \l__fontscale_baselineskip_size_ratio_fp.
+\cs_new_protected:Npn \__fontscale_set_font_size:n #1
+  { \exp_args:Ne \__fontscale_set_font_size_aux:n { \dim_eval:n {#1} } }
+\cs_new_protected:Npn \__fontscale_set_font_size_aux:n #1
+  {
+    \dim_compare:nTF { \c_zero_dim < #1 < 2048pt }
       {
-        \fp_to_dim:n
-          { \l__fontscale_tmp_fp * \dim_to_fp:n { \l_fontscale_size_dim } }
-      }
-      {
-        \fp_to_dim:n
+        \fontsize {#1}
           {
-            \l__fontscale_tmp_fp *
-            \dim_to_fp:n { \l_fontscale_baselineskip_skip }
+            \fp_to_dim:n
+              { \dim_to_fp:n {#1} * \l__fontscale_baselineskip_size_ratio_fp }
           }
+        \selectfont
       }
+      { \msg_error:nnn { fontscale } { font-size-invalid } {#1} }
   }
 
 \NewDocumentCommand \stepfontsize { m }
@@ -802,10 +673,7 @@
 \cs_new_protected:Npn \__fontscale_step_font_size:nn #1#2
   {
     \tl_if_empty:nTF {#1}
-      {
-        \msg_warning:nnV { fontscale } { current-font-step-invalid }
-          \l_fontscale_size_dim
-      }
+      { \msg_warning:nn { fontscale } { current-font-step-invalid } }
       {
         \int_compare:nNnTF { \int_abs:n {#2} } > 9
           { \msg_error:nnn { fontscale } { change-in-font-step-invalid } {#2} }
@@ -917,6 +785,102 @@
 \text_declare_purify_equivalent:Nn \fontscalesetup
   { \__fontscale_use_none_sm:w }
 \text_declare_purify_equivalent:Nn \setfontsize { \__fontscale_use_none_om:w }
-\text_declare_purify_equivalent:Nn \scalefont { \use_none:n }
 \text_declare_purify_equivalent:Nn \stepfontsize { \use_none:n }
 \text_declare_purify_equivalent:Nn \setfontbaselineskip { \use_none:n }
+
+%%> \section{Messages}
+
+\msg_new:nnn { fontscale } { math-mode-invalid }
+  { '\iow_char:N \\ #1'~ invalid~ in~ math~ mode~ \msg_line_context:. }
+\msg_new:nnn { fontscale } { font-size-invalid }
+  {
+    Invalid~ font~ size~ '#1'~ \msg_line_context:. \\
+    The~ font~ size~ must~ be~ a~ positive~ length~ and~ less~ than~ 2048pt.
+  }
+% Messages used in \fontscalesetup.
+\msg_new:nnn { fontscale } { musical-base-invalid }
+  {
+    Invalid~ value~ '\dim_use:N \l__fontscale_musical_base_dim'~
+    \msg_line_context:. \\
+    The~ value~ of~ the~ key~ 'musical / base'~ must~ be~ a~ positive~ length~
+    and~ less~ than~ 2048pt.
+  }
+\msg_new:nnn { fontscale } { musical-ratio-invalid }
+  {
+    Invalid~ value~ '\fp_to_tl:N \l__fontscale_musical_ratio_fp'~
+    \msg_line_context:. \\
+    The~ value~ of~ the~ key~ 'musical / ratio'~ must~ be~ greater~ than~ 1.
+  }
+\msg_new:nnn { fontscale } { musical-notes-invalid }
+  {
+    Invalid~ value~ '\int_use:N \l__fontscale_musical_notes_int'~
+    \msg_line_context:. \\
+    The~ value~ of~ the~ key~ 'musical / notes'~ must~ be~ a~ positive~
+    integer.
+  }
+\msg_new:nnn { fontscale } { name-font-size-invalid }
+  {
+    Invalid~ font~ size~ of~ \iow_char:N \\ #1~
+    '\dim_use:c { l_fontscale_#1_size_dim }'~ \msg_line_context:. \\
+    The~ font~ size~ must~ be~ a~ positive~ length~ and~ less~ than~ 2048pt.
+  }
+\msg_new:nnn { fontscale } { size-normalsize-ratio-overwritten }
+  {
+    The~ font~ size~ set~ by~ the~ key~ '#1 / size-normalsize-ratio'~
+    has~ been~ overwritten~ by~ the~ key~ '#1 / size'~ \msg_line_context:.
+  }
+\msg_new:nnn { fontscale } { baselineskip-size-ratio-overwritten }
+  {
+    The~ font~ baselineskip~ set~ by~ the~ key~ '#1 / baselineskip-size-ratio'~
+    has~ been~ overwritten~ by~ the~ key~ '#1 / baselineskip'~
+    \msg_line_context:.
+  }
+\msg_new:nnn { fontscale } { font-sizes-wrong-order }
+  {
+    Some~ package~ features~ may~ not~ work~ correctly~ because~ the~ lengths~
+    of~ the~ font~ sizes~ are~ not~ correctly~ ordered~ from~
+    \iow_char:N \\ tiny~ to~ \iow_char:N \\ Huge~ \msg_line_context:. \\
+    The~ lengths~ of~ the~ font~ sizes~ are: \\ \\
+    \iow_indent:n
+      {
+        \iow_char:N \\ tiny:~ \dim_use:N \l_fontscale_tiny_size_dim \\
+        \iow_char:N \\ scriptsize:~
+          \dim_use:N \l_fontscale_scriptsize_size_dim \\
+        \iow_char:N \\ footnotesize:~
+          \dim_use:N \l_fontscale_footnotesize_size_dim \\
+        \iow_char:N \\ small:~ \dim_use:N \l_fontscale_small_size_dim \\
+        \iow_char:N \\ normalsize:~
+          \dim_use:N \l_fontscale_normalsize_size_dim \\
+        \iow_char:N \\ large:~ \dim_use:N \l_fontscale_large_size_dim \\
+        \iow_char:N \\ Large:~ \dim_use:N \l_fontscale_Large_size_dim \\
+        \iow_char:N \\ LARGE:~ \dim_use:N \l_fontscale_LARGE_size_dim \\
+        \iow_char:N \\ huge:~ \dim_use:N \l_fontscale_huge_size_dim \\
+        \iow_char:N \\ Huge:~ \dim_use:N \l_fontscale_Huge_size_dim
+      }
+  }
+% Messages used in \stepfontsize.
+\msg_new:nnn { fontscale } { change-in-font-step-invalid }
+  {
+    Invalid~ change~ in~ font~ step~ '#1'~ \msg_line_context:. \\
+    The~ change~ in~ font~ step~ cannot~ be~
+    greater~ than~ 9~ or~ less~ than~ -9.
+  }
+\msg_new:nnn { fontscale } { current-font-step-invalid }
+  {
+    The~ font~ size~ could~ not~ be~ stepped~ \msg_line_context:. \\
+    The~ current~ font~ size~ '\dim_use:N \l_fontscale_size_dim'~
+    does~ not~ equal~ the~ font~ size~ of~ any~ font~ size~ command~
+    from~ \iow_char:N \\ tiny~ to~ \iow_char:N \\ Huge.
+  }
+\msg_new:nnn { fontscale } { font-step-too-small }
+  {
+    Using~ \iow_char:N \\ tiny~ \msg_line_context:. \\
+    The~ font~ size~ cannot~ be~ stepped~ to~ a~ size~ smaller~ than~
+    \iow_char:N \\ tiny.
+  }
+\msg_new:nnn { fontscale } { font-step-too-large }
+  {
+    Using~ \iow_char:N \\ Huge~ \msg_line_context:. \\
+    The~ font~ size~ cannot~ be~ stepped~ to~ a~ size~ larger~ than~
+    \iow_char:N \\ Huge.
+  }

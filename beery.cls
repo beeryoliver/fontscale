@@ -3,7 +3,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beery}{2025-10-27}{0.0.0}{}
+\ProvidesExplClass{beery}{2025-11-05}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beery } { Class }
 
@@ -59,7 +59,6 @@
 
 % CUSTOM MACROS
 
-\cs_generate_variant:Nn \tl_replace_all:Nnn { NeV }
 \prg_generate_conditional_variant:Nnn \str_if_eq:nn { e } { TF }
 
 \cs_new_protected:Npn \__beery_print_langle: { \ensuremath { \langle } }
@@ -141,12 +140,35 @@
     \group_begin:
       \bool_set_true:N \l__beery_arg_bool
       \tl_set:Nn \l__beery_print_cs_tl {#1}
-      \tl_replace_all:NeV \l__beery_print_cs_tl
-        { \char_generate:nn { `_ } { 8 } } \c_underscore_str
+      \__beery_print_cs_replace_underscore:
+      \__beery_print_cs_replace_atat:n { fontscale }
+      \__beery_print_cs_replace_active_vert:
       \ttfamily
       \c_backslash_str \l__beery_print_cs_tl \@
     \group_end:
   }
+\cs_new_protected:Npn \__beery_print_cs_replace_underscore:
+  {
+    \tl_replace_all:Nen \l__beery_print_cs_tl
+      { \char_generate:nn { `_ } { 8 } } { _ }
+    \tl_replace_all:NVn \l__beery_print_cs_tl \c_underscore_str { _ }
+  }
+\cs_new_protected:Npn \__beery_print_cs_replace_atat:n #1
+  {
+    \tl_replace_all:Nen \l__beery_print_cs_tl { \tl_to_str:n { @@ } _ } { @@_ }
+    \tl_replace_all:Nnn \l__beery_print_cs_tl { c_@@_ } { c__#1_ }
+    \tl_replace_all:Nnn \l__beery_print_cs_tl { l_@@_ } { l__#1_ }
+    \tl_replace_all:Nnn \l__beery_print_cs_tl { g_@@_ } { g__#1_ }
+    \tl_replace_all:Nnn \l__beery_print_cs_tl {   @@_ } {  __#1_ }
+  }
+\group_begin:
+  \char_set_catcode_active:N |
+  \cs_new_protected:Npe \__beery_print_cs_replace_active_vert:
+    {
+      \tl_replace_all:Nnn \exp_not:N \l__beery_print_cs_tl { \exp_not:N | }
+        { \token_to_str:N | }
+    }
+\group_end:
 
 \NewDocumentCommand \meta { >{ \TrimSpaces } m }
   {
@@ -161,7 +183,7 @@
         { \bool_if:NF \l__beery_arg_bool { ~ } }
         { \bool_if:NF \l__beery_arg_bool { \allowbreak } }
       \tl_set:Nn \l__beery_print_meta_tl {#1}
-      \__beery_print_meta_replace_subscript:
+      \__beery_print_meta_replace_underscore:
       \__beery_print_meta_replace_expr:
       \ttfamily \slshape
       \__beery_print_langle:
@@ -169,7 +191,7 @@
       \__beery_print_rangle:
     \group_end:
   }
-\cs_new_protected:Npn \__beery_print_meta_replace_subscript:
+\cs_new_protected:Npn \__beery_print_meta_replace_underscore:
   {
     \tl_map_inline:nn { {8} {11} {12} }
       {
@@ -202,7 +224,7 @@
             \tl_if_empty:nT {##1}
               {
                 \tl_map_break:n
-                  { \tl_replace_once:Nnn \l__beery_print_meta_tl {#1} {#2} }
+                  { \tl_set:Nn \l__beery_print_meta_tl { #2 ##2 } }
               }
           }
         \exp_after:wN \__beery_print_meta_replace_expr:w

@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 27 October 2025
+Version 5.0.0\quad 5 November 2025
 
 
 \section{Introduction}
@@ -28,7 +28,7 @@ Version 5.0.0\quad 27 October 2025
   \item
   Defines lengths that store the current font size, font baselineskip, and the font size of \cs{normalsize} (\S\ref{subsec:lengths}).
   \item
-  Set the font size relative to the current font size using more robust tools than the \pkg{scalefnt} and \pkg{relsize} packages (\S\ref{subsec:fontsize}).
+  Set the font size relative to the current font size using more robust tools than the \pkg{scalefnt} and \pkg{relsize} packages (\S\S\ref{subsec:lengths}--\ref{subsec:morefontsize}).
   \item
   Defines \pkg{expl3} variables that store the font size and font baselineskip of each font size command from \cs{tiny} to \cs{Huge} and the current font size and font baselineskip (\S\S\ref{subsec:variablesfontscalesetup}--\ref{subsec:variablesselectfont}).
 \end{itemize}
@@ -42,7 +42,7 @@ Version 5.0.0\quad 27 October 2025
   \item \pkg{l3kernel} version 2023-11-01 or newer
 \end{itemize}
 
-For historical reasons, the default Computer Modern font is available only in a number of discrete font sizes.
+For historical reasons, the Computer Modern font is available only in a number of discrete font sizes.
 If you get a warning that Computer Modern is not available in the requested size, you may need to add the following code before \cs{documentclass} to make Computer Modern available at arbitrary font sizes:
 \begin{verbatim}
 \RequirePackage{fix-cm}
@@ -62,7 +62,7 @@ For this reason, you may want to set the class font size option close to the fon
   \item
   Set the font size and font baselineskip using \cs{fontsize} and \cs{selectfont}.
   Use \cs{fontscalesetup} (\S\ref{subsec:fontscalesetup}) to change the font sizes and font baselineskips set by the font size commands.
-  The font baselineskip should not be confused with the paragraph baselineskip \cs{baselineskip}.
+  (The font baselineskip should not be confused with the paragraph baselineskip \cs{baselineskip}.)
   \item
   Cannot be used in math mode.
   \item
@@ -173,7 +173,7 @@ The font baselineskips of the font size commands from \cs{tiny} to \cs{Huge} are
   \end{syntax}
   Sets the font baselineskip of each font size command from \cs{tiny} to \cs{Huge} equal to its font size \texttimes{} the result of evaluating the \meta{fp expr}.
   The initial value is \num{1.2}.
-  This key also affects the behavior of \cs{setfontsize} (\S\ref{subsec:fontsize}).
+  This key also affects the behavior of \cs{setfontsize} (\S\ref{subsec:morefontsize}).
 \end{variable}
 
 \subsection{Overwriting the previous keys}
@@ -305,8 +305,8 @@ This section documents the commands provided by the \pkg{fontscale} package.
   \end{syntax}
   Sets and processes the \pkg{fontscale} package keys (\S\ref{sec:keys}) in \meta{key-value list} and then uses \cs{normalsize}.
   Adding the optional star first resets all the \pkg{fontscale} package keys to their initial values.
+  All assignments made by \cs{fontscalesetup} are local to the current group.
   Can be used mid-document.
-  The scope of the effect is local to the current group.
   Cannot be used in math mode.
 \end{function}
 
@@ -327,7 +327,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
   \end{syntax}
   Skip register (rubber length) that stores the current font baselineskip.
   This is more convenient than using \cs{f@baselineskip}.
-  The font baselineskip should not be confused with the paragraph baselineskip \cs{baselineskip}.
+  (The font baselineskip should not be confused with the paragraph baselineskip \cs{baselineskip}.)
 \end{variable}
 
 \begin{variable}{\currentnormalsize}
@@ -338,7 +338,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 \end{variable}
 
 \subsection{More font size commands}
-\label{subsec:fontsize}
+\label{subsec:morefontsize}
 
 \begin{function}{\setfontsize}
   \begin{syntax}
@@ -387,8 +387,8 @@ This section documents the commands provided by the \pkg{fontscale} package.
   Cannot be used in math mode.
 \end{function}
 
-\subsection{Testing and debugging}
-\label{subsec:debug}
+\subsection{Printing sample text}
+\label{subsec:printsampletext}
 
 \begin{function}{\printsampletext}
   \begin{syntax}

@@ -3,7 +3,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beery}{2025-11-05}{0.0.0}{}
+\ProvidesExplClass{beery}{2025-11-07}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beery } { Class }
 
@@ -204,15 +204,18 @@
   { \ensuremath { \sb {#1} } }
 \cs_new_protected:Npn \__beery_print_meta_replace_expr:
   {
-    \tl_map_inline:nn
+    \tl_if_in:NnT \l__beery_print_meta_tl { expr }
       {
-        { { fp~ expr } { floating~ point~ expression } }
-        { { int~ expr } { integer~ expression } }
-        { { dim~ expr } { dimen~ expression } }
-        { { skip~ expr } { skip~ expression } }
-        { { muskip~ expr } { muskip~ expression } }
+        \tl_map_inline:nn
+          {
+            { { fp~ expr } { floating~ point~ expression } }
+            { { int~ expr } { integer~ expression } }
+            { { dim~ expr } { dimen~ expression } }
+            { { skip~ expr } { skip~ expression } }
+            { { muskip~ expr } { muskip~ expression } }
+          }
+          { \__beery_print_meta_replace_expr:nn ##1 }
       }
-      { \__beery_print_meta_replace_expr:nn ##1 }
   }
 \cs_new_protected:Npn \__beery_print_meta_replace_expr:nn #1#2
   {

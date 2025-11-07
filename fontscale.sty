@@ -7,7 +7,7 @@
 %%> \section{Loading the package}
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2025-11-05}{5.0.0}
+\ProvidesExplPackage{fontscale}{2025-11-07}{5.0.0}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -871,28 +871,29 @@
     does~ not~ equal~ the~ font~ size~ of~ any~ font~ size~ command~
     from~ \iow_char:N \\ tiny~ to~ \iow_char:N \\ Huge.
   }
-\msg_new:nnn { fontscale } { font-step-too-small }
-  { \__fontscale_msg_aux:nn { tiny } {#1} }
-\msg_new:nnn { fontscale } { font-step-too-large }
-  { \__fontscale_msg_aux:nn { Huge } {#1} }
-\cs_new:Npn \__fontscale_msg_aux:nn #1#2
+\cs_set_protected:Npn \__fontscale_tmp:nn #1#2
   {
-    Using~ \iow_char:N \\ #1~ \msg_line_context:. \\
-    The~ font~ size~ '\dim_use:N \l_fontscale_size_dim \c_space_tl
-    ( \iow_char:N \\
-    \dim_case:nn { \l_fontscale_size_dim }
+    \msg_new:nnn { fontscale } {#1}
       {
-        { \l_fontscale_tiny_size_dim         } { tiny         }
-        { \l_fontscale_scriptsize_size_dim   } { scriptsize   }
-        { \l_fontscale_footnotesize_size_dim } { footnotesize }
-        { \l_fontscale_small_size_dim        } { small        }
-        { \l_fontscale_normalsize_size_dim   } { normalsize   }
-        { \l_fontscale_large_size_dim        } { large        }
-        { \l_fontscale_Large_size_dim        } { Large        }
-        { \l_fontscale_LARGE_size_dim        } { LARGE        }
-        { \l_fontscale_huge_size_dim         } { huge         }
-        { \l_fontscale_Huge_size_dim         } { Huge         }
+        Using~ \iow_char:N \\ #2~ \msg_line_context:. \\
+        The~ font~ size~ '\dim_use:N \l_fontscale_size_dim \c_space_tl
+        ( \iow_char:N \\
+        \dim_case:nn { \l_fontscale_size_dim }
+          {
+            { \l_fontscale_tiny_size_dim         } { tiny         }
+            { \l_fontscale_scriptsize_size_dim   } { scriptsize   }
+            { \l_fontscale_footnotesize_size_dim } { footnotesize }
+            { \l_fontscale_small_size_dim        } { small        }
+            { \l_fontscale_normalsize_size_dim   } { normalsize   }
+            { \l_fontscale_large_size_dim        } { large        }
+            { \l_fontscale_Large_size_dim        } { Large        }
+            { \l_fontscale_LARGE_size_dim        } { LARGE        }
+            { \l_fontscale_huge_size_dim         } { huge         }
+            { \l_fontscale_Huge_size_dim         } { Huge         }
+          }
+        )'~ cannot~ be~ changed~ by~ '##1'~ step
+        \int_compare:nNnF { \int_abs:n {##1} } = 1 { s } .
       }
-    )'~ cannot~ be~ changed~ by~ '#2'~ step
-    \int_compare:nNnF { \int_abs:n {#2} } = 1 { s } .
   }
+\__fontscale_tmp:nn { font-step-too-small } { tiny }
+\__fontscale_tmp:nn { font-step-too-large } { Huge }

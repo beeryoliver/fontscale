@@ -147,19 +147,19 @@
       \c_backslash_str \l__beery_print_cs_tl \@
     \group_end:
   }
-\cs_new_protected:Npn \__beery_print_cs_replace_underscore:
+\cs_new_protected:Npe \__beery_print_cs_replace_underscore:
   {
-    \tl_replace_all:Nen \l__beery_print_cs_tl
+    \tl_replace_all:Nnn \exp_not:N \l__beery_print_cs_tl
       { \char_generate:nn { `_ } { 8 } } { _ }
-    \tl_replace_all:NVn \l__beery_print_cs_tl \c_underscore_str { _ }
+    \tl_replace_all:Nnn \exp_not:N \l__beery_print_cs_tl { \c_underscore_str }
+      { _ }
   }
 \cs_new_protected:Npn \__beery_print_cs_replace_atat:n #1
   {
-    \tl_replace_all:Nen \l__beery_print_cs_tl { \tl_to_str:n { @@ } _ } { @@_ }
-    \tl_replace_all:Nnn \l__beery_print_cs_tl { c_@@_ } { c__#1_ }
-    \tl_replace_all:Nnn \l__beery_print_cs_tl { l_@@_ } { l__#1_ }
-    \tl_replace_all:Nnn \l__beery_print_cs_tl { g_@@_ } { g__#1_ }
-    \tl_replace_all:Nnn \l__beery_print_cs_tl {   @@_ } {  __#1_ }
+    \tl_replace_all:Nen \l__beery_print_cs_tl { \tl_to_str:n { @ @ } } { @ @ }
+    \tl_replace_all:Nnn \l__beery_print_cs_tl { __@ @ } { __#1 }
+    \tl_replace_all:Nnn \l__beery_print_cs_tl {  _@ @ } { __#1 }
+    \tl_replace_all:Nnn \l__beery_print_cs_tl {   @ @ } { __#1 }
   }
 \group_begin:
   \char_set_catcode_active:N |
@@ -206,19 +206,19 @@
   {
     \tl_if_in:NnT \l__beery_print_meta_tl { expr }
       {
-        \tl_map_inline:nn
-          {
-            { { fp~ expr } { floating~ point~ expression } }
-            { { int~ expr } { integer~ expression } }
-            { { dim~ expr } { dimen~ expression } }
-            { { skip~ expr } { skip~ expression } }
-            { { muskip~ expr } { muskip~ expression } }
-          }
-          { \__beery_print_meta_replace_expr:nn ##1 }
+        \__beery_print_meta_replace_expr:nn
+          { fp~ expr } { floating~ point~ expression }
+          { int~ expr } { integer~ expression }
+          { dim~ expr } { dimen~ expression }
+          { skip~ expr } { skip~ expression }
+          { muskip~ expr } { muskip~ expression }
+          { \q_recursion_tail } { }
+        \q_recursion_stop
       }
   }
 \cs_new_protected:Npn \__beery_print_meta_replace_expr:nn #1#2
   {
+    \quark_if_recursion_tail_stop:n {#1}
     \tl_if_in:NnT \l__beery_print_meta_tl {#1}
       {
         \cs_set_protected:Npn \__beery_print_meta_replace_expr:w
@@ -226,13 +226,14 @@
           {
             \tl_if_empty:nT {##1}
               {
-                \tl_map_break:n
+                \use_i_delimit_by_q_recursion_stop:nw
                   { \tl_set:Nn \l__beery_print_meta_tl { #2 ##2 } }
               }
           }
         \exp_after:wN \__beery_print_meta_replace_expr:w
           \l__beery_print_meta_tl \q_stop
       }
+    \__beery_print_meta_replace_expr:nn
   }
 
 \NewDocumentCommand \marg { s >{ \TrimSpaces } m }

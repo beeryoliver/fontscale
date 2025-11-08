@@ -201,13 +201,13 @@
 % is used to test if the key has been set by the user.
 \cs_new_protected:Npn \__fontscale_keys_set_initial:
   {
-    \str_set:Nn \l__fontscale_typographic_scale_str      { classic }
-    \str_set:Nn \l__fontscale_classic_base_str           { 10 }
-    \str_set:Nn \l__fontscale_classic_point_str          { pt }
-    \dim_set:Nn \l__fontscale_musical_base_dim           { 10pt }
-    \fp_set:Nn  \l__fontscale_musical_ratio_fp           { 2 }
-    \int_set:Nn \l__fontscale_musical_notes_int          { 5 }
     \fp_set:Nn  \l__fontscale_baselineskip_size_ratio_fp { 1.2 }
+    \str_set:Nn \l__fontscale_typographic_scale_str { classic }
+    \str_set:Nn \l__fontscale_classic_base_str  { 10 }
+    \str_set:Nn \l__fontscale_classic_point_str { pt }
+    \dim_set:Nn \l__fontscale_musical_base_dim  { 10pt }
+    \fp_set:Nn  \l__fontscale_musical_ratio_fp  { 2 }
+    \int_set:Nn \l__fontscale_musical_notes_int { 5 }
 
     \tl_map_inline:nn
       {

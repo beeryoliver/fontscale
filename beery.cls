@@ -3,7 +3,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beery}{2025-11-07}{0.0.0}{}
+\ProvidesExplClass{beery}{2025-11-09}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beery } { Class }
 

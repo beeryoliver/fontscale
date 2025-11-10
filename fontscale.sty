@@ -7,7 +7,7 @@
 %%> \section{Loading the package}
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2025-11-07}{5.0.0}
+\ProvidesExplPackage{fontscale}{2025-11-09}{5.0.0}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -163,6 +163,8 @@
         , baselineskip .value_required:n = true
       }
   }
+% As an optimization, the keys below are implemented using .tl_set:N instead
+% of .meta:n.
 \keys_define:nn { fontscale }
   {
       tiny .tl_set:N = \l__fontscale_tiny_size_tl
@@ -265,18 +267,11 @@
     \mode_if_math:TF
       { \msg_error:nnn { fontscale } { math-mode-invalid } { fontscalesetup } }
       {
-        \IfBooleanTF #1
-          { \__fontscale_keys_reset:n {#2} }
-          { \__fontscale_keys_set:n {#2} }
+        \IfBooleanT #1 { \__fontscale_keys_set_initial: }
+        \keys_set:nn { fontscale } {#2}
+        \__fontscale_keys_process:
+        \normalsize
       }
-  }
-\cs_new_protected:Npn \__fontscale_keys_reset:n
-  { \__fontscale_keys_set_initial: \__fontscale_keys_set:n }
-\cs_new_protected:Npn \__fontscale_keys_set:n #1
-  {
-    \keys_set:nn { fontscale } {#1}
-    \__fontscale_keys_process:
-    \normalsize
   }
 \cs_new_protected:Npn \__fontscale_keys_process:
   {

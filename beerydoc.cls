@@ -663,9 +663,8 @@
           }
         \item #1 \endlist
       }
-    \coffin_typeset:Nnnnn \l__beerydoc_footnote_coffin
-      { l } { b } { \c_zero_dim }
-      { - \c_beerydoc_footnote_baselineheight_dim }
+    \coffin_typeset:Nnnnn \l__beerydoc_footnote_coffin { l } { b }
+      { \c_zero_dim } { - \c_beerydoc_footnote_baselineheight_dim }
   }
 
 % REFERENCES

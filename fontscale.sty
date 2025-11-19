@@ -7,7 +7,7 @@
 %%> \section{Loading the package}
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2025-11-15}{5.0.0}
+\ProvidesExplPackage{fontscale}{2025-11-18}{5.0.0}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -163,8 +163,8 @@
         , baselineskip .value_required:n = true
       }
   }
-% As an optimization, the keys below are implemented using .tl_set:N instead
-% of .meta:n.
+% As an optimization, the keys below are defined using .tl_set:N instead of
+% .meta:n.
 \keys_define:nn { fontscale }
   {
       tiny .tl_set:N = \l__fontscale_tiny_size_tl

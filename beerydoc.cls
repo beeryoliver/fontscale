@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-11-15}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-11-18}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
@@ -143,6 +143,7 @@
       \bool_set_true:N \l__beerydoc_arg_bool
       \tl_set:Nn \l__beerydoc_cs_tl {#1}
       \__beerydoc_cs_replace_underscore:
+      \__beerydoc_cs_replace_active_vert:
       \ttfamily
       \c_backslash_str \l__beerydoc_cs_tl \@
     \group_end:
@@ -154,6 +155,14 @@
     \tl_replace_all:Nnn \exp_not:N \l__beerydoc_cs_tl { \c_underscore_str }
       { _ }
   }
+\group_begin:
+  \char_set_catcode_active:N |
+  \cs_new_protected:Npe \__beerydoc_cs_replace_active_vert:
+    {
+      \tl_replace_all:Nnn \exp_not:N \l__beerydoc_cs_tl { \exp_not:N | }
+        { \token_to_str:N | }
+    }
+\group_end:
 
 \NewDocumentCommand \meta { >{ \TrimSpaces } m }
   {

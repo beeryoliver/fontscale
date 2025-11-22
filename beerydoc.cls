@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-11-18}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-11-21}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
@@ -190,8 +190,7 @@
     \tl_map_inline:nn { {8} {11} {12} }
       {
         \tl_replace_all:Nen \l__beerydoc_meta_tl
-          { \char_generate:nn { `_ } {##1} }
-          { \__beerydoc_meta_subscript:n }
+          { \char_generate:nn { `_ } {##1} } { \__beerydoc_meta_subscript:n }
       }
   }
 \cs_new_protected:Npn \__beerydoc_meta_subscript:n #1
@@ -376,7 +375,7 @@
     , right   = 2pt
     , top     = 2pt
     , bottom  = 2pt
-    , colback = black!4!white
+    , colback = black!5!white
     , code    = \__beerydoc_syntax_code:
   }
 \cs_new_protected:Npn \__beerydoc_syntax_code:
@@ -385,7 +384,7 @@
     \ttfamily
     \obeylines
   }
-\NewDocumentEnvironment { function } { >{ \TrimSpaces } m }
+\NewDocumentEnvironment { function } { m }
   {
     \par
     \begin { minipage } [ b ] { \textwidth }

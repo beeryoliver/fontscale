@@ -1,0 +1,28 @@
+\ProvidesFile{fontscale-table-syntax.tex}[2025-11-23]
+
+\begin{table}
+  \centering
+  \caption
+    {%
+      Syntaxes used by this package documentation.
+      The syntaxes on the left have the same meaning as the argument to the corresponding command on the right.
+      The commands on the right are documented in \pkg{usrguide}.%
+      \label{table:syntax}%
+    }
+  \bigskip
+  \begin{tblr}
+    {
+        colspec={ll}
+      , cell{2-Z}{1}={cmd=\meta}
+      , cell{2-Z}{2}={cmd=\cs}
+    }
+    \toprule
+      syntax & command \\
+    \midrule
+      fp expr   & fpeval   \\
+      int expr  & inteval  \\
+      dim expr  & dimeval  \\
+      skip expr & skipeval \\
+    \bottomrule
+  \end{tblr}
+\end{table}

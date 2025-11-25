@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 24 November 2025
+Version 5.0.0\quad 25 November 2025
 
 
 \section{Introduction}
@@ -22,15 +22,15 @@ Version 5.0.0\quad 24 November 2025
 \listheading{The \pkg{fontscale} package provides the following functionalities:}
 \begin{itemize}
   \item
-  Set font sizes using a classic or musical typographic scale (\S\ref{subsec:typographicscale}).
+  Set font sizes using a classic or musical typographic scale.
   \item
-  Set arbitrary font sizes and font baselineskips for the standard \LaTeX{} font size commands \cs{tiny}, \cs{scriptsize}, \cs{footnotesize}, \cs{small}, \cs{normalsize}, \cs{large}, \cs{Large}, \cs{LARGE}, \cs{huge}, and \cs{Huge} (\S\ref{subsec:overwriting}).
+  Set arbitrary font sizes and font baselineskips for the standard \LaTeX{} font size commands \cs{tiny}, \cs{scriptsize}, \cs{footnotesize}, \cs{small}, \cs{normalsize}, \cs{large}, \cs{Large}, \cs{LARGE}, \cs{huge}, and \cs{Huge}.
   \item
-  Defines lengths that store the current font size, font baselineskip, and the font size of \cs{normalsize} (\S\ref{subsec:lengths}).
+  Defines lengths that store the current font size, font baselineskip, and the font size of \cs{normalsize}.
   \item
-  Set the font size relative to the current font size using more robust tools than the \pkg{scalefnt} and \pkg{relsize} packages (\S\S\ref{subsec:lengths}--\ref{subsec:morefontsize}).
+  Set the font size relative to the current font size using more robust tools than the \pkg{scalefnt} and \pkg{relsize} packages.
   \item
-  Defines \pkg{expl3} variables that store the font size and font baselineskip of each font size command from \cs{tiny} to \cs{Huge} and the current font size and font baselineskip (\S\S\ref{subsec:variablesfontscalesetup}--\ref{subsec:variablesselectfont}).
+  Defines \pkg{expl3} variables that store the font size and font baselineskip of each font size command from \cs{tiny} to \cs{Huge} and the current font size and font baselineskip.
 \end{itemize}
 
 \subsection{Loading the package}
@@ -61,7 +61,7 @@ For this reason, you may want to set the class font size option close to the fon
   This is needed only for compatibility.
   \item
   Set the font size and font baselineskip using \cs{fontsize} and \cs{selectfont}.
-  Use \cs{fontscalesetup} (\S\ref{subsec:fontscalesetup}) to change the font sizes and font baselineskips set by the font size commands.
+  Use \cs{fontscalesetup} (\S\ref{subsec:setup}) to change the font sizes and font baselineskips set by the font size commands.
   (The font baselineskip should not be confused with the paragraph baselineskip \cs{baselineskip}.)
   \item
   Cannot be used in math mode.
@@ -79,7 +79,7 @@ For this reason, you may want to set the class font size option close to the fon
 \label{sec:keys}
 
 This section documents the keys provided by the \pkg{fontscale} package.
-Set the package keys using \cs{fontscalesetup}\marg{key-value list} (\S\ref{subsec:fontscalesetup}).
+Set the package keys using \cs{fontscalesetup}\marg{key-value list} (\S\ref{subsec:setup}).
 
 \subsection{The key \key{typographic-scale}}
 \label{subsec:typographicscale}
@@ -169,7 +169,7 @@ The font baselineskips of the font size commands from \cs{tiny} to \cs{Huge} are
   \end{syntax}
   Sets the font baselineskip of each font size command from \cs{tiny} to \cs{Huge} equal to its font size \texttimes{} the result of evaluating the \meta{fp expr}.
   The initial value is \num{1.2}.
-  This key also affects the behavior of \cs{setfontsize} (\S\ref{subsec:morefontsize}).
+  This key also affects the behavior of \cs{setfontsize} (\S\ref{subsec:fontsize}).
 \end{variable}
 
 \subsection{Overwriting the previous keys}
@@ -293,7 +293,7 @@ The syntax \meta{font size command} represents the name of a font size command f
 This section documents the commands provided by the \pkg{fontscale} package.
 
 \subsection{Setting the keys}
-\label{subsec:fontscalesetup}
+\label{subsec:setup}
 
 \begin{function}{\fontscalesetup}
   \begin{syntax}
@@ -334,7 +334,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 \end{variable}
 
 \subsection{More font size commands}
-\label{subsec:morefontsize}
+\label{subsec:fontsize}
 
 \begin{function}{\setfontsize}
   \begin{syntax}
@@ -372,7 +372,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 \end{function}
 
 \subsection{Setting only the font baselineskip}
-\label{subsec:setfontbaselineskip}
+\label{subsec:fontbaselineskip}
 
 \begin{function}{\setfontbaselineskip}
   \begin{syntax}
@@ -406,7 +406,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 
 \section{Programming}
-\label{sec:programming}
+\label{sec:expl3}
 
 This section documents the \pkg{expl3} programming support provided by the \pkg{fontscale} package.
 

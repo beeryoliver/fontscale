@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-11-25}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-11-29}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
@@ -30,6 +30,7 @@
 \RequirePackage { siunitx }
 \sisetup { list-final-separator = { ,~ and~ } , mode = math }
 \RequirePackage { mathtools }
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
 \RequirePackage { xcolor }
 
 % FONT SELECTION
@@ -239,24 +240,20 @@
           { \__beerydoc_m_arg_meta:n {#2} }
       }
   }
-\cs_new_protected:Npn \__beerydoc_m_arg:n #1
+\cs_set_protected:Npn \__beerydoc_tmp:Nn #1#2
   {
-    \group_begin:
-      \bool_set_true:N \l__beerydoc_arg_bool
-      \ttfamily
-      \bool_if:NTF \l__beerydoc_syntax_bool { ~ } { \allowbreak }
-      \c_left_brace_str #1 \c_right_brace_str
-    \group_end:
+    \cs_new_protected:Npn #1 ##1
+      {
+        \group_begin:
+          \bool_set_true:N \l__beerydoc_arg_bool
+          \ttfamily
+          \bool_if:NTF \l__beerydoc_syntax_bool { ~ } { \allowbreak }
+          \c_left_brace_str #2 \c_right_brace_str
+        \group_end:
+      }
   }
-\cs_new_protected:Npn \__beerydoc_m_arg_meta:n #1
-  {
-    \group_begin:
-      \bool_set_true:N \l__beerydoc_arg_bool
-      \ttfamily
-      \bool_if:NTF \l__beerydoc_syntax_bool { ~ } { \allowbreak }
-      \c_left_brace_str \__beerydoc_meta:n {#1} \c_right_brace_str
-    \group_end:
-  }
+\__beerydoc_tmp:Nn \__beerydoc_m_arg:n {#1}
+\__beerydoc_tmp:Nn \__beerydoc_m_arg_meta:n { \__beerydoc_meta:n {#1} }
 
 \NewDocumentCommand \oarg { s >{ \TrimSpaces } m }
   {
@@ -268,24 +265,20 @@
           { \__beerydoc_o_arg_meta:n {#2} }
       }
   }
-\cs_new_protected:Npn \__beerydoc_o_arg:n #1
+\cs_set_protected:Npn \__beerydoc_tmp:Nn #1#2
   {
-    \group_begin:
-      \bool_set_true:N \l__beerydoc_arg_bool
-      \ttfamily
-      \bool_if:NTF \l__beerydoc_syntax_bool { ~ } { \allowbreak }
-      [ #1 ]
-    \group_end:
+    \cs_new_protected:Npn #1 ##1
+      {
+        \group_begin:
+          \bool_set_true:N \l__beerydoc_arg_bool
+          \ttfamily
+          \bool_if:NTF \l__beerydoc_syntax_bool { ~ } { \allowbreak }
+          [ #2 ]
+        \group_end:
+      }
   }
-\cs_new_protected:Npn \__beerydoc_o_arg_meta:n #1
-  {
-    \group_begin:
-      \bool_set_true:N \l__beerydoc_arg_bool
-      \ttfamily
-      \bool_if:NTF \l__beerydoc_syntax_bool { ~ } { \allowbreak }
-      [ \__beerydoc_meta:n {#1} ]
-    \group_end:
-  }
+\__beerydoc_tmp:Nn \__beerydoc_o_arg:n {#1}
+\__beerydoc_tmp:Nn \__beerydoc_o_arg_meta:n { \__beerydoc_meta:n {#1} }
 
 \NewDocumentCommand \sarg { }
   {
@@ -299,29 +292,30 @@
     \__beerydoc_langle: \texttt {*} \__beerydoc_rangle:
   }
 
-\NewDocumentCommand \cls { >{ \TrimSpaces } m }
+\cs_set_protected:Npn \__beerydoc_tmp:nN #1#2
   {
-    \mode_if_math:TF
-      { \msg_error:nnn { beerydoc } { math-mode-invalid } { cls } }
-      { \__beerydoc_cls:n {#1} }
+    \quark_if_recursion_tail_stop:n {#1}
+    \use:e
+      {
+        \NewDocumentCommand \exp_not:c {#1} { >{ \TrimSpaces } m }
+          {
+            \exp_not:N \mode_if_math:TF
+              { \msg_error:nnn { beerydoc } { math-mode-invalid } {#1} }
+              { \exp_not:c { __beerydoc_#1:n } {##1} }
+          }
+      }
+    \cs_new_protected:cpn { __beerydoc_#1:n } ##1 { #2 { ##1 \@ } }
+    \__beerydoc_tmp:nN
   }
-\cs_new_protected:Npn \__beerydoc_cls:n #1 { \textsf { #1 \@ } }
-
-\NewDocumentCommand \env { >{ \TrimSpaces } m }
-  {
-    \mode_if_math:TF
-      { \msg_error:nnn { beerydoc } { math-mode-invalid } { env } }
-      { \__beerydoc_env:n {#1} }
-  }
-\cs_new_protected:Npn \__beerydoc_env:n #1 { \texttt { #1 \@ } }
-
-\NewDocumentCommand \pkg { >{ \TrimSpaces } m }
-  {
-    \mode_if_math:TF
-      { \msg_error:nnn { beerydoc } { math-mode-invalid } { pkg } }
-      { \__beerydoc_pkg:n {#1} }
-  }
-\cs_new_protected:Npn \__beerydoc_pkg:n #1 { \textsf { #1 \@ } }
+\__beerydoc_tmp:nN
+  {cls}    \textsf
+  {env}    \texttt
+  {pkg}    \textsf
+  {hook}   \texttt
+  {socket} \texttt
+  {plug}   \texttt
+  { \q_recursion_tail } \scan_stop:
+\q_recursion_stop
 
 \NewDocumentCommand \latin { >{ \TrimSpaces } m }
   {
@@ -686,7 +680,6 @@
     \cs_set_eq:NN \key  \__beerydoc_pdfstring_key_value:n
     \cs_set_eq:NN \cs   \__beerydoc_pdfstring_cs:n
     \cs_set_eq:NN \meta \__beerydoc_pdfstring_meta:n
-    \cs_set_eq:NN \pkg  \__beerydoc_pdfstring_tl_to_str:n
-    \cs_set_eq:NN \cls  \__beerydoc_pdfstring_tl_to_str:n
-    \cs_set_eq:NN \env  \__beerydoc_pdfstring_tl_to_str:n
+    \tl_map_inline:nn { \pkg \cls \env \hook \socket \plug }
+      { \cs_set_eq:NN #1 \__beerydoc_pdfstring_tl_to_str:n }
   }

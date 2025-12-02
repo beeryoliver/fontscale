@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-11-29}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-02}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
@@ -46,6 +46,14 @@
 \tl_const:Nn \c_beerydoc_digits_tl { 0123456789 }
 \tl_const:Nn \c_beerydoc_pangram_tl
   { The~ quick~ brown~ fox~ jumps~ over~ the~ lazy~ dog. }
+
+\group_begin:
+  \char_set_active_eq:NN \  \scan_stop:
+  \char_set_active_eq:NN | \scan_stop:
+  \tl_const:Ne \c__beerydoc_active_space_tl
+    { \char_generate:nn { `\  } { 13 } }
+  \tl_const:Ne \c__beerydoc_active_vert_tl { \char_generate:nn { `| } { 13 } }
+\group_end:
 
 \bool_new:N \l__beerydoc_syntax_bool
 \bool_new:N \l__beerydoc_arg_bool
@@ -144,7 +152,7 @@
       \bool_set_true:N \l__beerydoc_arg_bool
       \tl_set:Nn \l__beerydoc_cs_tl {#1}
       \__beerydoc_cs_replace_underscore:
-      \__beerydoc_cs_replace_active_vert:
+      \tl_replace_all:NVn \l__beerydoc_cs_tl \c__beerydoc_active_vert_tl { | }
       \ttfamily
       \c_backslash_str \l__beerydoc_cs_tl \@
     \group_end:
@@ -156,14 +164,6 @@
     \tl_replace_all:Nnn \exp_not:N \l__beerydoc_cs_tl { \c_underscore_str }
       { _ }
   }
-\group_begin:
-  \char_set_catcode_active:N |
-  \cs_new_protected:Npe \__beerydoc_cs_replace_active_vert:
-    {
-      \tl_replace_all:Nnn \exp_not:N \l__beerydoc_cs_tl { \exp_not:N | }
-        { \token_to_str:N | }
-    }
-\group_end:
 
 \NewDocumentCommand \meta { >{ \TrimSpaces } m }
   {
@@ -178,6 +178,8 @@
         { \bool_if:NF \l__beerydoc_arg_bool { ~ } }
         { \bool_if:NF \l__beerydoc_arg_bool { \allowbreak } }
       \tl_set:Nn \l__beerydoc_meta_tl {#1}
+      \tl_replace_all:NVn \l__beerydoc_meta_tl \c__beerydoc_active_space_tl
+        { ~ }
       \__beerydoc_meta_replace_underscore:
       \__beerydoc_meta_replace_expr:
       \ttfamily \slshape
@@ -376,6 +378,7 @@
   {
     \bool_set_true:N \l__beerydoc_syntax_bool
     \ttfamily
+    % \obeyspaces
     \obeylines
   }
 \NewDocumentEnvironment { function } { m }

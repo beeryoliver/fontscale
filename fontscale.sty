@@ -7,7 +7,7 @@
 %%> \section{Loading the package}
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2025-11-29}{5.0.0}
+\ProvidesExplPackage{fontscale}{2025-12-02}{5.0.0}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -551,8 +551,7 @@
 
 % Defines the font size commands from \tiny to \Huge and initializes to
 % \normalsize. Their corresponding internal functions are not used elsewhere in
-% this package for compatibility with hooks such as
-% \AddToHook{cmd/<font size command>/after}{<code>}.
+% this package for compatibility with hooks.
 \tl_map_inline:nn
   {
     {tiny} {scriptsize} {footnotesize} {small} {normalsize}

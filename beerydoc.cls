@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-02}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-04}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
@@ -68,6 +68,7 @@
 
 % CUSTOM MACROS
 
+\cs_generate_variant:Nn \tl_replace_once:Nnn { No }
 \prg_generate_conditional_variant:Nnn \str_if_eq:nn { e } { TF }
 
 \cs_new_protected:Npn \__beerydoc_langle: { \ensuremath { \langle } }
@@ -178,8 +179,6 @@
         { \bool_if:NF \l__beerydoc_arg_bool { ~ } }
         { \bool_if:NF \l__beerydoc_arg_bool { \allowbreak } }
       \tl_set:Nn \l__beerydoc_meta_tl {#1}
-      \tl_replace_all:NVn \l__beerydoc_meta_tl \c__beerydoc_active_space_tl
-        { ~ }
       \__beerydoc_meta_replace_underscore:
       \__beerydoc_meta_replace_expr:
       \ttfamily \slshape
@@ -202,6 +201,8 @@
   {
     \tl_if_in:NnT \l__beerydoc_meta_tl { expr }
       {
+        \tl_replace_once:Non \l__beerydoc_meta_tl
+          { \c__beerydoc_active_space_tl expr } { ~expr }
         \__beerydoc_meta_replace_expr:nn
           { fp~ expr } { floating~ point~ expression }
           { int~ expr } { integer~ expression }

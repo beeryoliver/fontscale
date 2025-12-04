@@ -7,7 +7,7 @@
 %%> \section{Loading the package}
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2025-12-02}{5.0.0}
+\ProvidesExplPackage{fontscale}{2025-12-04}{5.0.0}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -276,6 +276,7 @@
 \cs_new_protected:Npn \__fontscale_keys_process:
   {
     \__fontscale_keys_process_start:
+    \__fontscale_keys_process_sizes_normalsize:
     \__fontscale_keys_process_sizes:
     \__fontscale_keys_process_baselineskips:
     \__fontscale_keys_process_end:
@@ -299,7 +300,7 @@
         \prg_break:
       }
   }
-\cs_new_protected:Npn \__fontscale_keys_process_sizes:
+\cs_new_protected:Npn \__fontscale_keys_process_sizes_normalsize:
   {
     \quark_if_no_value:NTF \l__fontscale_normalsize_size_tl
       {
@@ -327,6 +328,9 @@
         \msg_error:nnn { fontscale } { name-font-size-invalid } { normalsize }
         \prg_break:
       }
+  }
+\cs_new_protected:Npn \__fontscale_keys_process_sizes:
+  {
     \str_case:Vn \l__fontscale_typographic_scale_str
       {
         { classic }

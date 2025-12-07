@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-04}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-06}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
@@ -19,11 +19,6 @@
 \sys_if_engine_luatex:F { \msg_critical:nn { beerydoc } { luatex } }
 
 \LoadClass { article }
-
-% MESSAGES
-
-\msg_new:nnn { beerydoc } { math-mode-invalid }
-  { '\iow_char:N \\ #1'~ invalid~ in~ math~ mode~ \msg_line_context:. }
 
 \RequirePackage { fontscale }
 \fontscalesetup { musical }
@@ -153,6 +148,7 @@
       \bool_set_true:N \l__beerydoc_arg_bool
       \tl_set:Nn \l__beerydoc_cs_tl {#1}
       \__beerydoc_cs_replace_underscore:
+      \tl_replace_all:Nnn \l__beerydoc_cs_tl { \  } { \textvisiblespace }
       \tl_replace_all:NVn \l__beerydoc_cs_tl \c__beerydoc_active_vert_tl { | }
       \ttfamily
       \c_backslash_str \l__beerydoc_cs_tl \@
@@ -406,10 +402,10 @@
 \dim_log:N \c_beerydoc_alphabet_dim
 
 \dim_const:Nn \c_beerydoc_big_dim { \l_fontscale_normalsize_baselineskip_skip }
-\dim_const:Nn \c_beerydoc_medium_dim { \c_beerydoc_big_dim / 2 }
+\dim_const:Nn \c_beerydoc_med_dim { \c_beerydoc_big_dim / 2 }
 \dim_const:Nn \c_beerydoc_small_dim  { \c_beerydoc_big_dim / 4 }
 \dim_log:N \c_beerydoc_big_dim
-\dim_log:N \c_beerydoc_medium_dim
+\dim_log:N \c_beerydoc_med_dim
 \dim_log:N \c_beerydoc_small_dim
 
 \skip_const:Nn \c_beerydoc_big_skip
@@ -418,13 +414,13 @@
     plus  \dim_eval:n { \c_beerydoc_big_dim / 2 }
     minus \dim_eval:n { \c_beerydoc_big_dim / 3 }
   }
-\skip_const:Nn \c_beerydoc_medium_skip { \c_beerydoc_big_skip / 2 }
+\skip_const:Nn \c_beerydoc_med_skip { \c_beerydoc_big_skip / 2 }
 \skip_const:Nn \c_beerydoc_small_skip  { \c_beerydoc_big_skip / 4 }
 \setlength \bigskipamount   { \skip_use:N \c_beerydoc_big_skip    }
-\setlength \medskipamount   { \skip_use:N \c_beerydoc_medium_skip }
+\setlength \medskipamount   { \skip_use:N \c_beerydoc_med_skip }
 \setlength \smallskipamount { \skip_use:N \c_beerydoc_small_skip  }
 \skip_log:N \c_beerydoc_big_skip
-\skip_log:N \c_beerydoc_medium_skip
+\skip_log:N \c_beerydoc_med_skip
 \skip_log:N \c_beerydoc_small_skip
 
 % \flushbottom
@@ -472,7 +468,7 @@
 % \frenchspacing
 \nonfrenchspacing
 % \linespread { 1 }
-\RequirePackage [ skip = \skip_use:N \c_beerydoc_medium_skip ] { parskip }
+\RequirePackage [ skip = \skip_use:N \c_beerydoc_med_skip ] { parskip }
 \RequirePackage [ raggedrightboxes ] { ragged2e }
 \setlength \RaggedRightRightskip
   { 0pt plus \dim_use:N \c_beerydoc_alphabet_dim }
@@ -498,8 +494,7 @@
 \setcounter { secnumdepth } { 3 }
 \setcounter { tocdepth } { 3 }
 
-\titlespacing* \section % section
-  { 0pt } % indent
+\titlespacing* \section { 0pt } % section , indent
   {
     \skip_eval:n
       {
@@ -508,51 +503,40 @@
         minus \dim_eval:n { \c_beerydoc_big_dim / 3 / 4 }
       }
   } % before
-  { \skip_use:N \c_beerydoc_medium_skip } % after
-\titlespacing* \subsection
-  { 0pt }
+  { \skip_use:N \c_beerydoc_med_skip } % after
+\titlespacing* \subsection { 0pt }
   {
     \skip_eval:n
       {
-        \dim_eval:n { \c_beerydoc_medium_dim * 4 / 3 }
-        plus  \dim_eval:n { \c_beerydoc_medium_dim / 2 * 4 }
-        minus \dim_eval:n { \c_beerydoc_medium_dim / 3 / 4 }
+        \dim_eval:n { \c_beerydoc_med_dim * 4 / 3 }
+        plus  \dim_eval:n { \c_beerydoc_med_dim / 2 * 4 }
+        minus \dim_eval:n { \c_beerydoc_med_dim / 3 / 4 }
       }
   }
-  { \skip_use:N \c_beerydoc_medium_skip }
-\titlespacing* \subsubsection
-  { 0pt }
+  { \skip_use:N \c_beerydoc_med_skip }
+\titlespacing* \subsubsection { 0pt }
   {
     \skip_eval:n
       {
-        \dim_eval:n { \c_beerydoc_medium_dim * 4 / 3 }
-        plus  \dim_eval:n { \c_beerydoc_medium_dim / 2 * 4 }
-        minus \dim_eval:n { \c_beerydoc_medium_dim / 3 / 4 }
+        \dim_eval:n { \c_beerydoc_med_dim * 4 / 3 }
+        plus  \dim_eval:n { \c_beerydoc_med_dim / 2 * 4 }
+        minus \dim_eval:n { \c_beerydoc_med_dim / 3 / 4 }
       }
   }
-  { \skip_use:N \c_beerydoc_medium_skip }
+  { \skip_use:N \c_beerydoc_med_skip }
 
-\titleformat \section % section
-  [ block ] % shape
+\titleformat \section [ block ] % section , shape
   { \raggedright \large \bfseries } % format
-  { \thesection } % label
-  { 1em } % the horizontal separation between label and title body
-  { } % before code
-  { } % after code
-\titleformat \subsection
-  [ block ]
+  { \thesection } { 1em } % label , length between label and title body
+  { } { } % before code , after code
+\titleformat \subsection [ block ]
   { \raggedright \normalsize \bfseries }
-  { \thesubsection }
-  { 1em }
-  { }
-  { }
-\titleformat \subsubsection
-  [ block ]
+  { \thesubsection } { 1em }
+  { } { }
+\titleformat \subsubsection [ block ]
   { \raggedright \normalsize \bfseries }
-  { \thesubsubsection }
-  { 1em }
-  { }
-  { }
+  { \thesubsubsection } { 1em }
+  { } { }
 
 % LISTS, LIST HEADINGS
 
@@ -591,10 +575,7 @@
   }
 \cs_new_protected:Npn \__beerydoc_keep_next_par: { \nobreak \@afterheading }
 \cs_new_protected:Npn \__beerydoc_keep_next_par_if_single_line:
-  {
-    \int_compare:nNnT \prevgraf = 1
-      { \nobreak \@afterheading }
-  }
+  { \int_compare:nNnT \prevgraf = 1 { \nobreak \@afterheading } }
 
 \NewDocumentCommand \listheading { m }
   {
@@ -607,8 +588,7 @@
     \par
     #1
     \par
-    \int_compare:nNnT \prevgraf = 1
-      { \nobreak \@afterheading }
+    \int_compare:nNnT \prevgraf = 1 { \nobreak \@afterheading }
     \vspace { \skip_eval:n { \c_beerydoc_small_skip - \parskip } }
   }
 
@@ -624,42 +604,31 @@
 
 % FOOTNOTES
 
-\RequirePackage [ bottom ] { footmisc }
-\cs_set_protected:Npn \footnoterule { }
+\RequirePackage [ bottomfloats , ragged ] { footmisc }
 % \setlength { \skip \footins } { \c_beerydoc_big_skip }
 \setlength \footnotesep { \f@linespread \footnotesep }
+\box_new:N \l__beerydoc_footnote_box
 \coffin_new:N \l__beerydoc_footnote_coffin
-\dim_const:Nn \c_beerydoc_footnote_baselineheight_dim
-  {
-    \f@linespread \l_fontscale_footnotesize_baselineskip_skip
-    - \l_fontscale_footnotesize_size_dim
-  }
 \cs_set_protected:Npn \@makefntext #1
   {
+    \hbox_set:Nn \l__beerydoc_footnote_box { \@thefnmark . }
     \vcoffin_set:Nnn \l__beerydoc_footnote_coffin { \textwidth }
       {
-        \list { \@thefnmark . }
+        \list { \box_use:N \l__beerydoc_footnote_box }
           {
-            \setlength \leftmargin
-              {
-                \fp_to_dim:n
-                  {
-                    (
-                      1 - \dim_to_fp:n { \l_fontscale_footnotesize_size_dim } /
-                      \dim_to_fp:n { \l_fontscale_normalsize_size_dim }
-                    )
-                    / 2 * \dim_to_fp:n { \textwidth }
-                  }
-              }
-            \setlength \rightmargin { \leftmargin }
             \setlength \labelsep { 0.5em }
             \setlength \topsep { 0pt }
             \setlength \partopsep { 0pt }
+            \setlength \leftmargin
+              {
+                \dim_eval:n { \box_wd:N \l__beerydoc_footnote_box + \labelsep }
+              }
+            \setlength \rightmargin { \leftmargin }
           }
         \item #1 \endlist
       }
     \coffin_typeset:Nnnnn \l__beerydoc_footnote_coffin { l } { b }
-      { \c_zero_dim } { - \c_beerydoc_footnote_baselineheight_dim }
+      { \c_zero_dim } { \c_zero_dim }
   }
 
 % REFERENCES
@@ -687,3 +656,8 @@
     \tl_map_inline:nn { \pkg \cls \env \hook \socket \plug }
       { \cs_set_eq:NN #1 \__beerydoc_pdfstring_tl_to_str:n }
   }
+
+% MESSAGES
+
+\msg_new:nnn { beerydoc } { math-mode-invalid }
+  { '\iow_char:N \\ #1'~ invalid~ in~ math~ mode~ \msg_line_context:. }

@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-06}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-07}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
@@ -43,10 +43,7 @@
   { The~ quick~ brown~ fox~ jumps~ over~ the~ lazy~ dog. }
 
 \group_begin:
-  \char_set_active_eq:NN \  \scan_stop:
   \char_set_active_eq:NN | \scan_stop:
-  \tl_const:Ne \c__beerydoc_active_space_tl
-    { \char_generate:nn { `\  } { 13 } }
   \tl_const:Ne \c__beerydoc_active_vert_tl { \char_generate:nn { `| } { 13 } }
 \group_end:
 
@@ -198,7 +195,7 @@
     \tl_if_in:NnT \l__beerydoc_meta_tl { expr }
       {
         \tl_replace_once:Non \l__beerydoc_meta_tl
-          { \c__beerydoc_active_space_tl expr } { ~expr }
+          { \c_catcode_active_space_tl expr } { ~expr }
         \__beerydoc_meta_replace_expr:nn
           { fp~ expr } { floating~ point~ expression }
           { int~ expr } { integer~ expression }

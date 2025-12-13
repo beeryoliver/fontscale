@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-08}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-12}{0.0.0}{}
 
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
@@ -390,7 +390,6 @@
 % ENVIRONMENTS
 
 \RequirePackage { multicol }
-\RequirePackage { csquotes }
 
 % PAGE STYLE
 
@@ -599,6 +598,20 @@
 \RequirePackage { fancyvrb }
 \hook_gput_code:nnn { begindocument } { beerydoc } { \DefineShortVerb { \| } }
 
+% QUOTES
+
+\RequirePackage { csquotes }
+\RenewDocumentEnvironment { quote } { }
+  {
+    \list { }
+      {
+        \setlength \leftmargin { 1.5em }
+        \setlength \rightmargin { \leftmargin }
+      }
+    \item \relax
+  }
+  { \endlist }
+
 % FOOTNOTES
 
 \RequirePackage [ bottomfloats , ragged ] { footmisc }
@@ -611,18 +624,16 @@
     \hbox_set:Nn \l__beerydoc_footnote_box { \@thefnmark . }
     \vcoffin_set:Nnn \l__beerydoc_footnote_coffin { \textwidth }
       {
-        \list { \box_use:N \l__beerydoc_footnote_box }
+        \list { \@thefnmark . }
           {
+            \setlength \leftmargin
+              { \dim_eval:n { \box_wd:N \l__beerydoc_footnote_box + 0.5em } }
+            % \setlength \rightmargin { \leftmargin }
             \setlength \labelsep { 0.5em }
             \setlength \topsep { 0pt }
             \setlength \partopsep { 0pt }
-            \setlength \leftmargin
-              {
-                \dim_eval:n { \box_wd:N \l__beerydoc_footnote_box + \labelsep }
-              }
-            \setlength \rightmargin { \leftmargin }
           }
-        \item #1 \endlist
+        \item \relax #1 \endlist
       }
     \coffin_typeset:Nnnnn \l__beerydoc_footnote_coffin { l } { b }
       { \c_zero_dim } { \c_zero_dim }

@@ -46,7 +46,7 @@
 
 \fp_const:Nn \c_beerydoc_golden_ratio_fp { 1.6180 3398 8749 8948 }
 \tl_const:Nn \c_beerydoc_alphabet_tl { abcdefghijklmnopqrstuvwxyz }
-\tl_const:Nn \c_beerydoc_digits_tl { 0123456789 }
+\str_const:Nn \c_beerydoc_digits_str { 0123456789 }
 \tl_const:Nn \c_beerydoc_pangram_tl
   { The~ quick~ brown~ fox~ jumps~ over~ the~ lazy~ dog. }
 
@@ -74,7 +74,7 @@
 \cs_new_protected:Npn \__beerydoc_rangle: { \ensuremath { \rangle } }
 
 \cs_new:Npe \alphabet { \c_beerydoc_alphabet_tl }
-\cs_new:Npe \digits { \c_beerydoc_digits_tl }
+\cs_new:Npe \digits { \c_beerydoc_digits_str }
 \cs_new:Npe \pangram { \c_beerydoc_pangram_tl }
 
 \NewDocumentCommand \key { m }

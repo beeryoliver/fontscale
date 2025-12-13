@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 12 December 2025
+Version 5.0.0\quad 13 December 2025
 
 
 \section{Introduction}
@@ -80,8 +80,9 @@ font size of \cs{normalsize} set by this package.
   \item
   Set the font size and font baselineskip using \cs{fontsize} and
   \cs{selectfont}.
-  Use \cs{fontscalesetup} (\S\ref{subsec:setup}) to change the font sizes and
-  font baselineskips set by the font size commands.
+  You can change the font sizes and font baselineskips that are set by the
+  font size commands by setting the \pkg{fontscale} package keys
+  (\S\ref{sec:keys}).
   (The font baselineskip should not be confused with the paragraph
   baselineskip \cs{baselineskip}.)
   \item
@@ -102,8 +103,7 @@ font size of \cs{normalsize} set by this package.
 \label{sec:keys}
 
 This section documents the keys provided by the \pkg{fontscale} package.
-Set the package keys using \cs{fontscalesetup}\marg{key-value list}
-(\S\ref{subsec:setup}).
+Set the package keys using \cs{fontscalesetup} (\S\ref{subsec:setup}).
 
 \subsection{The key \key{typographic-scale}}
 \label{subsec:typographicscale}
@@ -358,7 +358,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\fontscalesetup}
   \begin{syntax}
-    \cs{fontscalesetup}\sarg\marg{key-value list}
+    \cs{fontscalesetup} \sarg{} \marg{key-value list}
   \end{syntax}
   Sets and processes the \pkg{fontscale} package keys (\S\ref{sec:keys}) in
   \meta{key-value list} and then uses \cs{normalsize}.
@@ -403,7 +403,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\setfontsize}
   \begin{syntax}
-    \cs{setfontsize}\oarg{skip expr}\marg{dim expr}
+    \cs{setfontsize} \oarg{skip expr} \marg{dim expr}
   \end{syntax}
   Sets the font size to the result of evaluating the \meta{dim expr}.
   Sets the font baselineskip equal to the new font size \texttimes{} the value
@@ -417,7 +417,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\stepfontsize}
   \begin{syntax}
-    \cs{stepfontsize}\marg{int expr}
+    \cs{stepfontsize} \marg{int expr}
   \end{syntax}
   Increases the font size by a number of \enquote{steps} equal to the result
   of evaluating the \meta{int expr}.
@@ -454,7 +454,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\setfontbaselineskip}
   \begin{syntax}
-    \cs{setfontbaselineskip}\marg{skip expr}
+    \cs{setfontbaselineskip} \marg{skip expr}
   \end{syntax}
   Sets the font baselineskip to the result of evaluating the \meta{skip expr}.
   Does not change the font size.
@@ -466,7 +466,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 
 \begin{function}{\printsampletext}
   \begin{syntax}
-    \cs{printsampletext}\sarg\marg{text}
+    \cs{printsampletext} \sarg{} \marg{text}
   \end{syntax}
   Prints \meta{text} in each font size ordered from \cs{tiny} to \cs{Huge}
   each followed by \cs{par}.

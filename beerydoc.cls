@@ -1,8 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-12}{0.0.0}{}
-
+\ProvidesExplClass{beerydoc}{2025-12-13}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -19,6 +18,15 @@
 \sys_if_engine_luatex:F { \msg_critical:nn { beerydoc } { luatex } }
 
 \LoadClass { article }
+
+\keys_define:nn { beerydoc }
+  {
+      showframe .code:n =
+        { \PassOptionsToPackage { showframe } { geometry } }
+    , showframe .value_forbidden:n = true
+    , showframe .usage:n = load
+  }
+\ProcessKeyOptions
 
 \RequirePackage { fontscale }
 \fontscalesetup { musical }
@@ -48,7 +56,6 @@
 \group_end:
 
 \bool_new:N \l__beerydoc_syntax_bool
-\bool_new:N \l__beerydoc_arg_bool
 
 \tl_new:N \l__beerydoc_key_tl
 \tl_new:N \l__beerydoc_value_tl
@@ -95,7 +102,6 @@
 \cs_new_protected:Npn \__beerydoc_key:n #1
   {
     \group_begin:
-      \bool_set_true:N \l__beerydoc_arg_bool
       \tl_set:Nn \l__beerydoc_key_tl {#1}
       \tl_trim_spaces:N \l__beerydoc_key_tl
       \tl_replace_all:Nnn \l__beerydoc_key_tl { / }
@@ -113,7 +119,6 @@
 \cs_new_protected:Npn \__beerydoc_value:n #1
   {
     \group_begin:
-      \bool_set_true:N \l__beerydoc_arg_bool
       \tl_set:Nn \l__beerydoc_value_tl {#1}
       \tl_trim_spaces:N \l__beerydoc_value_tl
       \tl_replace_all:Nnn \l__beerydoc_value_tl { \  } { \textvisiblespace }
@@ -142,7 +147,6 @@
 \cs_new_protected:Npn \__beerydoc_cs:n #1
   {
     \group_begin:
-      \bool_set_true:N \l__beerydoc_arg_bool
       \tl_set:Nn \l__beerydoc_cs_tl {#1}
       \__beerydoc_cs_replace_underscore:
       \tl_replace_all:Nnn \l__beerydoc_cs_tl { \  } { \textvisiblespace }
@@ -168,9 +172,6 @@
 \cs_new_protected:Npn \__beerydoc_meta:n #1
   {
     \group_begin:
-      \bool_if:NTF \l__beerydoc_syntax_bool
-        { \bool_if:NF \l__beerydoc_arg_bool { ~ } }
-        { \bool_if:NF \l__beerydoc_arg_bool { \allowbreak } }
       \tl_set:Nn \l__beerydoc_meta_tl {#1}
       \__beerydoc_meta_replace_underscore:
       \__beerydoc_meta_replace_expr:
@@ -241,9 +242,7 @@
     \cs_new_protected:Npn #1 ##1
       {
         \group_begin:
-          \bool_set_true:N \l__beerydoc_arg_bool
           \ttfamily
-          \bool_if:NTF \l__beerydoc_syntax_bool { ~ } { \allowbreak }
           \c_left_brace_str #2 \c_right_brace_str
         \group_end:
       }
@@ -266,9 +265,7 @@
     \cs_new_protected:Npn #1 ##1
       {
         \group_begin:
-          \bool_set_true:N \l__beerydoc_arg_bool
           \ttfamily
-          \bool_if:NTF \l__beerydoc_syntax_bool { ~ } { \allowbreak }
           [ #2 ]
         \group_end:
       }
@@ -283,10 +280,7 @@
       { \__beerydoc_s_arg: }
   }
 \cs_new_protected:Npn \__beerydoc_s_arg:
-  {
-    \bool_if:NT \l__beerydoc_syntax_bool { ~ }
-    \__beerydoc_langle: \texttt {*} \__beerydoc_rangle:
-  }
+  { \__beerydoc_langle: \texttt {*} \__beerydoc_rangle: }
 
 \cs_set_protected:Npn \__beerydoc_tmp:nN #1#2
   {

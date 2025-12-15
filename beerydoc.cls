@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-13}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-14}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -50,6 +50,7 @@
 \tl_const:Nn \c_beerydoc_pangram_tl
   { The~ quick~ brown~ fox~ jumps~ over~ the~ lazy~ dog. }
 
+\tl_const:Ne \c__beerydoc_math_subscript_tl { \char_generate:nn { `_ } { 8 } }
 \group_begin:
   \char_set_active_eq:NN | \scan_stop:
   \tl_const:Ne \c__beerydoc_active_vert_tl { \char_generate:nn { `| } { 13 } }
@@ -150,17 +151,16 @@
       \tl_set:Nn \l__beerydoc_cs_tl {#1}
       \__beerydoc_cs_replace_underscore:
       \tl_replace_all:Nnn \l__beerydoc_cs_tl { \  } { \textvisiblespace }
+      \tl_replace_all:Nnn \l__beerydoc_cs_tl { ~ } { \textvisiblespace }
       \tl_replace_all:NVn \l__beerydoc_cs_tl \c__beerydoc_active_vert_tl { | }
       \ttfamily
       \c_backslash_str \l__beerydoc_cs_tl \@
     \group_end:
   }
-\cs_new_protected:Npe \__beerydoc_cs_replace_underscore:
+\cs_new_protected:Npn \__beerydoc_cs_replace_underscore:
   {
-    \tl_replace_all:Nnn \exp_not:N \l__beerydoc_cs_tl
-      { \char_generate:nn { `_ } { 8 } } { _ }
-    \tl_replace_all:Nnn \exp_not:N \l__beerydoc_cs_tl { \c_underscore_str }
-      { _ }
+    \tl_replace_all:NVn \l__beerydoc_cs_tl \c__beerydoc_math_subscript_tl { _ }
+    \tl_replace_all:NVn \l__beerydoc_cs_tl \c_underscore_str { _ }
   }
 
 \NewDocumentCommand \meta { >{ \TrimSpaces } m }
@@ -183,11 +183,12 @@
   }
 \cs_new_protected:Npn \__beerydoc_meta_replace_underscore:
   {
-    \tl_map_inline:nn { {8} {11} {12} }
-      {
-        \tl_replace_all:Nen \l__beerydoc_meta_tl
-          { \char_generate:nn { `_ } {##1} } { \__beerydoc_meta_subscript:n }
-      }
+    \tl_replace_all:NVn \l__beerydoc_meta_tl \c__beerydoc_math_subscript_tl
+      { \__beerydoc_meta_subscript:n }
+    \tl_replace_all:Nnn \l__beerydoc_meta_tl { _ }
+      { \__beerydoc_meta_subscript:n }
+    \tl_replace_all:NVn \l__beerydoc_meta_tl \c_underscore_str
+      { \__beerydoc_meta_subscript:n }
   }
 \cs_new_protected:Npn \__beerydoc_meta_subscript:n #1
   { \ensuremath { \sb {#1} } }
@@ -347,6 +348,7 @@
   { \textls [ \int_eval:n {#1} ] { \scshape #2 } }
 \cs_new_protected:Npn \__beerydoc_text_lowercase_small_caps:nn #1#2
   { \textls [ \int_eval:n {#1} ] { \scshape \text_lowercase:n {#2} } }
+
 \RenewDocumentCommand \slash { } { / \allowbreak }
 
 % CUSTOM ENVIRONMENTS
@@ -565,7 +567,7 @@
   }
 \cs_new_protected:Npn \__beerydoc_keep_next_par: { \nobreak \@afterheading }
 \cs_new_protected:Npn \__beerydoc_keep_next_par_if_single_line:
-  { \int_compare:nNnT \prevgraf = 1 { \nobreak \@afterheading } }
+  { \int_compare:nNnT \prevgraf = 1 { \__beerydoc_keep_next_par: } }
 
 \NewDocumentCommand \listheading { m }
   {
@@ -578,7 +580,7 @@
     \par
     #1
     \par
-    \int_compare:nNnT \prevgraf = 1 { \nobreak \@afterheading }
+    \__beerydoc_keep_next_par_if_single_line:
     \vspace { \skip_eval:n { \c_beerydoc_small_skip - \parskip } }
   }
 

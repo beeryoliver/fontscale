@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-14}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-15}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -69,7 +69,8 @@
 % CUSTOM MACROS
 
 \cs_generate_variant:Nn \tl_replace_once:Nnn { No }
-\prg_generate_conditional_variant:Nnn \str_if_eq:nn { e } { TF }
+\prg_generate_conditional_variant:Nnn \str_if_eq:nn { ne , e }
+  { p , T , F , TF }
 
 \cs_new_protected:Npn \__beerydoc_langle: { \ensuremath { \langle } }
 \cs_new_protected:Npn \__beerydoc_rangle: { \ensuremath { \rangle } }
@@ -351,6 +352,8 @@
 
 \RenewDocumentCommand \slash { } { / \allowbreak }
 
+\cs_if_exist:NF \muskipeval { \cs_new_eq:NN \muskipeval \muskip_eval:n }
+
 % CUSTOM ENVIRONMENTS
 
 \RequirePackage { tcolorbox }
@@ -394,8 +397,8 @@
 \dim_log:N \c_beerydoc_alphabet_dim
 
 \dim_const:Nn \c_beerydoc_big_dim { \l_fontscale_normalsize_baselineskip_skip }
-\dim_const:Nn \c_beerydoc_med_dim { \c_beerydoc_big_dim / 2 }
-\dim_const:Nn \c_beerydoc_small_dim  { \c_beerydoc_big_dim / 4 }
+\dim_const:Nn \c_beerydoc_med_dim   { \c_beerydoc_big_dim / 2 }
+\dim_const:Nn \c_beerydoc_small_dim { \c_beerydoc_big_dim / 4 }
 \dim_log:N \c_beerydoc_big_dim
 \dim_log:N \c_beerydoc_med_dim
 \dim_log:N \c_beerydoc_small_dim
@@ -406,11 +409,11 @@
     plus  \dim_eval:n { \c_beerydoc_big_dim / 2 }
     minus \dim_eval:n { \c_beerydoc_big_dim / 3 }
   }
-\skip_const:Nn \c_beerydoc_med_skip { \c_beerydoc_big_skip / 2 }
-\skip_const:Nn \c_beerydoc_small_skip  { \c_beerydoc_big_skip / 4 }
-\setlength \bigskipamount   { \skip_use:N \c_beerydoc_big_skip    }
-\setlength \medskipamount   { \skip_use:N \c_beerydoc_med_skip }
-\setlength \smallskipamount { \skip_use:N \c_beerydoc_small_skip  }
+\skip_const:Nn \c_beerydoc_med_skip   { \c_beerydoc_big_skip / 2 }
+\skip_const:Nn \c_beerydoc_small_skip { \c_beerydoc_big_skip / 4 }
+\setlength \bigskipamount   { \skip_use:N \c_beerydoc_big_skip   }
+\setlength \medskipamount   { \skip_use:N \c_beerydoc_med_skip   }
+\setlength \smallskipamount { \skip_use:N \c_beerydoc_small_skip }
 \skip_log:N \c_beerydoc_big_skip
 \skip_log:N \c_beerydoc_med_skip
 \skip_log:N \c_beerydoc_small_skip

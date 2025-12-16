@@ -648,8 +648,8 @@
 
 \cs_new:Npn \__beerydoc_pdfstring_key_value:n #1
   {
-    \str_if_eq:enTF { \tl_head:n {#1} } { = }
-      { \tl_to_str:e { \tl_range:nnn {#1} { 2 } { -1 } } }
+    \str_if_eq:enTF { \str_head:n {#1} } { = }
+      { \str_range:nnn {#1} { 2 } { -1 } }
       { \tl_to_str:n {#1} }
   }
 \cs_new:Npn \__beerydoc_pdfstring_cs:n #1 { \textbackslash \tl_to_str:n {#1} }

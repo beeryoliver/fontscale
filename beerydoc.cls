@@ -34,6 +34,7 @@
 \sisetup { list-final-separator = { ,~ and~ } , mode = math }
 \RequirePackage { mathtools }
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\cs_set_eq:NN \muskipeval \muskip_eval:n
 \RequirePackage { xcolor }
 
 % FONT SELECTION
@@ -52,8 +53,8 @@
 
 \tl_const:Ne \c__beerydoc_math_subscript_tl { \char_generate:nn { `_ } { 8 } }
 \group_begin:
-  \char_set_active_eq:NN | \scan_stop:
-  \tl_const:Ne \c__beerydoc_active_vert_tl { \char_generate:nn { `| } { 13 } }
+  \char_set_catcode_active:N |
+  \tl_const:Nn \c__beerydoc_active_vert_tl { | }
 \group_end:
 
 \bool_new:N \l__beerydoc_syntax_bool
@@ -300,12 +301,14 @@
     \__beerydoc_tmp:nN
   }
 \__beerydoc_tmp:nN
-  {cls}    \textsf
-  {env}    \texttt
-  {pkg}    \textsf
-  {hook}   \texttt
-  {socket} \texttt
-  {plug}   \texttt
+  {cls}      \textsf
+  {pkg}      \textsf
+  {env}      \texttt
+  {hook}     \texttt
+  {socket}   \texttt
+  {plug}     \texttt
+  {template} \texttt
+  {instance} \texttt
   { \q_recursion_tail } \scan_stop:
 \q_recursion_stop
 
@@ -351,8 +354,6 @@
   { \textls [ \int_eval:n {#1} ] { \scshape \text_lowercase:n {#2} } }
 
 \RenewDocumentCommand \slash { } { / \allowbreak }
-
-\cs_if_exist:NF \muskipeval { \cs_new_eq:NN \muskipeval \muskip_eval:n }
 
 % CUSTOM ENVIRONMENTS
 
@@ -660,7 +661,8 @@
     \cs_set_eq:NN \key  \__beerydoc_pdfstring_key_value:n
     \cs_set_eq:NN \cs   \__beerydoc_pdfstring_cs:n
     \cs_set_eq:NN \meta \__beerydoc_pdfstring_meta:n
-    \tl_map_inline:nn { \pkg \cls \env \hook \socket \plug }
+    \tl_map_inline:nn
+      { \cls \pkg \env \hook \socket \plug \template \instance }
       { \cs_set_eq:NN #1 \__beerydoc_pdfstring_tl_to_str:n }
   }
 

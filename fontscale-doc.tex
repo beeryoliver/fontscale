@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 13 December 2025
+Version 5.0.0\quad 16 December 2025
 
 
 \section{Introduction}
@@ -96,7 +96,7 @@ font size of \cs{normalsize} set by this package.
   documented in \pkg{lthooks} and \pkg{ltcmdhooks}.
 \end{itemize}
 
-\input{./fontscale-table-syntax.tex}
+\input{./fontscale-doc-table-syntax.tex}
 
 
 \section{Keys}
@@ -129,6 +129,9 @@ initially set by the key \key{typographic-scale}.
   Meta keys that set the key \key{typographic-scale} to the named value.
 \end{variable}
 
+\subsubsection{The classic typographic scale}
+\label{subsubsec:classictypographicscale}
+
 \begin{variable}{classic/base, classic/point}
   \begin{syntax}
     \key{classic/base=\choices{10,11,12}}
@@ -139,7 +142,7 @@ initially set by the key \key{typographic-scale}.
   scale.
   The classic typographic scale consists of the traditional font sizes in units
   of points:\footnotemark
-  \input{fontscale-table-classic-list.tex}
+  \input{fontscale-doc-classic-list.tex}
   They have been used since the sixteenth century and are the default font
   sizes on some computer software.
 
@@ -158,7 +161,10 @@ initially set by the key \key{typographic-scale}.
 \footnotetext
   {See \textit{The Elements of Typographic Style} by Robert Bringhurst.}
 
-\input{./fontscale-table-classic.tex}
+\input{./fontscale-doc-table-classic.tex}
+
+\subsubsection{The musical typographic scale}
+\label{subsubsec:musicaltypographicscale}
 
 \begin{variable}{musical/base, musical/ratio, musical/notes}
   \begin{syntax}
@@ -199,7 +205,7 @@ initially set by the key \key{typographic-scale}.
     \url{https://spencermortensen.com/articles/typographic-scale/}%
   }
 
-\input{./fontscale-table-musical.tex}
+\input{./fontscale-doc-table-musical.tex}
 
 \subsection{The key \key{baselineskip-size-ratio}}
 \label{subsec:baselineskipsizeratio}

@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-15}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-16}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -387,6 +387,13 @@
   }
 \NewEnvironmentCopy { variable } { function }
 
+% FLOATS
+
+\renewcommand\bottomfraction{0.5} % default = 0.3
+\setcounter{bottomnumber}{2} % default = 1
+\setcounter{topnumber}{3} % default = 2
+\setcounter{totalnumber}{4} % default = 3
+
 % ENVIRONMENTS
 
 \RequirePackage { multicol }
@@ -455,7 +462,7 @@
 \RequirePackage { fancyhdr }
 \pagestyle { fancy }
 \fancyhf { }
-\cs_set:Npn \headrulewidth { 0pt }
+\renewcommand \headrulewidth { 0pt }
 \fancyfoot [ C ]
   { \footnotesize \thepage \c_space_tl of~ \pageref { LastPage } }
 
@@ -465,24 +472,24 @@
 \nonfrenchspacing
 % \linespread { 1 }
 \RequirePackage [ skip = \skip_use:N \c_beerydoc_med_skip ] { parskip }
+% default = 0.5 \baselineskip plus 2pt
 \RequirePackage [ raggedrightboxes ] { ragged2e }
 \setlength \RaggedRightRightskip
-  { 0pt plus \dim_use:N \c_beerydoc_alphabet_dim }
-\setlength \RaggedRightParindent { 0pt }
-\setlength \JustifyingParindent { 1.5em }
+  { 0pt plus \dim_use:N \c_beerydoc_alphabet_dim } % default = 0pt plus 2em
+\setlength \JustifyingParindent { 1.5em } % default = \parindent
 \RaggedRight
 % \justifying
 \RequirePackage { microtype }
 \microtypesetup { protrusion = false , expansion = false }
-\pretolerance = -1
-\tolerance = 200
-\setlength \emergencystretch { 0pt }
+\pretolerance = -1 % default = 100
+\tolerance = 200 % default = 200
+\setlength \emergencystretch { 0pt } % default = 0
 \widowpenalty = 10000
 \clubpenalty = \widowpenalty
 \displaywidowpenalty = \widowpenalty
 % hyphenation
-\hyphenpenalty = 50
-\exhyphenpenalty = \hyphenpenalty
+\hyphenpenalty = 50 % default = 50
+\exhyphenpenalty = \hyphenpenalty % default = 100
 
 % HEADINGS, TABLE OF CONTENTS
 

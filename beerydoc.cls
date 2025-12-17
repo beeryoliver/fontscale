@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-16}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-17}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -63,9 +63,6 @@
 \tl_new:N \l__beerydoc_value_tl
 \tl_new:N \l__beerydoc_cs_tl
 \tl_new:N \l__beerydoc_meta_tl
-
-% Scratch variable
-\box_new:N \l__beerydoc_tmp_box
 
 % CUSTOM MACROS
 
@@ -372,6 +369,7 @@
   {
     \bool_set_true:N \l__beerydoc_syntax_bool
     \ttfamily
+    \raggedright
     % \obeyspaces
     \obeylines
   }
@@ -398,11 +396,10 @@
 
 \RequirePackage { multicol }
 
-% PAGE STYLE
+% LENGTHS
 
-\hbox_set:Nn \l__beerydoc_tmp_box { \c_beerydoc_alphabet_tl }
-\dim_const:Nn \c_beerydoc_alphabet_dim { \box_wd:N \l__beerydoc_tmp_box }
-\dim_log:N \c_beerydoc_alphabet_dim
+\hbox_set:Nn \l_tmpa_box { \c_beerydoc_alphabet_tl }
+\dim_const:Nn \c_beerydoc_alphabet_dim { \box_wd:N \l_tmpa_box }
 
 \dim_const:Nn \c_beerydoc_big_dim { \l_fontscale_normalsize_baselineskip_skip }
 \dim_const:Nn \c_beerydoc_med_dim   { \c_beerydoc_big_dim / 2 }
@@ -426,6 +423,8 @@
 \skip_log:N \c_beerydoc_med_skip
 \skip_log:N \c_beerydoc_small_skip
 
+% PAGE STYLE
+
 % \flushbottom
 \raggedbottom
 \vbadness = 100
@@ -435,28 +434,19 @@
 \setlength \splittopskip { \topskip }
 
 \RequirePackage { geometry }
-\dim_const:Nn \c_beerydoc_textwidth_dim
-  { \fp_to_dim:n { \c_e_fp * \dim_to_fp:n { \c_beerydoc_alphabet_dim } } }
-\dim_const:Nn \c_beerydoc_textheight_dim
-  {
-    \fp_to_dim:n
-      {
-        \c_beerydoc_golden_ratio_fp *
-        \dim_to_fp:n { \c_beerydoc_textwidth_dim }
-      }
-  }
-\dim_const:Nn \c_beerydoc_footskip_dim
-  { \c_beerydoc_big_dim + \l_fontscale_footnotesize_baselineskip_skip }
 \geometry
   {
       a4paper
-    , textwidth = \dim_use:N \c_beerydoc_textwidth_dim
-    , textheight = \dim_use:N \c_beerydoc_textheight_dim
+    , textwidth = 5in
+    , textheight =
+        \fp_to_dim:n { \c_beerydoc_golden_ratio_fp * \dim_to_fp:n { 5in } }
     , heightrounded
     , centering
     , headheight = \skip_use:N \l_fontscale_footnotesize_baselineskip_skip
     , headsep = \dim_use:N \c_beerydoc_big_dim
-    , footskip = \dim_use:N \c_beerydoc_footskip_dim
+    , footskip =
+        \dim_eval:n
+          { \c_beerydoc_big_dim + \l_fontscale_footnotesize_baselineskip_skip }
   }
 
 \RequirePackage { fancyhdr }

@@ -7,7 +7,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2025-12-13
+## [v5.0.0] - 2025-12-17
 
 ### Changed
 - This update includes many changes that are backwards incompatible.
@@ -78,8 +78,6 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 - `\stepfontsize`
 
 ### Fixed
-- The package now correctly uses `\fp_to_tl:` to display floating point
-  numbers.
 - Added a space after every `\iow_char:N \\` in `fontscale.sty` to make the
   `codehigh` package typeset the code with the correct color syntax.
 

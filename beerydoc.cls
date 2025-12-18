@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-17}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-18}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -51,18 +51,43 @@
 \tl_const:Nn \c_beerydoc_pangram_tl
   { The~ quick~ brown~ fox~ jumps~ over~ the~ lazy~ dog. }
 
+\hbox_set:Nn \l_tmpa_box { \c_beerydoc_alphabet_tl }
+\dim_const:Nn \c_beerydoc_alphabet_dim { \box_wd:N \l_tmpa_box }
+
+\dim_const:Nn \c_beerydoc_big_dim { \l_fontscale_normalsize_baselineskip_skip }
+\dim_const:Nn \c_beerydoc_med_dim   { \c_beerydoc_big_dim / 2 }
+\dim_const:Nn \c_beerydoc_small_dim { \c_beerydoc_big_dim / 4 }
+\dim_log:N \c_beerydoc_big_dim
+\dim_log:N \c_beerydoc_med_dim
+\dim_log:N \c_beerydoc_small_dim
+
+\skip_const:Nn \c_beerydoc_big_skip
+  {
+    \c_beerydoc_big_dim
+    plus  \dim_eval:n { \c_beerydoc_big_dim / 2 }
+    minus \dim_eval:n { \c_beerydoc_big_dim / 3 }
+  }
+\skip_const:Nn \c_beerydoc_med_skip   { \c_beerydoc_big_skip / 2 }
+\skip_const:Nn \c_beerydoc_small_skip { \c_beerydoc_big_skip / 4 }
+\setlength \bigskipamount   { \skip_use:N \c_beerydoc_big_skip   }
+\setlength \medskipamount   { \skip_use:N \c_beerydoc_med_skip   }
+\setlength \smallskipamount { \skip_use:N \c_beerydoc_small_skip }
+\skip_log:N \c_beerydoc_big_skip
+\skip_log:N \c_beerydoc_med_skip
+\skip_log:N \c_beerydoc_small_skip
+
 \tl_const:Ne \c__beerydoc_math_subscript_tl { \char_generate:nn { `_ } { 8 } }
 \group_begin:
   \char_set_catcode_active:N |
   \tl_const:Nn \c__beerydoc_active_vert_tl { | }
 \group_end:
 
-\bool_new:N \l__beerydoc_syntax_bool
-
 \tl_new:N \l__beerydoc_key_tl
 \tl_new:N \l__beerydoc_value_tl
 \tl_new:N \l__beerydoc_cs_tl
 \tl_new:N \l__beerydoc_meta_tl
+
+\bool_new:N \l__beerydoc_syntax_bool
 
 % CUSTOM MACROS
 
@@ -103,14 +128,13 @@
   {
     \group_begin:
       \tl_set:Nn \l__beerydoc_key_tl {#1}
-      \tl_trim_spaces:N \l__beerydoc_key_tl
       \tl_replace_all:Nnn \l__beerydoc_key_tl { / }
         { \__beerydoc_key_value_slash: }
       \ttfamily
       \l__beerydoc_key_tl \@
     \group_end:
   }
-\cs_new_protected:Npn \__beerydoc_key_value_slash: { \slash }
+\cs_new_protected:Npn \__beerydoc_key_value_slash: { / \allowbreak }
 \cs_new_protected:Npn \__beerydoc_key_value_equal:
   {
     \bool_if:NTF \l__beerydoc_syntax_bool
@@ -120,8 +144,7 @@
   {
     \group_begin:
       \tl_set:Nn \l__beerydoc_value_tl {#1}
-      \tl_trim_spaces:N \l__beerydoc_value_tl
-      \tl_replace_all:Nnn \l__beerydoc_value_tl { \  } { \textvisiblespace }
+      \tl_replace_all:Nnn \l__beerydoc_value_tl { ~ } { \textvisiblespace }
       \ttfamily
       \l__beerydoc_value_tl \@
     \group_end:
@@ -138,7 +161,7 @@
 \cs_new_protected:Npn \__beerydoc_key_value_choices_separator:
   { \ensuremath { \, \vert \, } }
 
-\NewDocumentCommand \cs { >{ \TrimSpaces } m }
+\NewDocumentCommand \cs { m }
   {
     \mode_if_math:TF
       { \msg_error:nnn { beerydoc } { math-mode-invalid } { cs } }
@@ -149,7 +172,6 @@
     \group_begin:
       \tl_set:Nn \l__beerydoc_cs_tl {#1}
       \__beerydoc_cs_replace_underscore:
-      \tl_replace_all:Nnn \l__beerydoc_cs_tl { \  } { \textvisiblespace }
       \tl_replace_all:Nnn \l__beerydoc_cs_tl { ~ } { \textvisiblespace }
       \tl_replace_all:NVn \l__beerydoc_cs_tl \c__beerydoc_active_vert_tl { | }
       \ttfamily
@@ -162,7 +184,7 @@
     \tl_replace_all:NVn \l__beerydoc_cs_tl \c_underscore_str { _ }
   }
 
-\NewDocumentCommand \meta { >{ \TrimSpaces } m }
+\NewDocumentCommand \meta { m }
   {
     \mode_if_math:TF
       { \msg_error:nnn { beerydoc } { math-mode-invalid } { meta } }
@@ -227,7 +249,7 @@
     \__beerydoc_meta_replace_expr:nn
   }
 
-\NewDocumentCommand \marg { s >{ \TrimSpaces } m }
+\NewDocumentCommand \marg { s m }
   {
     \mode_if_math:TF
       { \msg_error:nnn { beerydoc } { math-mode-invalid } { marg } }
@@ -250,7 +272,7 @@
 \__beerydoc_tmp:Nn \__beerydoc_m_arg:n {#1}
 \__beerydoc_tmp:Nn \__beerydoc_m_arg_meta:n { \__beerydoc_meta:n {#1} }
 
-\NewDocumentCommand \oarg { s >{ \TrimSpaces } m }
+\NewDocumentCommand \oarg { s m }
   {
     \mode_if_math:TF
       { \msg_error:nnn { beerydoc } { math-mode-invalid } { oarg } }
@@ -287,7 +309,7 @@
     \quark_if_recursion_tail_stop:n {#1}
     \use:e
       {
-        \NewDocumentCommand \exp_not:c {#1} { >{ \TrimSpaces } m }
+        \NewDocumentCommand \exp_not:c {#1} { m }
           {
             \exp_not:N \mode_if_math:TF
               { \msg_error:nnn { beerydoc } { math-mode-invalid } {#1} }
@@ -309,7 +331,7 @@
   { \q_recursion_tail } \scan_stop:
 \q_recursion_stop
 
-\NewDocumentCommand \latin { >{ \TrimSpaces } m }
+\NewDocumentCommand \latin { m }
   {
     \mode_if_math:TF
       { \msg_error:nnn { beerydoc } { math-mode-invalid } { latin } }
@@ -317,7 +339,7 @@
   }
 \cs_new_protected:Npn \__beerydoc_latin:n #1 { \textit {#1} }
 
-\NewDocumentCommand \honorific { >{ \TrimSpaces } m }
+\NewDocumentCommand \honorific { m }
   {
     \mode_if_math:TF
       { \msg_error:nnn { beerydoc } { math-mode-invalid } { honorific } }
@@ -326,7 +348,7 @@
 \cs_new_protected:Npn \__beerydoc_honorific:n #1
   { \group_begin: #1 \@ \group_end: }
 
-\NewDocumentCommand \allcaps { O { 50 } >{ \TrimSpaces } m }
+\NewDocumentCommand \allcaps { O { 50 } m }
   {
     \mode_if_math:TF
       { \msg_error:nnn { beerydoc } { math-mode-invalid } { allcaps } }
@@ -335,7 +357,7 @@
 \cs_new_protected:Npn \__beerydoc_text_all_caps:nn #1#2
   { \textls [ \int_eval:n {#1} ] { \text_uppercase:n {#2} } }
 
-\NewDocumentCommand \allsmallcaps { s O { 50 } >{ \TrimSpaces } m }
+\NewDocumentCommand \allsmallcaps { s O { 50 } m }
   {
     \mode_if_math:TF
       { \msg_error:nnn { beerydoc } { math-mode-invalid } { allsmallcaps } }
@@ -395,33 +417,6 @@
 % ENVIRONMENTS
 
 \RequirePackage { multicol }
-
-% LENGTHS
-
-\hbox_set:Nn \l_tmpa_box { \c_beerydoc_alphabet_tl }
-\dim_const:Nn \c_beerydoc_alphabet_dim { \box_wd:N \l_tmpa_box }
-
-\dim_const:Nn \c_beerydoc_big_dim { \l_fontscale_normalsize_baselineskip_skip }
-\dim_const:Nn \c_beerydoc_med_dim   { \c_beerydoc_big_dim / 2 }
-\dim_const:Nn \c_beerydoc_small_dim { \c_beerydoc_big_dim / 4 }
-\dim_log:N \c_beerydoc_big_dim
-\dim_log:N \c_beerydoc_med_dim
-\dim_log:N \c_beerydoc_small_dim
-
-\skip_const:Nn \c_beerydoc_big_skip
-  {
-    \c_beerydoc_big_dim
-    plus  \dim_eval:n { \c_beerydoc_big_dim / 2 }
-    minus \dim_eval:n { \c_beerydoc_big_dim / 3 }
-  }
-\skip_const:Nn \c_beerydoc_med_skip   { \c_beerydoc_big_skip / 2 }
-\skip_const:Nn \c_beerydoc_small_skip { \c_beerydoc_big_skip / 4 }
-\setlength \bigskipamount   { \skip_use:N \c_beerydoc_big_skip   }
-\setlength \medskipamount   { \skip_use:N \c_beerydoc_med_skip   }
-\setlength \smallskipamount { \skip_use:N \c_beerydoc_small_skip }
-\skip_log:N \c_beerydoc_big_skip
-\skip_log:N \c_beerydoc_med_skip
-\skip_log:N \c_beerydoc_small_skip
 
 % PAGE STYLE
 

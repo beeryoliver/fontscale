@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-18}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-19}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -145,16 +145,10 @@
     \group_begin:
       \tl_set:Nn \l__beerydoc_value_tl {#1}
       \tl_replace_all:Nnn \l__beerydoc_value_tl { ~ } { \textvisiblespace }
+      \cs_set_eq:NN \choices \__beerydoc_key_value_choices:n
       \ttfamily
       \l__beerydoc_value_tl \@
     \group_end:
-  }
-
-\NewDocumentCommand \choices { m }
-  {
-    \mode_if_math:TF
-      { \msg_error:nnn { beerydoc } { math-mode-invalid } { choices } }
-      { \__beerydoc_key_value_choices:n {#1} }
   }
 \cs_new_protected:Npn \__beerydoc_key_value_choices:n #1
   { \clist_use:nn {#1} { \__beerydoc_key_value_choices_separator: } }
@@ -397,14 +391,10 @@
   }
 \NewDocumentEnvironment { function } { m }
   {
-    \par
     \begin { minipage } [ b ] { \textwidth }
       \setlength \parskip { \medskipamount }
   }
-  {
-    \end { minipage }
-    \par
-  }
+  { \end { minipage } }
 \NewEnvironmentCopy { variable } { function }
 
 % FLOATS
@@ -461,7 +451,7 @@
 \RequirePackage [ raggedrightboxes ] { ragged2e }
 \setlength \RaggedRightRightskip
   { 0pt plus \dim_use:N \c_beerydoc_alphabet_dim } % default = 0pt plus 2em
-\setlength \JustifyingParindent { 1.5em } % default = \parindent
+\setlength \JustifyingParindent { 2em } % default = \parindent
 \RaggedRight
 % \justifying
 \RequirePackage { microtype }

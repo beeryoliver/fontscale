@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-19}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-21}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -176,6 +176,13 @@
   {
     \tl_replace_all:NVn \l__beerydoc_cs_tl \c__beerydoc_math_subscript_tl { _ }
     \tl_replace_all:NVn \l__beerydoc_cs_tl \c_underscore_str { _ }
+  }
+\cs_new_protected:Npn \__beerydoc_cs:N #1
+  {
+    \group_begin:
+      \ttfamily
+      \token_to_str:N #1 \@
+    \group_end:
   }
 
 \NewDocumentCommand \meta { m }

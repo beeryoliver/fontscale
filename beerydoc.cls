@@ -185,13 +185,10 @@
     \group_end:
   }
 
-\NewDocumentCommand \meta { m }
-  {
-    \mode_if_math:TF
-      { \msg_error:nnn { beerydoc } { math-mode-invalid } { meta } }
-      { \__beerydoc_meta:n {#1} }
-  }
+\NewDocumentCommand \meta { m } { \__beerydoc_meta:n {#1} }
 \cs_new_protected:Npn \__beerydoc_meta:n #1
+  { \mode_if_math:TF { \text } { \use:n } { \__beerydoc_meta_aux:n {#1} } }
+\cs_new_protected:Npn \__beerydoc_meta_aux:n #1
   {
     \group_begin:
       \tl_set:Nn \l__beerydoc_meta_tl {#1}

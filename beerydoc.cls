@@ -8,12 +8,12 @@
   {
     The~ beerydoc~ class~ could~ not~ load. \\
     This~ class~ requires~
-    L3~ programming~ layer~ version~ 2024-12-09~ or~ newer.
+    L3~ programming~ layer~ version~ 2023-11-01~ or~ newer.
   }
 \msg_new:nnn { beerydoc } { luatex }
   { The~ beerydoc~ class~ could~ not~ load. \\ This~ class~ requires~ LuaTeX. }
 
-\IfExplAtLeastTF { 2024-12-09 } { }
+\IfExplAtLeastTF { 2023-11-01 } { }
   { \msg_critical:nn { beerydoc } { l3kernel } }
 \sys_if_engine_luatex:F { \msg_critical:nn { beerydoc } { luatex } }
 
@@ -88,7 +88,9 @@
 \tl_new:N \l__beerydoc_key_tl
 \tl_new:N \l__beerydoc_value_tl
 \tl_new:N \l__beerydoc_cs_tl
+\tl_new:N \l__beerydoc_cs_hyphenation_tl
 \tl_new:N \l__beerydoc_meta_tl
+\tl_new:N \l__beerydoc_hook_tl
 
 \bool_new:N \l__beerydoc_syntax_bool
 
@@ -167,13 +169,13 @@
 \cs_new_protected:Npn \__beerydoc_cs:n #1
   {
     \group_begin:
-      \tl_set:No \l__beerydoc_cs_tl { \c_backslash_str #1 }
+      \tl_set:Nn \l__beerydoc_cs_tl {#1}
       \tl_replace_all:Nnn \l__beerydoc_cs_tl { ~ } { \textvisiblespace }
       \tl_replace_all:NVn \l__beerydoc_cs_tl \c__beerydoc_active_vert_tl { | }
       \__beerydoc_cs_replace_underscore:
-      \__beerydoc_cs_breakable_underscore:
+      \__beerydoc_cs_hyphenation:
       \ttfamily
-      \l__beerydoc_cs_tl \@
+      \c_backslash_str \l__beerydoc_cs_tl \@
     \group_end:
   }
 \cs_new_protected:Npn \__beerydoc_cs_replace_underscore:
@@ -186,16 +188,55 @@
       }
       { \tl_replace_all:NVn \l__beerydoc_cs_tl ##1 { _ } }
   }
-\regex_const:Nn \c__beerydoc_cs_breakable_underscore_regex
-  { ([^\\\_]\_+) ([^\_]) }
-\cs_new_protected:Npn \__beerydoc_cs_breakable_underscore:
+\cs_new_protected:Npn \__beerydoc_cs_hyphenation:
   {
     \tl_if_in:NnT \l__beerydoc_cs_tl { _ }
       {
-        \tl_regex_replace_all:NNn \l__beerydoc_cs_tl
-          \c__beerydoc_cs_breakable_underscore_regex { \1 \c{-} \2 }
+        \__beerydoc_cs_hyphenation_start:
+        \__beerydoc_cs_hyphenation_replace:
+        \tl_set_eq:NN \l__beerydoc_cs_tl \l__beerydoc_cs_hyphenation_tl
       }
   }
+\cs_new_protected:Npn \__beerydoc_cs_hyphenation_start:
+  {
+    \tl_if_eq:enT { \tl_head:N \l__beerydoc_cs_tl } { _ }
+      {
+        \tl_put_right:Nn \l__beerydoc_cs_hyphenation_tl { _ }
+        \tl_set:Ne \l__beerydoc_cs_tl
+          {
+            \exp_after:wN \__beerydoc_cs_hyphenation_start:nw
+              \l__beerydoc_cs_tl \q_stop
+          }
+        \__beerydoc_cs_hyphenation_start:
+      }
+  }
+\cs_new:Npn \__beerydoc_cs_hyphenation_start:nw #1#2 \q_stop
+  { \exp_not:n {#2} }
+\cs_new_protected:Npn \__beerydoc_cs_hyphenation_replace:
+  {
+    \tl_map_function:NN \l__beerydoc_cs_tl \__beerydoc_cs_hyphenation_replace:n
+  }
+\cs_new_protected:Npn \__beerydoc_cs_hyphenation_replace_auxi:n #1
+  {
+    \tl_if_eq:nnT {#1} { _ }
+      {
+        \cs_set_eq:NN \__beerydoc_cs_hyphenation_replace:n
+          \__beerydoc_cs_hyphenation_replace_auxii:n
+      }
+    \tl_put_right:Nn \l__beerydoc_cs_hyphenation_tl {#1}
+  }
+\cs_new_protected:Npn \__beerydoc_cs_hyphenation_replace_auxii:n #1
+  {
+    \tl_if_eq:nnTF {#1} { _ }
+      { \tl_put_right:Nn \l__beerydoc_cs_hyphenation_tl {#1} }
+      {
+        \tl_put_right:Nn \l__beerydoc_cs_hyphenation_tl { \- #1 }
+        \cs_set_eq:NN \__beerydoc_cs_hyphenation_replace:n
+          \__beerydoc_cs_hyphenation_replace_auxi:n
+      }
+  }
+\cs_new_eq:NN \__beerydoc_cs_hyphenation_replace:n
+  \__beerydoc_cs_hyphenation_replace_auxi:n
 \cs_new_protected:Npn \__beerydoc_cs:N #1
   { \exp_args:Ne \__beerydoc_cs:n { \cs_to_str:N #1 } }
 
@@ -287,7 +328,7 @@
       }
   }
 \__beerydoc_tmp:Nn \__beerydoc_m_arg:n {#1}
-\__beerydoc_tmp:Nn \__beerydoc_m_arg_meta:n { \__beerydoc_meta:n {#1} }
+\__beerydoc_tmp:Nn \__beerydoc_m_arg_meta:n { \meta {#1} }
 
 \NewDocumentCommand \oarg { s m }
   {
@@ -310,7 +351,7 @@
       }
   }
 \__beerydoc_tmp:Nn \__beerydoc_o_arg:n {#1}
-\__beerydoc_tmp:Nn \__beerydoc_o_arg_meta:n { \__beerydoc_meta:n {#1} }
+\__beerydoc_tmp:Nn \__beerydoc_o_arg_meta:n { \meta {#1} }
 
 \NewDocumentCommand \sarg { }
   {
@@ -333,18 +374,36 @@
               { \exp_not:c { __beerydoc_#1:n } {##1} }
           }
       }
-    \cs_new_protected:cpn { __beerydoc_#1:n } ##1 { #2 { ##1 \@ } }
+    \cs_new_protected:cpn { __beerydoc_#1:n } ##1
+      { \group_begin: #2 ##1 \@ \group_end: }
     \__beerydoc_tmp:nN
   }
 \__beerydoc_tmp:nN
-  {cls}      \textsf
-  {pkg}      \textsf
-  {env}      \texttt
-  {hook}     \texttt
-  {socket}   \texttt
-  {plug}     \texttt
+  {cls}    \sffamily
+  {pkg}    \sffamily
+  {env}    \ttfamily
+  {socket} \ttfamily
+  {plug}   \ttfamily
   { \q_recursion_tail } \scan_stop:
 \q_recursion_stop
+
+\NewDocumentCommand \hook { m }
+  {
+    \mode_if_math:TF
+      { \msg_error:nnn { beerydoc } { math-mode-invalid } { hook } }
+      { \__beerydoc_hook:n {#1} }
+  }
+\cs_new_protected:Npn \__beerydoc_hook:n #1
+  {
+    \group_begin:
+      \tl_set:Nn \l__beerydoc_hook_tl {#1}
+      \tl_replace_all:Nnn \l__beerydoc_hook_tl { / }
+        { \__beerydoc_hook_slash: }
+      \ttfamily
+      \l__beerydoc_hook_tl \@
+    \group_end:
+  }
+\cs_new_protected:Npn \__beerydoc_hook_slash: { / \allowbreak }
 
 \NewDocumentCommand \latin { m }
   {
@@ -352,7 +411,8 @@
       { \msg_error:nnn { beerydoc } { math-mode-invalid } { latin } }
       { \__beerydoc_latin:n {#1} }
   }
-\cs_new_protected:Npn \__beerydoc_latin:n #1 { \textit {#1} }
+\cs_new_protected:Npn \__beerydoc_latin:n #1
+  { \group_begin: \ttfamily #1 \group_end: }
 
 \NewDocumentCommand \honorific { m }
   {
@@ -417,6 +477,20 @@
   }
   { \end { minipage } }
 \NewEnvironmentCopy { variable } { function }
+\cs_new_protected:Npn \__beerydoc_function_footnote:n #1
+  {
+    \footnotemark
+    \hook_gput_next_code:nn { env/function/after } { \footnotetext {#1} }
+  }
+\cs_new_protected:Npn \__beerydoc_variable_footnote:n #1
+  {
+    \footnotemark
+    \hook_gput_next_code:nn { env/variable/after } { \footnotetext {#1} }
+  }
+\hook_gput_code:nnn { env/function/begin } { beerydoc }
+  { \cs_set_eq:NN \footnote \__beerydoc_function_footnote:n }
+\hook_gput_code:nnn { env/variable/begin } { beerydoc }
+  { \cs_set_eq:NN \footnote \__beerydoc_variable_footnote:n }
 
 % FLOATS
 

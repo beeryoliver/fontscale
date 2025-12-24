@@ -191,8 +191,8 @@
   {
     \tl_if_in:NnT \l__beerydoc_cs_tl { _ }
       {
-        \tl_regex_replace_all:NNn \l__beerydoc_cs_tl
-          \c__beerydoc_cs_hyphenation_regex { \1 \c{-} \2 }
+        \regex_replace_all:NnN \c__beerydoc_cs_hyphenation_regex
+          { \1 \c{-} \2 } \l__beerydoc_cs_tl
       }
   }
 \regex_const:Nn \c__beerydoc_cs_hyphenation_regex { ([^\\\_]\_+) ([^\_]) }

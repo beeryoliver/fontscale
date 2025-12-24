@@ -88,7 +88,6 @@
 \tl_new:N \l__beerydoc_key_tl
 \tl_new:N \l__beerydoc_value_tl
 \tl_new:N \l__beerydoc_cs_tl
-\tl_new:N \l__beerydoc_cs_hyphenation_tl
 \tl_new:N \l__beerydoc_meta_tl
 \tl_new:N \l__beerydoc_hook_tl
 
@@ -192,51 +191,11 @@
   {
     \tl_if_in:NnT \l__beerydoc_cs_tl { _ }
       {
-        \__beerydoc_cs_hyphenation_start:
-        \__beerydoc_cs_hyphenation_replace:
-        \tl_set_eq:NN \l__beerydoc_cs_tl \l__beerydoc_cs_hyphenation_tl
+        \regex_replace_all:NnN \c__beerydoc_cs_hyphenation_regex
+          { \1 \c{-} \2 } \l__beerydoc_cs_tl
       }
   }
-\cs_new_protected:Npn \__beerydoc_cs_hyphenation_start:
-  {
-    \tl_if_eq:enT { \tl_head:N \l__beerydoc_cs_tl } { _ }
-      {
-        \tl_put_right:Nn \l__beerydoc_cs_hyphenation_tl { _ }
-        \tl_set:Ne \l__beerydoc_cs_tl
-          {
-            \exp_after:wN \__beerydoc_cs_hyphenation_start:nw
-              \l__beerydoc_cs_tl \q_stop
-          }
-        \__beerydoc_cs_hyphenation_start:
-      }
-  }
-\cs_new:Npn \__beerydoc_cs_hyphenation_start:nw #1#2 \q_stop
-  { \exp_not:n {#2} }
-\cs_new_protected:Npn \__beerydoc_cs_hyphenation_replace:
-  {
-    \tl_map_function:NN \l__beerydoc_cs_tl \__beerydoc_cs_hyphenation_replace:n
-  }
-\cs_new_protected:Npn \__beerydoc_cs_hyphenation_replace_auxi:n #1
-  {
-    \tl_if_eq:nnT {#1} { _ }
-      {
-        \cs_set_eq:NN \__beerydoc_cs_hyphenation_replace:n
-          \__beerydoc_cs_hyphenation_replace_auxii:n
-      }
-    \tl_put_right:Nn \l__beerydoc_cs_hyphenation_tl {#1}
-  }
-\cs_new_protected:Npn \__beerydoc_cs_hyphenation_replace_auxii:n #1
-  {
-    \tl_if_eq:nnTF {#1} { _ }
-      { \tl_put_right:Nn \l__beerydoc_cs_hyphenation_tl {#1} }
-      {
-        \tl_put_right:Nn \l__beerydoc_cs_hyphenation_tl { \- #1 }
-        \cs_set_eq:NN \__beerydoc_cs_hyphenation_replace:n
-          \__beerydoc_cs_hyphenation_replace_auxi:n
-      }
-  }
-\cs_new_eq:NN \__beerydoc_cs_hyphenation_replace:n
-  \__beerydoc_cs_hyphenation_replace_auxi:n
+\regex_const:Nn \c__beerydoc_cs_hyphenation_regex { ([^\\\_]\_+) ([^\_]) }
 \cs_new_protected:Npn \__beerydoc_cs:N #1
   { \exp_args:Ne \__beerydoc_cs:n { \cs_to_str:N #1 } }
 

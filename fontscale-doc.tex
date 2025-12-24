@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 16 December 2025
+Version 5.0.0\quad 23 December 2025
 
 
 \section{Introduction}
@@ -141,7 +141,9 @@ initially set by the key \key{typographic-scale}.
   font size command from \cs{tiny} to \cs{Huge} using the classic typographic
   scale.
   The classic typographic scale consists of the traditional font sizes in units
-  of points:\footnotemark
+  of points:%
+  \footnote
+    {See \textit{The Elements of Typographic Style} by Robert Bringhurst.}
   \input{fontscale-doc-classic-list.tex}
   They have been used since the sixteenth century and are the default font
   sizes on some computer software.
@@ -158,8 +160,6 @@ initially set by the key \key{typographic-scale}.
   from \cs{tiny} to \cs{Huge} when setting the key
   \key{typographic-scale=classic}.
 \end{variable}
-\footnotetext
-  {See \textit{The Elements of Typographic Style} by Robert Bringhurst.}
 
 \input{./fontscale-doc-table-classic.tex}
 
@@ -174,7 +174,13 @@ initially set by the key \key{typographic-scale}.
   \end{syntax}
   Setting the key \key{typographic-scale=musical} calculates the font size of
   each font size command from \cs{tiny} to \cs{Huge} using the formula for the
-  musical typographic scale:\footnotemark
+  musical typographic scale:%
+  \footnote
+    {%
+      I have referenced this article by Spencer Mortensen:
+      \newline
+      \url{https://spencermortensen.com/articles/typographic-scale/}%
+    }
   \begin{equation*}
     f_i = f_0 \times r ^ { i / n }
   \end{equation*}
@@ -198,12 +204,6 @@ initially set by the key \key{typographic-scale}.
   from \cs{tiny} to \cs{Huge} when setting the key
   \key{typographic-scale=musical}.
 \end{variable}
-\footnotetext
-  {%
-    I have referenced this article by Spencer Mortensen:
-    \newline
-    \url{https://spencermortensen.com/articles/typographic-scale/}%
-  }
 
 \input{./fontscale-doc-table-musical.tex}
 

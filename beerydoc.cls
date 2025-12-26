@@ -428,8 +428,11 @@
     % \obeyspaces
     \obeylines
   }
+\hook_gput_code:nnn { env/syntax/after } { beerydoc }
+  { \noindent \ignorespaces }
 \NewDocumentEnvironment { function } { m }
   {
+    \noindent
     \begin { minipage } [ b ] { \textwidth }
       \setlength \parskip { \medskipamount }
   }

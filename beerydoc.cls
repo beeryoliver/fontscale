@@ -1,7 +1,7 @@
 % LOADING THE CLASS
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-23}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-26}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -21,8 +21,7 @@
 
 \keys_define:nn { beerydoc }
   {
-      showframe .code:n =
-        { \PassOptionsToPackage { showframe } { geometry } }
+      showframe .code:n = { \PassOptionsToPackage { showframe } { geometry } }
     , showframe .value_forbidden:n = true
     , showframe .usage:n = load
   }

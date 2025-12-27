@@ -1,20 +1,19 @@
-% LOADING THE CLASS
+% Loading the class
 
-\NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-26}{0.0.0}{}
+\NeedsTeXFormat{LaTeX2e}[2025-11-01]
+\ProvidesExplClass{beerydoc}{2025-12-27}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
   {
     The~ beerydoc~ class~ could~ not~ load. \\
     This~ class~ requires~
-    L3~ programming~ layer~ version~ 2023-11-01~ or~ newer.
+    L3~ programming~ layer~ version~ 2024-12-09~ or~ newer.
   }
 \msg_new:nnn { beerydoc } { luatex }
   { The~ beerydoc~ class~ could~ not~ load. \\ This~ class~ requires~ LuaTeX. }
 
-\IfExplAtLeastTF { 2023-11-01 } { }
-  { \msg_critical:nn { beerydoc } { l3kernel } }
+\IfExplAtLeastF { 2024-12-09 } { \msg_critical:nn { beerydoc } { l3kernel } }
 \sys_if_engine_luatex:F { \msg_critical:nn { beerydoc } { luatex } }
 
 \LoadClass { article }
@@ -36,13 +35,13 @@
 \cs_set_eq:NN \muskipeval \muskip_eval:n
 \RequirePackage { xcolor }
 
-% FONT SELECTION
+% Font selection
 
 \RequirePackage { lmodern }
 \RequirePackage { scaletextbullet }
 \settextbulletfactor { 0.4 }
 
-% SOME VARIABLES
+% Some variables
 
 \fp_const:Nn \c_beerydoc_golden_ratio_fp { 1.6180 3398 8749 8948 }
 \tl_const:Nn \c_beerydoc_alphabet_tl { abcdefghijklmnopqrstuvwxyz }
@@ -92,7 +91,7 @@
 
 \bool_new:N \l__beerydoc_syntax_bool
 
-% CUSTOM MACROS
+% Custom macros
 
 \cs_generate_variant:Nn \tl_replace_once:Nnn { No }
 \cs_generate_variant:Nn \tl_replace_all:Nnn { No }
@@ -190,8 +189,8 @@
   {
     \tl_if_in:NnT \l__beerydoc_cs_tl { _ }
       {
-        \regex_replace_all:NnN \c__beerydoc_cs_hyphenation_regex
-          { \1 \c{-} \2 } \l__beerydoc_cs_tl
+        \tl_regex_replace_all:NNn \l__beerydoc_cs_tl
+          \c__beerydoc_cs_hyphenation_regex { \1 \c{-} \2 }
       }
   }
 \regex_const:Nn \c__beerydoc_cs_hyphenation_regex { ([^\\\_]\_+) ([^\_]) }
@@ -407,7 +406,7 @@
 
 \RenewDocumentCommand \slash { } { / \allowbreak }
 
-% CUSTOM ENVIRONMENTS
+% Custom environments
 
 \RequirePackage { tcolorbox }
 \NewTColorBox { syntax } { }
@@ -453,18 +452,18 @@
 \hook_gput_code:nnn { env/variable/begin } { beerydoc }
   { \cs_set_eq:NN \footnote \__beerydoc_variable_footnote:n }
 
-% FLOATS
+% Floats
 
 \renewcommand\bottomfraction{0.5} % default = 0.3
 \setcounter{bottomnumber}{2} % default = 1
 \setcounter{topnumber}{3} % default = 2
 \setcounter{totalnumber}{4} % default = 3
 
-% ENVIRONMENTS
+% Environments
 
 \RequirePackage { multicol }
 
-% PAGE STYLE
+% Page style
 
 % \flushbottom
 \raggedbottom
@@ -497,7 +496,7 @@
 \fancyfoot [ C ]
   { \footnotesize \thepage \c_space_tl of~ \pageref { LastPage } }
 
-% PARAGRAPH STYLE
+% Paragraph style
 
 % \frenchspacing
 \nonfrenchspacing
@@ -523,7 +522,7 @@
 \exhyphenpenalty = \hyphenpenalty % default = 100
 \finalhyphendemerits = 0 % default = 5000
 
-% HEADINGS, TABLE OF CONTENTS
+% Headings, Table of contents
 
 \RequirePackage { titlesec , titletoc }
 \setcounter { secnumdepth } { 3 }
@@ -573,7 +572,7 @@
   { \thesubsubsection } { 1em }
   { } { }
 
-% LISTS, LIST HEADINGS
+% Lists, List headings
 
 \RequirePackage { enumitem }
 \setlist
@@ -627,17 +626,17 @@
     \vspace { \skip_eval:n { \c_beerydoc_small_skip - \parskip } }
   }
 
-% TABLES
+% Tables
 
 \RequirePackage { tabularray }
 \UseTblrLibrary { booktabs , siunitx }
 
-% VERBATIM
+% Verbatim
 
 \RequirePackage { fancyvrb }
 \hook_gput_code:nnn { begindocument } { beerydoc } { \DefineShortVerb { \| } }
 
-% QUOTES
+% Quotes
 
 \RequirePackage { csquotes }
 \RenewDocumentEnvironment { quote } { }
@@ -651,7 +650,7 @@
   }
   { \endlist }
 
-% FOOTNOTES
+% Footnotes
 
 \RequirePackage [ bottomfloats , ragged ] { footmisc }
 % \setlength { \skip \footins } { \c_beerydoc_big_skip }
@@ -678,7 +677,7 @@
       { \c_zero_dim } { \c_zero_dim }
   }
 
-% REFERENCES
+% References
 
 \hook_gput_code:nnn { shipout / lastpage } { beerydoc } { \label { LastPage } }
 \RequirePackage { xurl }
@@ -704,7 +703,7 @@
       { \cs_set_eq:NN #1 \__beerydoc_pdfstring_tl_to_str:n }
   }
 
-% MESSAGES
+% Messages
 
 \msg_new:nnn { beerydoc } { math-mode-invalid }
   { '\iow_char:N \\ #1'~ invalid~ in~ math~ mode~ \msg_line_context:. }

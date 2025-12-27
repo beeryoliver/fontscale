@@ -7,7 +7,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2025-12-26
+## [v5.0.0] - 2025-12-27
 
 ### Changed
 - This update includes many changes that are backwards incompatible.
@@ -30,7 +30,9 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   functionality.
 
 ### Removed
-- `fontscale-v3.sty`
+- Files:
+  - `fontscale-v3.sty`
+  - `fontscale-code.pdf`
 - Keys:
   - `typographic-scale/classic-10pt`
   - `typographic-scale/classic-11pt`
@@ -78,10 +80,6 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   - `classic/base`
   - `classic/point`
 - `\stepfontsize`
-
-### Fixed
-- Added a space after every `\iow_char:N \\` in `fontscale.sty` to make the
-  `codehigh` package typeset the code with the correct color syntax.
 
 ## [v4.2.0] - 2025-04-30
 

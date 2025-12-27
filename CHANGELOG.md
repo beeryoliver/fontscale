@@ -7,7 +7,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2025-12-18
+## [v5.0.0] - 2025-12-26
 
 ### Changed
 - This update includes many changes that are backwards incompatible.
@@ -57,17 +57,19 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   - `classic-11nd`
   - `classic-12nd`
   - `magscale`
-- `\currentfontstep`, `\currentfontscale`
-- `\setfontstep`, `\setfontscale`
-- `\scalefont` (redundant with `\setfontsize` and `\currentfontsize`)
-- `\setfontsizebaselineskip` (redundant with `\setfontsize`)
-- `\setfontbaselineskip` `s`-type argument (redundant with
-  `\currentfontbaselineskip`)
-- `\printfontsizeparameters`, `\printallfontsizeparameters`
-- `\c_fontscale_<font size command>_step_fp`,
-  `\c_fontscale_normalsize_scale_fp`,
-  `\l_fontscale_<font size command>_scale_fp`
-- `\l_fontscale_step_fp`, `\l_fontscale_scale_fp`
+- Commands:
+  - `\currentfontstep`, `\currentfontscale`
+  - `\setfontstep`, `\setfontscale`
+  - `\scalefont` (redundant with `\setfontsize` and `\currentfontsize`)
+  - `\setfontsizebaselineskip` (redundant with `\setfontsize`)
+  - `\setfontbaselineskip` `s`-type argument (redundant with
+    `\currentfontbaselineskip`)
+  - `\printfontsizeparameters`, `\printallfontsizeparameters`
+- Variables:
+  - `\c_fontscale_<font size command>_step_fp`,
+    `\c_fontscale_normalsize_scale_fp`,
+    `\l_fontscale_<font size command>_scale_fp`
+  - `\l_fontscale_step_fp`, `\l_fontscale_scale_fp`
 
 ### Added
 - Keys:

@@ -4,7 +4,7 @@
 % Repository: https://github.com/beeryoliver/fontscale
 % License   : The LaTeX Project Public License 1.3c
 
-%%> \section{Loading the package}
+% Loading the package
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
 \ProvidesExplPackage{fontscale}{2025-12-27}{5.0.0}
@@ -19,7 +19,7 @@
 \IfExplAtLeastTF { 2023-11-01 } { }
   { \msg_critical:nn { fontscale } { l3kernel } }
 
-%%> \section{Some variables}
+% Some variables
 
 % Declares and initializes the font size and font baselineskip of each font
 % size command from \tiny to \Huge.
@@ -85,7 +85,7 @@
 % Scratch variable
 \fp_new:N \l__fontscale_tmp_fp
 
-%%> \section{Define keys}
+% Define keys
 
 \str_new:N \l__fontscale_typographic_scale_str
 \str_new:N \l__fontscale_classic_base_str
@@ -260,7 +260,7 @@
   }
 \__fontscale_keys_set_initial:
 
-%%> \section{Set and process keys}
+% Set and process keys
 
 \NewDocumentCommand \fontscalesetup { s m }
   {
@@ -551,7 +551,7 @@
       { \msg_warning:nn { fontscale } { font-sizes-wrong-order } }
   }
 
-%%> \section{Document commands}
+% Document commands
 
 % Defines the font size commands from \tiny to \Huge and initializes to
 % \normalsize. Their corresponding internal functions are not used elsewhere in
@@ -775,7 +775,7 @@
       { undefined }
   }
 
-%%> \section{Purifying text}
+% Purifying text
 
 \NewExpandableDocumentCommand \__fontscale_use_none_sm:w { s m } { }
 \NewExpandableDocumentCommand \__fontscale_use_none_om:w { o m } { }
@@ -786,7 +786,7 @@
 \text_declare_purify_equivalent:Nn \stepfontsize { \use_none:n }
 \text_declare_purify_equivalent:Nn \setfontbaselineskip { \use_none:n }
 
-%%> \section{Messages}
+% Messages
 
 \msg_new:nnn { fontscale } { math-mode-invalid }
   { '\iow_char:N \\ #1'~ invalid~ in~ math~ mode~ \msg_line_context:. }

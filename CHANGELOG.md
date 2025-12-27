@@ -81,10 +81,6 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   - `classic/point`
 - `\stepfontsize`
 
-### Fixed
-- Added a space after every `\iow_char:N \\` in `fontscale.sty` to make the
-  `codehigh` package typeset the code with the correct color syntax.
-
 ## [v4.2.0] - 2025-04-30
 
 ### Added

@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 27 December 2025
+Version 5.0.0\quad 31 December 2025
 
 
 \section{Introduction}
@@ -111,7 +111,7 @@ Set the package keys using \cs{fontscalesetup} (\S\ref{subsec:setup}).
 The font sizes of the font size commands from \cs{tiny} to \cs{Huge} are
 initially set by the key \key{typographic-scale}.
 
-\begin{variable}{typographic-scale}
+\begin{code}{typographic-scale}
   \begin{syntax}
     \key{typographic-scale=\choices{classic,musical}}
   \end{syntax}
@@ -119,20 +119,20 @@ initially set by the key \key{typographic-scale}.
   to \cs{Huge} using a classic or musical typographic scale.
   These are common methods of choosing a set of document font sizes.
   The initial value is \key{=classic}.
-\end{variable}
+\end{code}
 
-\begin{variable}{classic, musical}
+\begin{code}{classic, musical}
   \begin{syntax}
     \key{classic}
     \key{musical}
   \end{syntax}
   Meta keys that set the key \key{typographic-scale} to the named value.
-\end{variable}
+\end{code}
 
 \subsubsection{The classic typographic scale}
 \label{subsubsec:classictypographicscale}
 
-\begin{variable}{classic/base, classic/point}
+\begin{code}{classic/base, classic/point}
   \begin{syntax}
     \key{classic/base=\choices{10,11,12}}
     \key{classic/point=\choices{pt,bp,dd,nd}}
@@ -159,14 +159,14 @@ initially set by the key \key{typographic-scale}.
   Table \ref{table:classic} displays the font size of each font size command
   from \cs{tiny} to \cs{Huge} when setting the key
   \key{typographic-scale=classic}.
-\end{variable}
+\end{code}
 
 \input{./fontscale-table-classic.tex}
 
 \subsubsection{The musical typographic scale}
 \label{subsubsec:musicaltypographicscale}
 
-\begin{variable}{musical/base, musical/ratio, musical/notes}
+\begin{code}{musical/base, musical/ratio, musical/notes}
   \begin{syntax}
     \key{musical/base=\meta{dim expr}}
     \key{musical/ratio=\meta{fp expr}}
@@ -203,7 +203,7 @@ initially set by the key \key{typographic-scale}.
   Table \ref{table:musical} displays the font size of each font size command
   from \cs{tiny} to \cs{Huge} when setting the key
   \key{typographic-scale=musical}.
-\end{variable}
+\end{code}
 
 \input{./fontscale-table-musical.tex}
 
@@ -213,7 +213,7 @@ initially set by the key \key{typographic-scale}.
 The font baselineskips of the font size commands from \cs{tiny} to \cs{Huge}
 are initially set by the key \key{baselineskip-size-ratio}.
 
-\begin{variable}{baselineskip-size-ratio}
+\begin{code}{baselineskip-size-ratio}
   \begin{syntax}
     \key{baselineskip-size-ratio=\meta{fp expr}}
   \end{syntax}
@@ -223,7 +223,7 @@ are initially set by the key \key{baselineskip-size-ratio}.
   The initial value is \num{1.2}.
   This key also affects the behavior of \cs{setfontsize}
   (\S\ref{subsec:fontsize}).
-\end{variable}
+\end{code}
 
 \subsection{Overwriting the previous keys}
 \label{subsec:overwriting}
@@ -241,7 +241,7 @@ a warning and some package features may not work correctly.
 The syntax \meta{font size command} represents the name of a font size command
 from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
-\begin{variable}
+\begin{code}
   {
     tiny/size-normalsize-ratio,
     scriptsize/size-normalsize-ratio,
@@ -261,9 +261,9 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
   Overwrites the font size set by the key \key{typographic-scale}.
   The initial value is \meta{not set}.
   The key \key{normalsize/size-normalsize-ratio} is not defined.
-\end{variable}
+\end{code}
 
-\begin{variable}
+\begin{code}
   {
     tiny/size,
     scriptsize/size,
@@ -284,9 +284,9 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
   Overwrites the font size set by the keys \key{typographic-scale} and
   \key{\meta{font size command}/size-normalsize-ratio}.
   The initial value is \meta{not set}.
-\end{variable}
+\end{code}
 
-\begin{variable}
+\begin{code}
   {
     tiny,
     scriptsize,
@@ -304,9 +304,9 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
   \end{syntax}
   Meta keys that set the key
   \key{\meta{font size command}/size=\meta{dim expr}}.
-\end{variable}
+\end{code}
 
-\begin{variable}
+\begin{code}
   {
     tiny/baselineskip-size-ratio,
     scriptsize/baselineskip-size-ratio,
@@ -327,9 +327,9 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
   Overwrites the font baselineskip set by the key
   \key{baselineskip-size-ratio}.
   The initial value is \meta{not set}.
-\end{variable}
+\end{code}
 
-\begin{variable}
+\begin{code}
   {
     tiny/baselineskip,
     scriptsize/baselineskip,
@@ -351,7 +351,7 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
   \key{baselineskip-size-ratio} and
   \key{\meta{font size command}/baselineskip-size-ratio}.
   The initial value is \meta{not set}.
-\end{variable}
+\end{code}
 
 
 \section{Commands}
@@ -362,7 +362,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
 \subsection{Setting the keys}
 \label{subsec:setup}
 
-\begin{function}{\fontscalesetup}
+\begin{code}{\fontscalesetup}
   \begin{syntax}
     \cs{fontscalesetup} \sarg{} \marg{key-value list}
   \end{syntax}
@@ -373,20 +373,20 @@ This section documents the commands provided by the \pkg{fontscale} package.
   All assignments made by \cs{fontscalesetup} are local to the current group.
   Can be used mid-document.
   Cannot be used in math mode.
-\end{function}
+\end{code}
 
 \subsection{Lengths}
 \label{subsec:lengths}
 
-\begin{variable}{\currentfontsize}
+\begin{code}{\currentfontsize}
   \begin{syntax}
     \cs{currentfontsize}
   \end{syntax}
   Dimen register (rigid length) that stores the current font size.
   This is more convenient than using \cs{f@size}.
-\end{variable}
+\end{code}
 
-\begin{variable}{\currentfontbaselineskip}
+\begin{code}{\currentfontbaselineskip}
   \begin{syntax}
     \cs{currentfontbaselineskip}
   \end{syntax}
@@ -394,20 +394,20 @@ This section documents the commands provided by the \pkg{fontscale} package.
   This is more convenient than using \cs{f@baselineskip}.
   (The font baselineskip should not be confused with the paragraph
   baselineskip \cs{baselineskip}.)
-\end{variable}
+\end{code}
 
-\begin{variable}{\currentnormalsize}
+\begin{code}{\currentnormalsize}
   \begin{syntax}
     \cs{currentnormalsize}
   \end{syntax}
   Dimen register (rigid length) that stores the current font size of
   \cs{normalsize}.
-\end{variable}
+\end{code}
 
 \subsection{More font size commands}
 \label{subsec:fontsize}
 
-\begin{function}{\setfontsize}
+\begin{code}{\setfontsize}
   \begin{syntax}
     \cs{setfontsize} \oarg{skip expr} \marg{dim expr}
   \end{syntax}
@@ -419,9 +419,9 @@ This section documents the commands provided by the \pkg{fontscale} package.
   result of evaluating the \meta{skip expr}.
   Cannot be used in math mode.
   This command is a more robust alternative to \cs{fontsize} + \cs{selectfont}.
-\end{function}
+\end{code}
 
-\begin{function}{\stepfontsize}
+\begin{code}{\stepfontsize}
   \begin{syntax}
     \cs{stepfontsize} \marg{int expr}
   \end{syntax}
@@ -453,24 +453,24 @@ This section documents the commands provided by the \pkg{fontscale} package.
     \item
     Cannot be used in math mode.
   \end{itemize}
-\end{function}
+\end{code}
 
 \subsection{Setting only the font baselineskip}
 \label{subsec:fontbaselineskip}
 
-\begin{function}{\setfontbaselineskip}
+\begin{code}{\setfontbaselineskip}
   \begin{syntax}
     \cs{setfontbaselineskip} \marg{skip expr}
   \end{syntax}
   Sets the font baselineskip to the result of evaluating the \meta{skip expr}.
   Does not change the font size.
   Cannot be used in math mode.
-\end{function}
+\end{code}
 
 \subsection{Printing sample text}
 \label{subsec:printsampletext}
 
-\begin{function}{\printsampletext}
+\begin{code}{\printsampletext}
   \begin{syntax}
     \cs{printsampletext} \sarg{} \marg{text}
   \end{syntax}
@@ -478,9 +478,9 @@ This section documents the commands provided by the \pkg{fontscale} package.
   each followed by \cs{par}.
   \meta{text} can contain \cs{par} tokens.
   Adding the optional star reverses the order of the font sizes.
-\end{function}
+\end{code}
 
-\begin{function}{\printfontsizecommand}
+\begin{code}{\printfontsizecommand}
   \begin{syntax}
     \cs{printfontsizecommand}
   \end{syntax}
@@ -488,7 +488,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
   from \cs{tiny} to \cs{Huge}.
   If so, prints the name of that font size command.
   If not, prints \enquote{\string\undefined}.
-\end{function}
+\end{code}
 
 
 \section{Programming}
@@ -510,7 +510,7 @@ this package.
 The syntax \meta{font size command} represents the name of a font size command
 from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
-\begin{variable}
+\begin{code}
   {
     \l_fontscale_tiny_size_dim,
     \l_fontscale_scriptsize_size_dim,
@@ -529,9 +529,9 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
   Stores the font size of \cs{\meta{font size command}}.
   \cs{l_fontscale_normalsize_size_dim} is equivalent to \cs{currentnormalsize}
   (\S\ref{subsec:lengths}).
-\end{variable}
+\end{code}
 
-\begin{variable}
+\begin{code}
   {
     \l_fontscale_tiny_baselineskip_skip,
     \l_fontscale_scriptsize_baselineskip_skip,
@@ -548,26 +548,26 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
     \cs{l_fontscale_\meta{font size command}_baselineskip_skip}
   \end{syntax}
   Stores the font baselineskip of \cs{\meta{font size command}}.
-\end{variable}
+\end{code}
 
 \subsection{Variables set in the \hook{selectfont} hook}
 \label{subsec:varselectfont}
 
-\begin{variable}{\l_fontscale_size_dim}
+\begin{code}{\l_fontscale_size_dim}
   \begin{syntax}
     \cs{l_fontscale_size_dim}
   \end{syntax}
   Stores the current font size.
   Equivalent to \cs{currentfontsize} (\S\ref{subsec:lengths}).
-\end{variable}
+\end{code}
 
-\begin{variable}{\l_fontscale_baselineskip_skip}
+\begin{code}{\l_fontscale_baselineskip_skip}
   \begin{syntax}
     \cs{l_fontscale_baselineskip_skip}
   \end{syntax}
   Stores the current font baselineskip.
   Equivalent to \cs{currentfontbaselineskip} (\S\ref{subsec:lengths}).
-\end{variable}
+\end{code}
 
 
 \end{document}

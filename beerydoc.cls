@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-27}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2025-12-31}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -146,11 +146,17 @@
   {
     \group_begin:
       \tl_set:Nn \l__beerydoc_value_tl {#1}
-      \tl_replace_all:Nnn \l__beerydoc_value_tl { ~ } { \textvisiblespace }
+      \__beerydoc_value_replace_spaces:
       \cs_set_eq:NN \choices \__beerydoc_value_choices:n
       \ttfamily
       \l__beerydoc_value_tl \@
     \group_end:
+  }
+\cs_new_protected:Npn \__beerydoc_value_replace_spaces:
+  {
+    \tl_replace_all:NVn \l__beerydoc_value_tl \c_catcode_active_space_tl
+      { \textvisiblespace }
+    \tl_replace_all:Nnn \l__beerydoc_value_tl { ~ } { \textvisiblespace }
   }
 \cs_new_protected:Npn \__beerydoc_value_choices:n #1
   { \clist_use:nn {#1} { \__beerydoc_value_choices_separator: } }
@@ -167,13 +173,19 @@
   {
     \group_begin:
       \tl_set:Nn \l__beerydoc_cs_tl {#1}
-      \tl_replace_all:Nnn \l__beerydoc_cs_tl { ~ } { \textvisiblespace }
       \tl_replace_all:NVn \l__beerydoc_cs_tl \c__beerydoc_active_vert_tl { | }
+      \__beerydoc_cs_replace_spaces:
       \__beerydoc_cs_replace_underscore:
       \__beerydoc_cs_hyphenation:
       \ttfamily
       \c_backslash_str \l__beerydoc_cs_tl \@
     \group_end:
+  }
+\cs_new_protected:Npn \__beerydoc_cs_replace_spaces:
+  {
+    \tl_replace_all:NVn \l__beerydoc_cs_tl \c_catcode_active_space_tl
+      { \textvisiblespace }
+    \tl_replace_all:Nnn \l__beerydoc_cs_tl { ~ } { \textvisiblespace }
   }
 \cs_new_protected:Npn \__beerydoc_cs_replace_underscore:
   {
@@ -184,6 +196,7 @@
         \c__beerydoc_active_underscore_tl
       }
       { \tl_replace_all:NVn \l__beerydoc_cs_tl ##1 { _ } }
+    \tl_replace_all:Nnn \l__beerydoc_cs_tl { \_ } { _ }
   }
 \cs_new_protected:Npn \__beerydoc_cs_hyphenation:
   {
@@ -424,33 +437,24 @@
     \bool_set_true:N \l__beerydoc_syntax_bool
     \ttfamily
     \raggedright
-    % \obeyspaces
+    \obeyspaces
     \obeylines
   }
 \hook_gput_code:nnn { env/syntax/after } { beerydoc }
   { \noindent \ignorespaces }
-\NewDocumentEnvironment { function } { m }
+\NewDocumentEnvironment { code } { m }
   {
+    \cs_set_eq:NN \footnote \__beerydoc_code_footnote:n
     \noindent
     \begin { minipage } [ b ] { \textwidth }
       \setlength \parskip { \medskipamount }
   }
   { \end { minipage } }
-\NewEnvironmentCopy { variable } { function }
-\cs_new_protected:Npn \__beerydoc_function_footnote:n #1
+\cs_new_protected:Npn \__beerydoc_code_footnote:n #1
   {
     \footnotemark
-    \hook_gput_next_code:nn { env/function/after } { \footnotetext {#1} }
+    \hook_gput_next_code:nn { env/code/after } { \footnotetext {#1} }
   }
-\cs_new_protected:Npn \__beerydoc_variable_footnote:n #1
-  {
-    \footnotemark
-    \hook_gput_next_code:nn { env/variable/after } { \footnotetext {#1} }
-  }
-\hook_gput_code:nnn { env/function/begin } { beerydoc }
-  { \cs_set_eq:NN \footnote \__beerydoc_function_footnote:n }
-\hook_gput_code:nnn { env/variable/begin } { beerydoc }
-  { \cs_set_eq:NN \footnote \__beerydoc_variable_footnote:n }
 
 % Floats
 

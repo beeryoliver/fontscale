@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2025-12-31}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-01-03}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -81,6 +81,9 @@
   \char_set_active_eq:NN _ \scan_stop:
   \tl_const:Ne \c__beerydoc_active_underscore_tl
     { \char_generate:nn { `_ } { 13 } }
+  \char_set_active_eq:nN { `\^^I } \scan_stop:
+  \tl_const:Ne \c__beerydoc_active_tab_tl
+    { \char_generate:nn { `\^^I } { 13 } }
 \group_end:
 
 \tl_new:N \l__beerydoc_key_tl
@@ -95,7 +98,7 @@
 
 \cs_generate_variant:Nn \tl_replace_once:Nnn { No }
 \cs_generate_variant:Nn \tl_replace_all:Nnn { No }
-\prg_generate_conditional_variant:Nnn \str_if_eq:nn { ne , e }
+\prg_generate_conditional_variant:Nnn \str_if_eq:nn { ne , Ve , e , eV }
   { p , T , F , TF }
 
 \cs_new_protected:Npn \__beerydoc_langle: { \ensuremath { \langle } }
@@ -623,7 +626,6 @@
   }
 \cs_new_protected:Npn \__beerydoc_list_heading:n #1
   {
-    \par
     #1
     \par
     \__beerydoc_keep_next_par_if_single_line:

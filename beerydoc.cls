@@ -98,8 +98,6 @@
 
 \cs_generate_variant:Nn \tl_replace_once:Nnn { No }
 \cs_generate_variant:Nn \tl_replace_all:Nnn { No }
-\prg_generate_conditional_variant:Nnn \str_if_eq:nn { ne , Ve , e , eV }
-  { p , T , F , TF }
 
 \cs_new_protected:Npn \__beerydoc_langle: { \ensuremath { \langle } }
 \cs_new_protected:Npn \__beerydoc_rangle: { \ensuremath { \rangle } }
@@ -690,23 +688,37 @@
 \RequirePackage { hyperref }
 \hypersetup { bookmarksnumbered , hidelinks , linktoc = page }
 
+% The argument to \tl_to_str:n must be braced.
+\cs_new:Npn \__beerydoc_pdfstring_tl_to_str:n #1 { \tl_to_str:n {#1} }
+\cs_new:Npn \__beerydoc_pdfstring_meta:n #1 { < \tl_to_str:n {#1} > }
+\cs_new:Npn \__beerydoc_pdfstring_cs:n
+  { \textbackslash \__beerydoc_pdfstring_cs_aux:n }
+\cs_new:Npn \__beerydoc_pdfstring_cs_aux:n #1
+  { \__beerydoc_pdfstring_cs:wn #1 \meta \q_recursion_tail \q_recursion_stop }
+\cs_new:Npn \__beerydoc_pdfstring_cs:wn #1 \meta #2
+  {
+    \tl_to_str:n {#1}
+    \quark_if_recursion_tail_stop:n {#2}
+    \__beerydoc_pdfstring_meta:n {#2}
+    \__beerydoc_pdfstring_cs:wn
+  }
 \cs_new:Npn \__beerydoc_pdfstring_key_value:n #1
   {
-    \str_if_eq:enTF { \str_head:n {#1} } { = }
-      { \str_range:nnn {#1} { 2 } { -1 } }
-      { \tl_to_str:n {#1} }
+    \str_if_eq:eeTF { \str_head:n {#1} } { = }
+      { \__beerydoc_pdfstring_value:n {#1} }
+      { \__beerydoc_pdfstring_key:n {#1} }
   }
-\cs_new:Npn \__beerydoc_pdfstring_cs:n #1 { \textbackslash \tl_to_str:n {#1} }
-\cs_new:Npn \__beerydoc_pdfstring_meta:n #1 { < \tl_to_str:n {#1} > }
-% \tl_to_str:n works only when its argument is given in braces.
-\cs_new:Npn \__beerydoc_pdfstring_tl_to_str:n #1 { \tl_to_str:n {#1} }
+\cs_new:Npn \__beerydoc_pdfstring_value:n #1
+  { \str_range:nnn {#1} { 2 } { -1 } }
+\cs_new_eq:NN \__beerydoc_pdfstring_key:n \__beerydoc_pdfstring_cs_aux:n
+
 \pdfstringdefDisableCommands
   {
-    \cs_set_eq:NN \key  \__beerydoc_pdfstring_key_value:n
-    \cs_set_eq:NN \cs   \__beerydoc_pdfstring_cs:n
-    \cs_set_eq:NN \meta \__beerydoc_pdfstring_meta:n
     \tl_map_inline:nn { \cls \pkg \env \hook \socket \plug }
       { \cs_set_eq:NN #1 \__beerydoc_pdfstring_tl_to_str:n }
+    \cs_set_eq:NN \meta \__beerydoc_pdfstring_meta:n
+    \cs_set_eq:NN \cs   \__beerydoc_pdfstring_cs:n
+    \cs_set_eq:NN \key  \__beerydoc_pdfstring_key_value:n
   }
 
 % Messages

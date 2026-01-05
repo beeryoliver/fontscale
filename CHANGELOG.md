@@ -7,7 +7,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2025-12-27
+## [v5.0.0] - 2026-01-05
 
 ### Changed
 - This update includes many changes that are backwards incompatible.
@@ -15,7 +15,10 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   - Now requires `l3kernel` version 2023-11-01.
   - No longer incompatible with the `scalefnt` package.
 - The documentation no longer uses the terms "font step" and "font scale" to
-  describe the font size.
+  describe the font size. All package features which relied on the "font step"
+  or "font scale" have been removed or redesigned. In hindsight, I do not find
+  these concepts to be particularly helpful for users. Moreover, this had led
+  to package feature bloat.
 - The documentation has been completely rewritten.
 - Improved performance in the code added to the `selectfont` hook.
 - Keys `<font size command>/scale` renamed to
@@ -25,7 +28,8 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 - Improved the warning message in `\fontscalesetup` when the lengths of the
   font sizes are not correctly ordered from `\tiny` to `\Huge`.
 - `\currentfontsize`, `\currentfontbaselineskip`, and `\currentnormalsize` are
-  now lengths instead of expandable commands.
+  now proper lengths instead of expandable commands. This is more convenient
+  when performing computations.
 - `\setfontsize` now has an `o`- instead of an `s`-type argument with a new
   functionality.
 
@@ -58,7 +62,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   - `classic-10nd`
   - `classic-11nd`
   - `classic-12nd`
-  - `magscale`
+  - `magscale` (lacks use case)
 - Commands:
   - `\currentfontstep`, `\currentfontscale`
   - `\setfontstep`, `\setfontscale`
@@ -68,9 +72,9 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
     `\currentfontbaselineskip`)
   - `\printfontsizeparameters`, `\printallfontsizeparameters`
 - Variables:
-  - `\c_fontscale_<font size command>_step_fp`,
-    `\c_fontscale_normalsize_scale_fp`,
-    `\l_fontscale_<font size command>_scale_fp`
+  - `\c_fontscale_<font size command>_step_fp`
+  - `\c_fontscale_normalsize_scale_fp`
+  - `\l_fontscale_<font size command>_scale_fp`
   - `\l_fontscale_step_fp`, `\l_fontscale_scale_fp`
 
 ### Added

@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-01-03}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-01-05}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -207,7 +207,7 @@
           \c__beerydoc_cs_hyphenation_regex { \1 \c{-} \2 }
       }
   }
-\regex_const:Nn \c__beerydoc_cs_hyphenation_regex { ([^\\\_]\_+) ([^\_]) }
+\regex_const:Nn \c__beerydoc_cs_hyphenation_regex { ([^\_]\_+) ([^\_]) }
 \cs_new_protected:Npn \__beerydoc_cs:N #1
   { \exp_args:Ne \__beerydoc_cs:n { \cs_to_str:N #1 } }
 

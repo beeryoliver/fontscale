@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-01-05}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-01-06}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -693,6 +693,7 @@
 \cs_new:Npn \__beerydoc_pdfstring_meta:n #1 { < \tl_to_str:n {#1} > }
 \cs_new:Npn \__beerydoc_pdfstring_cs:n
   { \textbackslash \__beerydoc_pdfstring_cs_aux:n }
+% Replaces \meta with \__beerydoc_pdfstring_meta:n.
 \cs_new:Npn \__beerydoc_pdfstring_cs_aux:n #1
   { \__beerydoc_pdfstring_cs:wn #1 \meta \q_recursion_tail \q_recursion_stop }
 \cs_new:Npn \__beerydoc_pdfstring_cs:wn #1 \meta #2

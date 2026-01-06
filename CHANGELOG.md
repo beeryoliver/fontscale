@@ -7,7 +7,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2026-01-05
+## [v5.0.0] - 2026-01-06
 
 ### Changed
 - This update includes many changes that are backwards incompatible.
@@ -18,9 +18,9 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   describe the font size. All package features which relied on the "font step"
   or "font scale" have been removed or redesigned. In hindsight, I do not find
   these concepts to be particularly helpful for users. Moreover, this had led
-  to package feature bloat.
+  to large package feature bloat.
 - The documentation has been completely rewritten.
-- Improved performance in the code added to the `selectfont` hook.
+- Improved performance in the package code added to the `selectfont` hook.
 - Keys `<font size command>/scale` renamed to
   `<font size command>/size-normalsize-ratio`.
 - All font size commands defined by this package now issue an error instead of

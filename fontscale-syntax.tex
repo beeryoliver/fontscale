@@ -1,0 +1,21 @@
+\ProvidesFile{fontscale-syntax.tex}[2026-01-06]
+
+\begingroup
+  \centering
+  \begin{tblr}
+    {
+        colspec={ll}
+      , cell{2-Z}{1}={cmd=\meta}
+      , cell{2-Z}{2}={cmd=\cs}
+    }
+    \toprule
+      syntax & meaning \\
+    \midrule
+      fp expr   & fpeval   \\
+      int expr  & inteval  \\
+      dim expr  & dimeval  \\
+      skip expr & skipeval \\
+    \bottomrule
+  \end{tblr}
+  \par
+\endgroup

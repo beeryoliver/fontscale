@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 9 January 2026
+Version 5.0.0\quad 10 January 2026
 
 
 \section{Introduction}
@@ -61,13 +61,13 @@ Computer Modern available at arbitrary font sizes:
 Alternatively, you can use the Latin Modern font by loading the \pkg{lmodern}
 package.
 
-When loaded, this package uses \cs{normalsize} after declaring and
-initializing the font size commands from \cs{tiny} to \cs{Huge}.
+When loaded, this package uses \cs{normalsize} after declaring and initializing
+the font size commands from \cs{tiny} to \cs{Huge}.
 
 Many \LaTeX{} classes have a font size option (e.g.\ \key{10pt}, \key{11pt},
-\key{12pt}) which not only changes the font sizes, but also modifies
-additional settings such as the page layout and vertical spacing which were
-specifically designed to work with those font sizes.
+\key{12pt}) which not only changes the font sizes, but also modifies additional
+settings such as the page layout and vertical spacing which were specifically
+designed to work with those font sizes.
 For this reason, you may want to set the class font size option close to the
 font size of \cs{normalsize} set by this package.
 
@@ -83,17 +83,16 @@ font size of \cs{normalsize} set by this package.
   \item
   Set the font size and font baselineskip using \cs{fontsize} and
   \cs{selectfont}.
-  You can change the font sizes and font baselineskips that are set by the
-  font size commands by setting the \pkg{fontscale} package keys
-  (\S\ref{sec:keys}).
-  (The font baselineskip should not be confused with the paragraph
-  baselineskip \cs{baselineskip}.)
+  You can change the font sizes and font baselineskips that are set by the font
+  size commands by setting the \pkg{fontscale} package keys (\S\ref{sec:keys}).
+  (The font baselineskip should not be confused with the paragraph baselineskip
+  \cs{baselineskip}.)
   \item
   Cannot be used in math mode.
   \item
   Have no other functionality.
-  In particular, they do not change the vertical spacing for displayed math
-  and list structures.
+  In particular, they do not change the vertical spacing for displayed math and
+  list structures.
   This differs from the font size commands defined by many \LaTeX{} classes.
   You can add arbitrary code to the font size commands using hooks, which are
   documented in \pkg{lthooks} and \pkg{ltcmdhooks}.
@@ -121,7 +120,7 @@ Set the package keys using \cs{fontscalesetup} (\S\ref{subsec:setup}).
 The font sizes of the font size commands from \cs{tiny} to \cs{Huge} are
 initially set by the key \key{typographic-scale}.
 
-\begin{code}{typographic-scale}
+\begin{code}{key:typographic-scale}
   \begin{syntax}
     \key{typographic-scale=\choices{classic,musical}}
   \end{syntax}
@@ -131,7 +130,7 @@ initially set by the key \key{typographic-scale}.
   The initial value is \key{=classic}.
 \end{code}
 
-\begin{code}{classic, musical}
+\begin{code}{key:classic, key:musical}
   \begin{syntax}
     \key{classic}
     \key{musical}
@@ -142,7 +141,7 @@ initially set by the key \key{typographic-scale}.
 \subsubsection{The classic typographic scale}
 \label{subsubsec:classictypographicscale}
 
-\begin{code}{classic/base, classic/point}
+\begin{code}{key:classic/base, key:classic/point}
   \begin{syntax}
     \key{classic/base=\choices{10,11,12}}
     \key{classic/point=\choices{pt,bp,dd,nd}}
@@ -161,8 +160,8 @@ initially set by the key \key{typographic-scale}.
   The choice key \key{classic/base} sets the base font size of the classic
   typographic scale to the named value in units of points.
   The base font size is the font size of \cs{normalsize}.
-  The font sizes of the other font size commands are the adjacent font sizes
-  in the classic typographic scale in units of points.
+  The font sizes of the other font size commands are the adjacent font sizes in
+  the classic typographic scale in units of points.
   The initial value is \key{=10}.
   The choice key \key{classic/point} sets which \enquote{point} is used.
   The initial value is \key{=pt}.
@@ -176,7 +175,7 @@ initially set by the key \key{typographic-scale}.
 \subsubsection{The musical typographic scale}
 \label{subsubsec:musicaltypographicscale}
 
-\begin{code}{musical/base, musical/ratio, musical/notes}
+\begin{code}{key:musical/base, key:musical/ratio, key:musical/notes}
   \begin{syntax}
     \key{musical/base=\meta{dim expr}}
     \key{musical/ratio=\meta{fp expr}}
@@ -223,7 +222,7 @@ initially set by the key \key{typographic-scale}.
 The font baselineskips of the font size commands from \cs{tiny} to \cs{Huge}
 are initially set by the key \key{baselineskip-size-ratio}.
 
-\begin{code}{baselineskip-size-ratio}
+\begin{code}{key:baselineskip-size-ratio}
   \begin{syntax}
     \key{baselineskip-size-ratio=\meta{fp expr}}
   \end{syntax}
@@ -253,21 +252,21 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{code}
   {
-    tiny/size-normalsize-ratio,
-    scriptsize/size-normalsize-ratio,
-    footnotesize/size-normalsize-ratio,
-    small/size-normalsize-ratio,
-    large/size-normalsize-ratio,
-    Large/size-normalsize-ratio,
-    LARGE/size-normalsize-ratio,
-    huge/size-normalsize-ratio,
-    Huge/size-normalsize-ratio
+    key:tiny/size-normalsize-ratio,
+    key:scriptsize/size-normalsize-ratio,
+    key:footnotesize/size-normalsize-ratio,
+    key:small/size-normalsize-ratio,
+    key:large/size-normalsize-ratio,
+    key:Large/size-normalsize-ratio,
+    key:LARGE/size-normalsize-ratio,
+    key:huge/size-normalsize-ratio,
+    key:Huge/size-normalsize-ratio
   }
   \begin{syntax}
     \key{\meta{font size command}/size-normalsize-ratio=\meta{fp expr}}
   \end{syntax}
-  Sets the font size of \cs{\meta{font size command}} equal to the font size
-  of \cs{normalsize} \texttimes{} the result of evaluating the \meta{fp expr}.
+  Sets the font size of \cs{\meta{font size command}} equal to the font size of
+  \cs{normalsize} \texttimes{} the result of evaluating the \meta{fp expr}.
   Overwrites the font size set by the key \key{typographic-scale}.
   The initial value is \meta{not set}.
   The key \key{normalsize/size-normalsize-ratio} is not defined.
@@ -275,16 +274,16 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{code}
   {
-    tiny/size,
-    scriptsize/size,
-    footnotesize/size,
-    small/size,
-    normalsize/size,
-    large/size,
-    Large/size,
-    LARGE/size,
-    huge/size,
-    Huge/size
+    key:tiny/size,
+    key:scriptsize/size,
+    key:footnotesize/size,
+    key:small/size,
+    key:normalsize/size,
+    key:large/size,
+    key:Large/size,
+    key:LARGE/size,
+    key:huge/size,
+    key:Huge/size
   }
   \begin{syntax}
     \key{\meta{font size command}/size=\meta{dim expr}}
@@ -298,16 +297,16 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{code}
   {
-    tiny,
-    scriptsize,
-    footnotesize,
-    small,
-    normalsize,
-    large,
-    Large,
-    LARGE,
-    huge,
-    Huge
+    key:tiny,
+    key:scriptsize,
+    key:footnotesize,
+    key:small,
+    key:normalsize,
+    key:large,
+    key:Large,
+    key:LARGE,
+    key:huge,
+    key:Huge
   }
   \begin{syntax}
     \key{\meta{font size command}=\meta{dim expr}}
@@ -318,22 +317,22 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{code}
   {
-    tiny/baselineskip-size-ratio,
-    scriptsize/baselineskip-size-ratio,
-    footnotesize/baselineskip-size-ratio,
-    small/baselineskip-size-ratio,
-    normalsize/baselineskip-size-ratio,
-    large/baselineskip-size-ratio,
-    Large/baselineskip-size-ratio,
-    LARGE/baselineskip-size-ratio,
-    huge/baselineskip-size-ratio,
-    Huge/baselineskip-size-ratio
+    key:tiny/baselineskip-size-ratio,
+    key:scriptsize/baselineskip-size-ratio,
+    key:footnotesize/baselineskip-size-ratio,
+    key:small/baselineskip-size-ratio,
+    key:normalsize/baselineskip-size-ratio,
+    key:large/baselineskip-size-ratio,
+    key:Large/baselineskip-size-ratio,
+    key:LARGE/baselineskip-size-ratio,
+    key:huge/baselineskip-size-ratio,
+    key:Huge/baselineskip-size-ratio
   }
   \begin{syntax}
     \key{\meta{font size command}/baselineskip-size-ratio=\meta{fp expr}}
   \end{syntax}
-  Sets the font baselineskip of \cs{\meta{font size command}} equal to its
-  font size \texttimes{} the result of evaluating the \meta{fp expr}.
+  Sets the font baselineskip of \cs{\meta{font size command}} equal to its font
+  size \texttimes{} the result of evaluating the \meta{fp expr}.
   Overwrites the font baselineskip set by the key
   \key{baselineskip-size-ratio}.
   The initial value is \meta{not set}.
@@ -341,16 +340,16 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{code}
   {
-    tiny/baselineskip,
-    scriptsize/baselineskip,
-    footnotesize/baselineskip,
-    small/baselineskip,
-    normalsize/baselineskip,
-    large/baselineskip,
-    Large/baselineskip,
-    LARGE/baselineskip,
-    huge/baselineskip,
-    Huge/baselineskip
+    key:tiny/baselineskip,
+    key:scriptsize/baselineskip,
+    key:footnotesize/baselineskip,
+    key:small/baselineskip,
+    key:normalsize/baselineskip,
+    key:large/baselineskip,
+    key:Large/baselineskip,
+    key:LARGE/baselineskip,
+    key:huge/baselineskip,
+    key:Huge/baselineskip
   }
   \begin{syntax}
     \key{\meta{font size command}/baselineskip=\meta{skip expr}}
@@ -402,8 +401,8 @@ This section documents the commands provided by the \pkg{fontscale} package.
   \end{syntax}
   Skip register (rubber length) that stores the current font baselineskip.
   This is more convenient than using \cs{f@baselineskip}.
-  (The font baselineskip should not be confused with the paragraph
-  baselineskip \cs{baselineskip}.)
+  (The font baselineskip should not be confused with the paragraph baselineskip
+  \cs{baselineskip}.)
 \end{code}
 
 \begin{code}{\currentnormalsize}
@@ -425,8 +424,8 @@ This section documents the commands provided by the \pkg{fontscale} package.
   Sets the font baselineskip equal to the new font size \texttimes{} the value
   of the key \key{baselineskip-size-ratio}
   (\S\ref{subsec:baselineskipsizeratio}).
-  Adding the optional argument instead sets the font baselineskip to the
-  result of evaluating the \meta{skip expr}.
+  Adding the optional argument instead sets the font baselineskip to the result
+  of evaluating the \meta{skip expr}.
   Cannot be used in math mode.
   This command is a more robust alternative to \cs{fontsize} + \cs{selectfont}.
 \end{code}
@@ -435,12 +434,12 @@ This section documents the commands provided by the \pkg{fontscale} package.
   \begin{syntax}
     \cs{stepfontsize} \marg{int expr}
   \end{syntax}
-  Increases the font size by a number of \enquote{steps} equal to the result
-  of evaluating the \meta{int expr}.
-  Changing the font size by one step means incrementing\slash decrementing
-  from a font size equal to the font size of a font size command from
-  \cs{tiny} to \cs{Huge} to the next larger\slash smaller
-  \cs{\meta{font size command}} by using \cs{\meta{font size command}}.
+  Increases the font size by a number of \enquote{steps} equal to the result of
+  evaluating the \meta{int expr}.
+  Changing the font size by one step means incrementing\slash decrementing from
+  a font size equal to the font size of a font size command from \cs{tiny} to
+  \cs{Huge} to the next larger\slash smaller \cs{\meta{font size command}} by
+  using \cs{\meta{font size command}}.
   Changing the font size by more than one step does not use any intermediate
   \cs{\meta{font size command}}.
   If the result of evaluating the \meta{int expr} is zero and the current font
@@ -484,8 +483,8 @@ This section documents the commands provided by the \pkg{fontscale} package.
   \begin{syntax}
     \cs{printsampletext} \sarg{} \marg{text}
   \end{syntax}
-  Prints \meta{text} in each font size ordered from \cs{tiny} to \cs{Huge}
-  each followed by \cs{par}.
+  Prints \meta{text} in each font size ordered from \cs{tiny} to \cs{Huge} each
+  followed by \cs{par}.
   \meta{text} can contain \cs{par} tokens.
   Adding the optional star reverses the order of the font sizes.
 \end{code}

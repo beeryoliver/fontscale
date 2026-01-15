@@ -75,7 +75,8 @@
 \skip_log:N \c_beerydoc_med_skip
 \skip_log:N \c_beerydoc_small_skip
 
-\tl_const:Ne \c__beerydoc_math_subscript_tl { \char_generate:nn { `_ } { 8 } }
+\tl_const:Ne \c__beerydoc_math_subscript_underscore_tl
+  { \char_generate:nn { `_ } { 8 } }
 \group_begin:
   \char_set_catcode_active:N |
   \tl_const:Nn \c__beerydoc_active_vert_tl { | }
@@ -187,7 +188,7 @@
   {
     \tl_map_inline:nn
       {
-        \c__beerydoc_math_subscript_tl
+        \c__beerydoc_math_subscript_underscore_tl
         \c_underscore_str
         \c__beerydoc_active_underscore_tl
       }
@@ -231,7 +232,7 @@
   {
     \tl_map_inline:nn
       {
-        \c__beerydoc_math_subscript_tl
+        \c__beerydoc_math_subscript_underscore_tl
         _
         \c_underscore_str
         \c__beerydoc_active_underscore_tl

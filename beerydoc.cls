@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-01-10}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-01-14}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -44,12 +44,13 @@
 % Some variables
 
 \fp_const:Nn \c_beerydoc_golden_ratio_fp { 1.6180 3398 8749 8948 }
-\tl_const:Nn \c_beerydoc_alphabet_tl { abcdefghijklmnopqrstuvwxyz }
+\tl_const:Nn \c_beerydoc_alphabet_lowercase_tl { abcdefghijklmnopqrstuvwxyz }
+\tl_const:Nn \c_beerydoc_alphabet_uppercase_tl { ABCDEFGHIJKLMNOPQRSTUVWXYZ }
 \str_const:Nn \c_beerydoc_digits_str { 0123456789 }
 \tl_const:Nn \c_beerydoc_pangram_tl
   { The~ quick~ brown~ fox~ jumps~ over~ the~ lazy~ dog. }
 
-\hbox_set:Nn \l_tmpa_box { \c_beerydoc_alphabet_tl }
+\hbox_set:Nn \l_tmpa_box { \c_beerydoc_alphabet_lowercase_tl }
 \dim_const:Nn \c_beerydoc_alphabet_dim { \box_wd:N \l_tmpa_box }
 
 \dim_const:Nn \c_beerydoc_big_dim { \l_fontscale_normalsize_baselineskip_skip }
@@ -103,7 +104,7 @@
 \cs_new_protected:Npn \__beerydoc_langle: { \ensuremath { \langle } }
 \cs_new_protected:Npn \__beerydoc_rangle: { \ensuremath { \rangle } }
 
-\cs_new:Npe \alphabet { \c_beerydoc_alphabet_tl }
+\cs_new:Npe \alphabet { \c_beerydoc_alphabet_lowercase_tl }
 \cs_new:Npe \digits { \c_beerydoc_digits_str }
 \cs_new:Npe \pangram { \c_beerydoc_pangram_tl }
 
@@ -207,7 +208,7 @@
           \c__beerydoc_cs_hyphenation_regex { \1 \c{-} \2 }
       }
   }
-\regex_const:Nn \c__beerydoc_cs_hyphenation_regex { ([^\\\_]\_+) ([^\_]) }
+\regex_const:Nn \c__beerydoc_cs_hyphenation_regex { ([^\\\_]\_+)([^\_]) }
 \cs_new_protected:Npn \__beerydoc_cs:N #1
   { \exp_args:Ne \__beerydoc_cs:n { \cs_to_str:N #1 } }
 

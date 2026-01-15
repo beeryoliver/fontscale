@@ -203,10 +203,13 @@
   }
 \cs_new_protected:Npn \__beerydoc_cs_hyphenation:
   {
-    \tl_if_in:NnT \l__beerydoc_cs_tl { _ }
+    \bool_if:NF \l__beerydoc_syntax_bool
       {
-        \tl_regex_replace_all:NNn \l__beerydoc_cs_tl
-          \c__beerydoc_cs_hyphenation_regex { \1 \c{-} \2 }
+        \tl_if_in:NnT \l__beerydoc_cs_tl { _ }
+          {
+            \tl_regex_replace_all:NNn \l__beerydoc_cs_tl
+              \c__beerydoc_cs_hyphenation_regex { \1 \c{-} \2 }
+          }
       }
   }
 \regex_const:Nn \c__beerydoc_cs_hyphenation_regex { ([^\\\_]\_+)([^\_]) }

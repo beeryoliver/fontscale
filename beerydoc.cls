@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-01-17}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-01-18}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -440,14 +440,22 @@
 
 % Code and syntax environments
 
+\coffin_new:N \l__beerydoc_code_coffin
 \NewDocumentEnvironment { code } { m }
+  { \__beerydoc_code_start:nw {#1} }
+  { \__beerydoc_code_end: }
+\cs_new_protected:Npn \__beerydoc_code_start:nw #1
   {
     \cs_set_eq:NN \footnote \__beerydoc_code_footnote:n
-    \noindent
-    \begin { minipage } [ b ] { \textwidth }
-      \setlength \parskip { \medskipamount }
+    \vcoffin_set:Nnw \l__beerydoc_code_coffin { \textwidth }
+      \noindent \ignorespaces
   }
-  { \end { minipage } }
+\cs_new_protected:Npn \__beerydoc_code_end:
+  {
+    \vcoffin_set_end:
+    \noindent
+    \coffin_typeset:Nnnnn \l__beerydoc_code_coffin { l } { T } { 0pt } { 0pt }
+  }
 \cs_new_protected:Npn \__beerydoc_code_footnote:n #1
   {
     \footnotemark
@@ -696,7 +704,7 @@
         \item \relax #1 \endlist
       }
     \coffin_typeset:Nnnnn \l__beerydoc_footnote_coffin { l } { b }
-      { \c_zero_dim } { \c_zero_dim }
+      { 0pt } { 0pt }
   }
 
 % References

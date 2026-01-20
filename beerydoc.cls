@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-01-18}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-01-20}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -95,7 +95,10 @@
 \tl_new:N \l__beerydoc_hook_tl
 \tl_new:N \l__beerydoc_socket_tl
 
+\coffin_new:N \l__beerydoc_code_coffin
 \bool_new:N \l__beerydoc_syntax_bool
+\box_new:N \l__beerydoc_footnote_box
+\coffin_new:N \l__beerydoc_footnote_coffin
 
 % Custom macros
 
@@ -440,12 +443,13 @@
 
 % Code and syntax environments
 
-\coffin_new:N \l__beerydoc_code_coffin
-\NewDocumentEnvironment { code } { m }
-  { \__beerydoc_code_start:nw {#1} }
+\NewDocumentEnvironment { code } { m } { \__beerydoc_code_start:nw {#1} }
   { \__beerydoc_code_end: }
 \cs_new_protected:Npn \__beerydoc_code_start:nw #1
   {
+    \par
+    \vspace { \skip_eval:n { \medskipamount - \parskip } }
+    \noindent
     \cs_set_eq:NN \footnote \__beerydoc_code_footnote:n
     \vcoffin_set:Nnw \l__beerydoc_code_coffin { \textwidth }
       \noindent \ignorespaces
@@ -453,7 +457,6 @@
 \cs_new_protected:Npn \__beerydoc_code_end:
   {
     \vcoffin_set_end:
-    \noindent
     \coffin_typeset:Nnnnn \l__beerydoc_code_coffin { l } { T } { 0pt } { 0pt }
   }
 \cs_new_protected:Npn \__beerydoc_code_footnote:n #1
@@ -676,7 +679,7 @@
         \setlength \leftmargin { 1.5em }
         \setlength \rightmargin { \leftmargin }
       }
-    \item \relax
+    \item \scan_stop:
   }
   { \endlist }
 
@@ -685,8 +688,6 @@
 \RequirePackage [ bottomfloats , ragged ] { footmisc }
 % \setlength { \skip \footins } { \c_beerydoc_big_skip }
 \setlength \footnotesep { \f@linespread \footnotesep }
-\box_new:N \l__beerydoc_footnote_box
-\coffin_new:N \l__beerydoc_footnote_coffin
 \cs_set_protected:Npn \@makefntext #1
   {
     \hbox_set:Nn \l__beerydoc_footnote_box { \@thefnmark . }
@@ -701,7 +702,7 @@
             \setlength \topsep { 0pt }
             \setlength \partopsep { 0pt }
           }
-        \item \relax #1 \endlist
+        \item \scan_stop: #1 \endlist
       }
     \coffin_typeset:Nnnnn \l__beerydoc_footnote_coffin { l } { b }
       { 0pt } { 0pt }

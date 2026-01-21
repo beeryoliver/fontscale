@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 20 January 2026
+Version 5.0.0\quad 21 January 2026
 
 
 \section{Introduction}
@@ -421,11 +421,10 @@ This section documents the commands provided by the \pkg{fontscale} package.
     \cs{setfontsize} \oarg{skip expr} \marg{dim expr}
   \end{syntax}
   Sets the font size to the result of evaluating the \meta{dim expr}.
-  Sets the font baselineskip equal to the new font size \texttimes{} the value
-  of the key \key{baselineskip-size-ratio}
+  Sets the font baselineskip to the result of evaluating the \meta{skip expr}
+  or, if the optional argument is omitted, equal to the new font size
+  \texttimes{} the value of the key \key{baselineskip-size-ratio}
   (\S\ref{subsec:baselineskipsizeratio}).
-  Adding the optional argument instead sets the font baselineskip to the result
-  of evaluating the \meta{skip expr}.
   Cannot be used in math mode.
   This command is a more robust alternative to \cs{fontsize} + \cs{selectfont}.
 \end{code}

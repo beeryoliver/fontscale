@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 15 January 2026
+Version 5.0.0\quad 20 January 2026
 
 
 \section{Introduction}
@@ -493,10 +493,9 @@ This section documents the commands provided by the \pkg{fontscale} package.
   \begin{syntax}
     \cs{printfontsizecommand}
   \end{syntax}
-  Tests if the current font size equals the font size of any font size command
-  from \cs{tiny} to \cs{Huge}.
-  If so, prints the name of that font size command.
-  If not, prints \enquote{\string\undefined}.
+  Prints \cs{\meta{font size command}} if the current font size equals the font
+  size of any font size command from \cs{tiny} to \cs{Huge}.
+  Otherwise, prints \enquote{\string\undefined}.
 \end{code}
 
 

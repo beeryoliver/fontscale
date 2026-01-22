@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-01-20}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-01-21}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -458,6 +458,7 @@
   {
     \vcoffin_set_end:
     \coffin_typeset:Nnnnn \l__beerydoc_code_coffin { l } { T } { 0pt } { 0pt }
+    \par
   }
 \cs_new_protected:Npn \__beerydoc_code_footnote:n #1
   {

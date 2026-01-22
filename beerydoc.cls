@@ -459,6 +459,7 @@
     \vcoffin_set_end:
     \coffin_typeset:Nnnnn \l__beerydoc_code_coffin { l } { T } { 0pt } { 0pt }
     \par
+    \vspace { \skip_eval:n { \medskipamount - \parskip } }
   }
 \cs_new_protected:Npn \__beerydoc_code_footnote:n #1
   {

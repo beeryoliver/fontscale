@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-01-24}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-01-25}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -96,9 +96,9 @@
 \tl_new:N \l__beerydoc_socket_tl
 
 \coffin_new:N \l__beerydoc_code_coffin
-\bool_new:N \l__beerydoc_code_bool
-\bool_new:N \l__beerydoc_syntax_bool
-\box_new:N \l__beerydoc_footnote_box
+\bool_new:N   \l__beerydoc_code_bool
+\bool_new:N   \l__beerydoc_syntax_bool
+\box_new:N    \l__beerydoc_footnote_box
 \coffin_new:N \l__beerydoc_footnote_coffin
 
 % Define keys
@@ -471,13 +471,8 @@
   { \__beerydoc_code_end: }
 \cs_new_protected:Npn \__beerydoc_code_start:nw #1
   {
-    \par
-    \vspace { \skip_eval:n { \medskipamount - \parskip } }
-    \noindent
-    \bool_if:NT \l__beerydoc_code_bool
-      { \msg_error:nn { beerydoc } { code-env-not-nestable } }
-    \bool_set_true:N \l__beerydoc_code_bool
-    \cs_set_eq:NN \footnote \__beerydoc_code_footnote:n
+    \__beerydoc_code_typeset_start:
+    \__beerydoc_code_init:
     \vcoffin_set:Nnw \l__beerydoc_code_coffin { \textwidth }
       \noindent \ignorespaces
   }
@@ -485,8 +480,25 @@
   {
     \vcoffin_set_end:
     \coffin_typeset:Nnnnn \l__beerydoc_code_coffin { l } { T } { 0pt } { 0pt }
+    \__beerydoc_code_typeset_end:
+  }
+\cs_new_protected:Npn \__beerydoc_code_typeset_start:
+  {
     \par
-    \vspace { \skip_eval:n { \medskipamount - \parskip } }
+    \vspace { \skip_eval:n { \c_beerydoc_med_skip - \parskip } }
+    \noindent
+  }
+\cs_new_protected:Npn \__beerydoc_code_typeset_end:
+  {
+    \par
+    \vspace { \skip_eval:n { \c_beerydoc_med_skip - \parskip } }
+  }
+\cs_new_protected:Npn \__beerydoc_code_init:
+  {
+    \bool_if:NT \l__beerydoc_code_bool
+      { \msg_error:nn { beerydoc } { code-env-not-nestable } }
+    \bool_set_true:N \l__beerydoc_code_bool
+    \cs_set_eq:NN \footnote \__beerydoc_code_footnote:n
   }
 \cs_new_protected:Npn \__beerydoc_code_footnote:n #1
   {

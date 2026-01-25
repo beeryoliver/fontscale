@@ -96,6 +96,7 @@
 \tl_new:N \l__beerydoc_socket_tl
 
 \coffin_new:N \l__beerydoc_code_coffin
+\bool_new:N \l__beerydoc_code_bool
 \bool_new:N \l__beerydoc_syntax_bool
 \box_new:N \l__beerydoc_footnote_box
 \coffin_new:N \l__beerydoc_footnote_coffin
@@ -473,6 +474,9 @@
     \par
     \vspace { \skip_eval:n { \medskipamount - \parskip } }
     \noindent
+    \bool_if:NT \l__beerydoc_code_bool
+      { \msg_error:nn { beerydoc } { code-env-not-nestable } }
+    \bool_set_true:N \l__beerydoc_code_bool
     \cs_set_eq:NN \footnote \__beerydoc_code_footnote:n
     \vcoffin_set:Nnw \l__beerydoc_code_coffin { \textwidth }
       \noindent \ignorespaces
@@ -502,6 +506,10 @@
   }
 \cs_new_protected:Npn \__beerydoc_syntax_code:
   {
+    \bool_if:NF \l__beerydoc_code_bool
+      { \msg_error:nn { beerydoc } { syntax-env-misused } }
+    \bool_if:NT \l__beerydoc_syntax_bool
+      { \msg_error:nn { beerydoc } { syntax-env-not-nestable } }
     \bool_set_true:N \l__beerydoc_syntax_bool
     \ttfamily
     \raggedright
@@ -778,3 +786,18 @@
 
 \msg_new:nnn { beerydoc } { math-mode-invalid }
   { '\iow_char:N \\ #1'~ invalid~ in~ math~ mode~ \msg_line_context:. }
+\msg_new:nnn { beerydoc } { code-env-not-nestable }
+  {
+    The~ 'code'~ environment~ cannot~ be~ used~ within~ another~
+    'code'~ environment~ \msg_line_context:.
+  }
+\msg_new:nnn { beerydoc } { syntax-env-misused }
+  {
+    The~ 'syntax' environment~ must~ be~ used~ within~ a~
+    'code'~ environment~ \msg_line_context:.
+  }
+\msg_new:nnn { beerydoc } { syntax-env-not-nestable }
+  {
+    The~ 'syntax' environment~ cannot~ be~ used~ within~ another~
+    'syntax'~ environment~ \msg_line_context:.
+  }

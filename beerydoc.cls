@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-01-21}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-01-24}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -99,6 +99,26 @@
 \bool_new:N \l__beerydoc_syntax_bool
 \box_new:N \l__beerydoc_footnote_box
 \coffin_new:N \l__beerydoc_footnote_coffin
+
+% Define keys
+
+\keys_define:nn { beerydoc }
+  {
+      meta / replace-expr .bool_set:N = \l__beerydoc_meta_replace_expr_bool
+    , meta / replace-expr .value_required:n = true
+  }
+\cs_new_protected:Npn \__beerydoc_keys_set_initial:
+  { \bool_set_true:N \l__beerydoc_meta_replace_expr_bool }
+\__beerydoc_keys_set_initial:
+\NewDocumentCommand \beerydocsetup { s m }
+  {
+    \mode_if_math:TF
+      { \msg_error:nnn { beerydoc } { math-mode-invalid } { beerydocsetup } }
+      {
+        \IfBooleanTF #1 { \__beerydoc_keys_set_initial: }
+        \keys_set:nn { beerydoc } {#2}
+      }
+  }
 
 % Custom macros
 
@@ -252,18 +272,21 @@
   { \ensuremath { \sb {#1} } }
 \cs_new_protected:Npn \__beerydoc_meta_replace_expr:
   {
-    \tl_if_in:NnT \l__beerydoc_meta_tl { expr }
+    \bool_if:NT \l__beerydoc_meta_replace_expr_bool
       {
-        \tl_replace_once:Non \l__beerydoc_meta_tl
-          { \c_catcode_active_space_tl expr } { ~expr }
-        \__beerydoc_meta_replace_expr:nn
-          { fp~ expr } { floating~ point~ expression }
-          { int~ expr } { integer~ expression }
-          { dim~ expr } { dimen~ expression }
-          { skip~ expr } { skip~ expression }
-          { muskip~ expr } { muskip~ expression }
-          { \q_recursion_tail } { }
-        \q_recursion_stop
+        \tl_if_in:NnT \l__beerydoc_meta_tl { expr }
+          {
+            \tl_replace_once:Non \l__beerydoc_meta_tl
+              { \c_catcode_active_space_tl expr } { ~expr }
+            \__beerydoc_meta_replace_expr:nn
+              { fp~ expr } { floating~ point~ expression }
+              { int~ expr } { integer~ expression }
+              { dim~ expr } { dimen~ expression }
+              { skip~ expr } { skip~ expression }
+              { muskip~ expr } { muskip~ expression }
+              { \q_recursion_tail } { }
+            \q_recursion_stop
+          }
       }
   }
 \cs_new_protected:Npn \__beerydoc_meta_replace_expr:nn #1#2

@@ -480,7 +480,7 @@
   {
     \vcoffin_set_end:
     \coffin_typeset:Nnnnn \l__beerydoc_code_coffin { l } { T } { 0pt } { 0pt }
-    \__beerydoc_code_typeset_end:
+    \__beerydoc_code_typeset_stop:
   }
 \cs_new_protected:Npn \__beerydoc_code_typeset_start:
   {
@@ -488,7 +488,7 @@
     \vspace { \skip_eval:n { \c_beerydoc_med_skip - \parskip } }
     \noindent
   }
-\cs_new_protected:Npn \__beerydoc_code_typeset_end:
+\cs_new_protected:Npn \__beerydoc_code_typeset_stop:
   {
     \par
     \vspace { \skip_eval:n { \c_beerydoc_med_skip - \parskip } }

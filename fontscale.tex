@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 21 January 2026
+Version 5.0.0\quad 26 January 2026
 
 
 \section{Introduction}
@@ -120,7 +120,7 @@ Set the package keys using \cs{fontscalesetup} (\S\ref{subsec:setup}).
 The font sizes of the font size commands from \cs{tiny} to \cs{Huge} are
 initially set by the key \key{typographic-scale}.
 
-\begin{code}{key:typographic-scale}
+\begin{code}{typographic-scale}
   \begin{syntax}
     \key{typographic-scale=\choices{classic,musical}}
   \end{syntax}
@@ -130,7 +130,7 @@ initially set by the key \key{typographic-scale}.
   The initial value is \key{=classic}.
 \end{code}
 
-\begin{code}{key:classic, key:musical}
+\begin{code}{classic, musical}
   \begin{syntax}
     \key{classic}
     \key{musical}
@@ -141,7 +141,7 @@ initially set by the key \key{typographic-scale}.
 \subsubsection{The classic typographic scale}
 \label{subsubsec:classictypographicscale}
 
-\begin{code}{key:classic/base, key:classic/point}
+\begin{code}{classic/base, classic/point}
   \begin{syntax}
     \key{classic/base=\choices{10,11,12}}
     \key{classic/point=\choices{pt,bp,dd,nd}}
@@ -175,7 +175,7 @@ initially set by the key \key{typographic-scale}.
 \subsubsection{The musical typographic scale}
 \label{subsubsec:musicaltypographicscale}
 
-\begin{code}{key:musical/base, key:musical/ratio, key:musical/notes}
+\begin{code}{musical/base, musical/ratio, musical/notes}
   \begin{syntax}
     \key{musical/base=\meta{dim expr}}
     \key{musical/ratio=\meta{fp expr}}
@@ -222,7 +222,7 @@ initially set by the key \key{typographic-scale}.
 The font baselineskips of the font size commands from \cs{tiny} to \cs{Huge}
 are initially set by the key \key{baselineskip-size-ratio}.
 
-\begin{code}{key:baselineskip-size-ratio}
+\begin{code}{baselineskip-size-ratio}
   \begin{syntax}
     \key{baselineskip-size-ratio=\meta{fp expr}}
   \end{syntax}
@@ -252,15 +252,15 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{code}
   {
-    key:tiny/size-normalsize-ratio,
-    key:scriptsize/size-normalsize-ratio,
-    key:footnotesize/size-normalsize-ratio,
-    key:small/size-normalsize-ratio,
-    key:large/size-normalsize-ratio,
-    key:Large/size-normalsize-ratio,
-    key:LARGE/size-normalsize-ratio,
-    key:huge/size-normalsize-ratio,
-    key:Huge/size-normalsize-ratio
+    tiny/size-normalsize-ratio,
+    scriptsize/size-normalsize-ratio,
+    footnotesize/size-normalsize-ratio,
+    small/size-normalsize-ratio,
+    large/size-normalsize-ratio,
+    Large/size-normalsize-ratio,
+    LARGE/size-normalsize-ratio,
+    huge/size-normalsize-ratio,
+    Huge/size-normalsize-ratio
   }
   \begin{syntax}
     \key{\meta{font size command}/size-normalsize-ratio=\meta{fp expr}}
@@ -274,16 +274,16 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{code}
   {
-    key:tiny/size,
-    key:scriptsize/size,
-    key:footnotesize/size,
-    key:small/size,
-    key:normalsize/size,
-    key:large/size,
-    key:Large/size,
-    key:LARGE/size,
-    key:huge/size,
-    key:Huge/size
+    tiny/size,
+    scriptsize/size,
+    footnotesize/size,
+    small/size,
+    normalsize/size,
+    large/size,
+    Large/size,
+    LARGE/size,
+    huge/size,
+    Huge/size
   }
   \begin{syntax}
     \key{\meta{font size command}/size=\meta{dim expr}}
@@ -297,16 +297,16 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{code}
   {
-    key:tiny,
-    key:scriptsize,
-    key:footnotesize,
-    key:small,
-    key:normalsize,
-    key:large,
-    key:Large,
-    key:LARGE,
-    key:huge,
-    key:Huge
+    tiny,
+    scriptsize,
+    footnotesize,
+    small,
+    normalsize,
+    large,
+    Large,
+    LARGE,
+    huge,
+    Huge
   }
   \begin{syntax}
     \key{\meta{font size command}=\meta{dim expr}}
@@ -317,16 +317,16 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{code}
   {
-    key:tiny/baselineskip-size-ratio,
-    key:scriptsize/baselineskip-size-ratio,
-    key:footnotesize/baselineskip-size-ratio,
-    key:small/baselineskip-size-ratio,
-    key:normalsize/baselineskip-size-ratio,
-    key:large/baselineskip-size-ratio,
-    key:Large/baselineskip-size-ratio,
-    key:LARGE/baselineskip-size-ratio,
-    key:huge/baselineskip-size-ratio,
-    key:Huge/baselineskip-size-ratio
+    tiny/baselineskip-size-ratio,
+    scriptsize/baselineskip-size-ratio,
+    footnotesize/baselineskip-size-ratio,
+    small/baselineskip-size-ratio,
+    normalsize/baselineskip-size-ratio,
+    large/baselineskip-size-ratio,
+    Large/baselineskip-size-ratio,
+    LARGE/baselineskip-size-ratio,
+    huge/baselineskip-size-ratio,
+    Huge/baselineskip-size-ratio
   }
   \begin{syntax}
     \key{\meta{font size command}/baselineskip-size-ratio=\meta{fp expr}}
@@ -340,16 +340,16 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{code}
   {
-    key:tiny/baselineskip,
-    key:scriptsize/baselineskip,
-    key:footnotesize/baselineskip,
-    key:small/baselineskip,
-    key:normalsize/baselineskip,
-    key:large/baselineskip,
-    key:Large/baselineskip,
-    key:LARGE/baselineskip,
-    key:huge/baselineskip,
-    key:Huge/baselineskip
+    tiny/baselineskip,
+    scriptsize/baselineskip,
+    footnotesize/baselineskip,
+    small/baselineskip,
+    normalsize/baselineskip,
+    large/baselineskip,
+    Large/baselineskip,
+    LARGE/baselineskip,
+    huge/baselineskip,
+    Huge/baselineskip
   }
   \begin{syntax}
     \key{\meta{font size command}/baselineskip=\meta{skip expr}}

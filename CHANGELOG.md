@@ -7,10 +7,11 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2026-01-06
+## [v5.0.0] - 2026-01-26
 
 ### Changed
-- This update includes many changes that are backwards incompatible.
+- Major update before TeX Live 2026. This update includes many changes that are
+  backwards incompatible.
 - Updated requirements:
   - Now requires `l3kernel` version 2023-11-01.
   - No longer incompatible with the `scalefnt` package.

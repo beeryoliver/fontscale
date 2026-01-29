@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-01-25}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-01-28}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -96,20 +96,26 @@
 \tl_new:N \l__beerydoc_socket_tl
 
 \coffin_new:N \l__beerydoc_code_coffin
-\bool_new:N   \l__beerydoc_code_bool
-\bool_new:N   \l__beerydoc_syntax_bool
-\box_new:N    \l__beerydoc_footnote_box
+\bool_new:N \l__beerydoc_code_bool
+\bool_new:N \l__beerydoc_syntax_bool
+\box_new:N \l__beerydoc_footnote_box
 \coffin_new:N \l__beerydoc_footnote_coffin
 
 % Define keys
 
 \keys_define:nn { beerydoc }
   {
-      meta / replace-expr .bool_set:N = \l__beerydoc_meta_replace_expr_bool
+      frenchspacing .bool_set:N = \l__beerydoc_frenchspacing_bool
+    , frenchspacing .value_required:n = true
+
+    , meta / replace-expr .bool_set:N = \l__beerydoc_meta_replace_expr_bool
     , meta / replace-expr .value_required:n = true
   }
 \cs_new_protected:Npn \__beerydoc_keys_set_initial:
-  { \bool_set_true:N \l__beerydoc_meta_replace_expr_bool }
+  {
+    \bool_set_true:N \l__beerydoc_frenchspacing_bool
+    \bool_set_true:N \l__beerydoc_meta_replace_expr_bool
+  }
 \__beerydoc_keys_set_initial:
 \NewDocumentCommand \beerydocsetup { s m }
   {
@@ -118,7 +124,13 @@
       {
         \IfBooleanTF #1 { \__beerydoc_keys_set_initial: }
         \keys_set:nn { beerydoc } {#2}
+        \__beerydoc_keys_process:
       }
+  }
+\cs_new_protected:Npn \__beerydoc_keys_process:
+  {
+    \bool_if:NTF \l__beerydoc_frenchspacing_bool
+      { \frenchspacing } { \nonfrenchspacing }
   }
 
 % Custom macros
@@ -577,8 +589,8 @@
 
 % Paragraph style
 
-% \frenchspacing
-\nonfrenchspacing
+\frenchspacing
+% \nonfrenchspacing
 % \linespread { 1 }
 \RequirePackage [ skip = \skip_use:N \c_beerydoc_med_skip ] { parskip }
 % default = 0.5 \baselineskip plus 2pt

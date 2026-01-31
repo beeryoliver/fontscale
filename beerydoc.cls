@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-01-28}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-01-30}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -105,17 +105,11 @@
 
 \keys_define:nn { beerydoc }
   {
-      frenchspacing .bool_set:N = \l__beerydoc_frenchspacing_bool
-    , frenchspacing .value_required:n = true
-
-    , meta / replace-expr .bool_set:N = \l__beerydoc_meta_replace_expr_bool
+      meta / replace-expr .bool_set:N = \l__beerydoc_meta_replace_expr_bool
     , meta / replace-expr .value_required:n = true
   }
 \cs_new_protected:Npn \__beerydoc_keys_set_initial:
-  {
-    \bool_set_true:N \l__beerydoc_frenchspacing_bool
-    \bool_set_true:N \l__beerydoc_meta_replace_expr_bool
-  }
+  { \bool_set_true:N \l__beerydoc_meta_replace_expr_bool }
 \__beerydoc_keys_set_initial:
 \NewDocumentCommand \beerydocsetup { s m }
   {
@@ -124,13 +118,7 @@
       {
         \IfBooleanTF #1 { \__beerydoc_keys_set_initial: }
         \keys_set:nn { beerydoc } {#2}
-        \__beerydoc_keys_process:
       }
-  }
-\cs_new_protected:Npn \__beerydoc_keys_process:
-  {
-    \bool_if:NTF \l__beerydoc_frenchspacing_bool
-      { \frenchspacing } { \nonfrenchspacing }
   }
 
 % Custom macros
@@ -476,6 +464,36 @@
   { \textls [ \int_eval:n {#1} ] { \scshape \text_lowercase:n {#2} } }
 
 \RenewDocumentCommand \slash { } { / \penalty \exhyphenpenalty }
+
+\DeclareDocumentCommand \printfontsizecommand { }
+  {
+    \mode_if_math:TF
+      {
+        \msg_error:nnn { beerydoc } { math-mode-invalid }
+          { printfontsizecommand }
+      }
+      { \__beerydoc_print_name: }
+  }
+\cs_new_protected:Npn \__beerydoc_print_name:
+  {
+    \exp_args:Ne \cs
+      {
+        \dim_case:nnF { \l_fontscale_size_dim }
+          {
+            { \l_fontscale_tiny_size_dim         } { tiny         }
+            { \l_fontscale_scriptsize_size_dim   } { scriptsize   }
+            { \l_fontscale_footnotesize_size_dim } { footnotesize }
+            { \l_fontscale_small_size_dim        } { small        }
+            { \l_fontscale_normalsize_size_dim   } { normalsize   }
+            { \l_fontscale_large_size_dim        } { large        }
+            { \l_fontscale_Large_size_dim        } { Large        }
+            { \l_fontscale_LARGE_size_dim        } { LARGE        }
+            { \l_fontscale_huge_size_dim         } { huge         }
+            { \l_fontscale_Huge_size_dim         } { Huge         }
+          }
+          { undefined }
+      }
+  }
 
 % Code and syntax environments
 

@@ -7,7 +7,7 @@
 % Loading the package
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2026-01-01}{5.0.0}
+\ProvidesExplPackage{fontscale}{2026-01-31}{5.0.0}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -758,21 +758,24 @@
   }
 \cs_new_protected:Npn \__fontscale_print_name:
   {
-    \c_backslash_str
-    \dim_case:nnF { \l_fontscale_size_dim }
+    \texttt
       {
-        { \l_fontscale_tiny_size_dim         } { tiny         }
-        { \l_fontscale_scriptsize_size_dim   } { scriptsize   }
-        { \l_fontscale_footnotesize_size_dim } { footnotesize }
-        { \l_fontscale_small_size_dim        } { small        }
-        { \l_fontscale_normalsize_size_dim   } { normalsize   }
-        { \l_fontscale_large_size_dim        } { large        }
-        { \l_fontscale_Large_size_dim        } { Large        }
-        { \l_fontscale_LARGE_size_dim        } { LARGE \@     }
-        { \l_fontscale_huge_size_dim         } { huge         }
-        { \l_fontscale_Huge_size_dim         } { Huge         }
+        \c_backslash_str
+        \dim_case:nnF { \l_fontscale_size_dim }
+          {
+            { \l_fontscale_tiny_size_dim         } { tiny         }
+            { \l_fontscale_scriptsize_size_dim   } { scriptsize   }
+            { \l_fontscale_footnotesize_size_dim } { footnotesize }
+            { \l_fontscale_small_size_dim        } { small        }
+            { \l_fontscale_normalsize_size_dim   } { normalsize   }
+            { \l_fontscale_large_size_dim        } { large        }
+            { \l_fontscale_Large_size_dim        } { Large        }
+            { \l_fontscale_LARGE_size_dim        } { LARGE \@     }
+            { \l_fontscale_huge_size_dim         } { huge         }
+            { \l_fontscale_Huge_size_dim         } { Huge         }
+          }
+          { undefined }
       }
-      { undefined }
   }
 
 % Purifying text

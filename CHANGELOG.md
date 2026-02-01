@@ -7,7 +7,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2026-01-26
+## [v5.0.0] - 2026-01-31
 
 ### Changed
 - Major update before TeX Live 2026. This update includes many changes that are
@@ -33,6 +33,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
   when performing computations.
 - `\setfontsize` now has an `o`- instead of an `s`-type argument with a new
   functionality.
+- `\printfontsizecommand` now prints the command name in `\ttfamily`.
 
 ### Removed
 - Files:

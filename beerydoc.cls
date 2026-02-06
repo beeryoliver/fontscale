@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-02-05}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-02-06}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -100,26 +100,6 @@
 \bool_new:N \l__beerydoc_syntax_bool
 \box_new:N \l__beerydoc_footnote_box
 \coffin_new:N \l__beerydoc_footnote_coffin
-
-% Define keys
-
-\keys_define:nn { beerydoc }
-  {
-      meta / replace-expr .bool_set:N = \l__beerydoc_meta_replace_expr_bool
-    , meta / replace-expr .value_required:n = true
-  }
-\cs_new_protected:Npn \__beerydoc_keys_set_initial:
-  { \bool_set_true:N \l__beerydoc_meta_replace_expr_bool }
-\__beerydoc_keys_set_initial:
-\NewDocumentCommand \beerydocsetup { s m }
-  {
-    \mode_if_math:TF
-      { \msg_error:nnn { beerydoc } { math-mode-invalid } { beerydocsetup } }
-      {
-        \IfBooleanTF #1 { \__beerydoc_keys_set_initial: }
-        \keys_set:nn { beerydoc } {#2}
-      }
-  }
 
 % Custom macros
 
@@ -250,7 +230,6 @@
     \group_begin:
       \tl_set:Nn \l__beerydoc_meta_tl {#1}
       \__beerydoc_meta_replace_underscore:
-      \__beerydoc_meta_replace_expr:
       \ttfamily \slshape
       \__beerydoc_langle:
       \l__beerydoc_meta_tl
@@ -273,44 +252,6 @@
   }
 \cs_new_protected:Npn \__beerydoc_meta_subscript:n #1
   { \ensuremath { \sb {#1} } }
-\cs_new_protected:Npn \__beerydoc_meta_replace_expr:
-  {
-    \bool_if:NT \l__beerydoc_meta_replace_expr_bool
-      {
-        \tl_if_in:NnT \l__beerydoc_meta_tl { expr }
-          {
-            \tl_replace_once:Non \l__beerydoc_meta_tl
-              { \c_catcode_active_space_tl expr } { ~expr }
-            \__beerydoc_meta_replace_expr:nn
-              { fp~ expr } { floating~ point~ expression }
-              { int~ expr } { integer~ expression }
-              { dim~ expr } { dimen~ expression }
-              { skip~ expr } { skip~ expression }
-              { muskip~ expr } { muskip~ expression }
-              { \q_recursion_tail } { }
-            \q_recursion_stop
-          }
-      }
-  }
-\cs_new_protected:Npn \__beerydoc_meta_replace_expr:nn #1#2
-  {
-    \quark_if_recursion_tail_stop:n {#1}
-    \tl_if_in:NnT \l__beerydoc_meta_tl {#1}
-      {
-        \cs_set_protected:Npn \__beerydoc_meta_replace_expr:w
-          ##1 #1 ##2 \q_stop
-          {
-            \tl_if_empty:nT {##1}
-              {
-                \use_i_delimit_by_q_recursion_stop:nw
-                  { \tl_set:Nn \l__beerydoc_meta_tl { #2 ##2 } }
-              }
-          }
-        \exp_after:wN \__beerydoc_meta_replace_expr:w \l__beerydoc_meta_tl
-          \q_stop
-      }
-    \__beerydoc_meta_replace_expr:nn
-  }
 
 \NewDocumentCommand \marg { s m }
   {
@@ -619,8 +560,7 @@
 \setlength \JustifyingParindent { 2em } % default = \parindent
 \RaggedRight
 % \justifying
-\RequirePackage { microtype }
-\microtypesetup { protrusion = false , expansion = false }
+\RequirePackage { letterspace }
 \pretolerance = -1 % default = 100
 \tolerance = 200 % default = 200
 \setlength \emergencystretch { 0pt } % default = 0

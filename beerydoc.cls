@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-02-01}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-02-05}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -125,6 +125,8 @@
 
 \cs_generate_variant:Nn \tl_replace_once:Nnn { No }
 \cs_generate_variant:Nn \tl_replace_all:Nnn { No }
+\prg_generate_conditional_variant:Nnn \str_if_eq:nn { ne , Ve , e , eV }
+  { p , T , F , TF }
 
 \cs_new_protected:Npn \__beerydoc_langle: { \ensuremath { \langle } }
 \cs_new_protected:Npn \__beerydoc_rangle: { \ensuremath { \rangle } }

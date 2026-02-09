@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-02-06}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-02-08}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -464,6 +464,7 @@
 \cs_new_protected:Npn \__beerydoc_code_typeset_stop:
   {
     \par
+    \dim_set:Nn \prevdepth { \coffin_dp:N \l__beerydoc_code_coffin }
     \vspace { \skip_eval:n { \c_beerydoc_med_skip - \parskip } }
   }
 \cs_new_protected:Npn \__beerydoc_code_init:

@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-02-08}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-02-11}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -96,9 +96,23 @@
 \tl_new:N \l__beerydoc_socket_tl
 
 \coffin_new:N \l__beerydoc_code_coffin
-\bool_new:N \l__beerydoc_code_bool
-\bool_new:N \l__beerydoc_syntax_bool
-\box_new:N \l__beerydoc_footnote_box
+\bool_new:N   \l__beerydoc_code_bool
+
+\tl_new:N     \l__beerydoc_code_names_tl
+\clist_new:N  \l__beerydoc_code_names_clist
+\coffin_new:N \l__beerydoc_code_names_coffin
+\dim_new:N    \l__beerydoc_code_names_dim
+\bool_new:N   \l__beerydoc_code_names_long_bool
+
+\coffin_new:N \l__beerydoc_code_descr_coffin
+\dim_new:N    \l__beerydoc_code_descr_yoffset_dim
+
+\bool_new:N   \l__beerydoc_syntax_bool
+\box_new:N    \g__beerydoc_syntax_box
+\coffin_new:N \l__beerydoc_syntax_coffin
+\dim_new:N    \l__beerydoc_syntax_yoffset_dim
+
+\box_new:N    \l__beerydoc_footnote_box
 \coffin_new:N \l__beerydoc_footnote_coffin
 
 % Custom macros
@@ -440,19 +454,20 @@
 
 % Code and syntax environments
 
-\NewDocumentEnvironment { code } { m } { \__beerydoc_code_start:nw {#1} }
+% For the code and syntax environments, I have used ideas from l3doc.
+\NewDocumentEnvironment { code } { +v } { \__beerydoc_code_start:nw {#1} }
   { \__beerydoc_code_end: }
 \cs_new_protected:Npn \__beerydoc_code_start:nw #1
   {
     \__beerydoc_code_typeset_start:
     \__beerydoc_code_init:
-    \vcoffin_set:Nnw \l__beerydoc_code_coffin { \textwidth }
-      \noindent \ignorespaces
+    \__beerydoc_code_names:n {#1}
+    \__beerydoc_code_descr_start:w
   }
 \cs_new_protected:Npn \__beerydoc_code_end:
   {
-    \vcoffin_set_end:
-    \coffin_typeset:Nnnnn \l__beerydoc_code_coffin { l } { T } { 0pt } { 0pt }
+    \__beerydoc_code_descr_stop:
+    \__beerydoc_code_assemble:
     \__beerydoc_code_typeset_stop:
   }
 \cs_new_protected:Npn \__beerydoc_code_typeset_start:
@@ -472,6 +487,7 @@
     \bool_if:NT \l__beerydoc_code_bool
       { \msg_error:nn { beerydoc } { code-env-not-nestable } }
     \bool_set_true:N \l__beerydoc_code_bool
+    \box_gclear:N \g__beerydoc_syntax_box
     \cs_set_eq:NN \footnote \__beerydoc_code_footnote:n
   }
 \cs_new_protected:Npn \__beerydoc_code_footnote:n #1
@@ -479,31 +495,140 @@
     \footnotemark
     \hook_gput_next_code:nn { env/code/after } { \footnotetext {#1} }
   }
-\RequirePackage { tcolorbox }
-\NewTColorBox { syntax } { }
+\cs_new_protected:Npn \__beerydoc_code_names:n #1
   {
-      size    = minimal
-    , left    = 2pt
-    , right   = 2pt
-    , top     = 2pt
-    , bottom  = 2pt
-    , colback = black!5!white
-    , code    = \__beerydoc_syntax_code:
+    \tl_set:Nn \l__beerydoc_code_names_tl {#1}
+    \tl_remove_all:Nn \l__beerydoc_code_names_tl { \obeyedline }
+    \tl_replace_all:NVn \l__beerydoc_code_names_tl \c__beerydoc_active_tab_tl
+      { ~ }
+    \tl_replace_all:NVn \l__beerydoc_code_names_tl \c_catcode_active_space_tl
+      { ~ }
+    \clist_set:NV \l__beerydoc_code_names_clist \l__beerydoc_code_names_tl
+    \clist_if_empty:NT \l__beerydoc_code_names_clist
+      { \msg_error:nn { beerydoc } { code-env-no-items } }
+    \hcoffin_set:Nn \l__beerydoc_code_names_coffin
+      {
+        \small
+        \ttfamily
+        \begin{tblr}[expand=\expanded]
+          {
+              colspec = { l }
+            , abovesep = 0pt
+            , belowsep = 0pt
+            , leftsep  = 2pt
+            , rightsep = 2pt
+          }
+          \toprule
+          \addlinespace[2pt]
+            \expanded { \clist_use:Nn \l__beerydoc_code_names_clist { \\ } }
+            \\
+          \addlinespace[2pt]
+          \bottomrule
+        \end{tblr}
+      }
+    \dim_set:Nn \l__beerydoc_code_names_dim
+      { \coffin_wd:N \l__beerydoc_code_names_coffin }
+    \bool_set:Nn \l__beerydoc_code_names_long_bool
+      { \dim_compare_p:nNn \l__beerydoc_code_names_dim > \marginparwidth }
   }
-\cs_new_protected:Npn \__beerydoc_syntax_code:
+\cs_new_protected:Npn \__beerydoc_code_descr_start:w
+  {
+    \vcoffin_set:Nnw \l__beerydoc_code_descr_coffin { \textwidth }
+      \noindent \ignorespaces
+  }
+\cs_new_protected:Npn \__beerydoc_code_descr_stop: { \vcoffin_set_end: }
+\cs_new_protected:Npn \__beerydoc_code_assemble:
+  {
+    \dim_set:Nn \l__beerydoc_code_descr_yoffset_dim
+      {
+        \l_fontscale_normalsize_baselineskip_skip -
+        0.7 \l_fontscale_normalsize_size_dim
+      }
+    \dim_set:Nn \l__beerydoc_syntax_yoffset_dim { \heavyrulewidth + 2pt }
+    \bool_if:NTF \l__beerydoc_code_names_long_bool
+      {
+        \box_if_empty:NTF \g__beerydoc_syntax_box
+          {
+            \coffin_set_eq:NN \l__beerydoc_code_coffin
+              \l__beerydoc_code_descr_coffin
+            \coffin_join:NnnNnnnn \l__beerydoc_code_coffin { l } { t }
+              \l__beerydoc_code_names_coffin { l } { b }
+              { - \marginparwidth - \marginparsep }
+              { \l__beerydoc_code_descr_yoffset_dim }
+          }
+          {
+            \hcoffin_set:Nn \l__beerydoc_syntax_coffin
+              { \box_use:N \g__beerydoc_syntax_box }
+            \coffin_set_eq:NN \l__beerydoc_code_coffin
+              \l__beerydoc_code_names_coffin
+            \coffin_join:NnnNnnnn \l__beerydoc_code_coffin { r } { t }
+              \l__beerydoc_syntax_coffin { l } { t }
+              { \marginparsep } { - \l__beerydoc_syntax_yoffset_dim }
+            \coffin_join:NnnNnnnn \l__beerydoc_code_coffin { r } { b }
+              \l__beerydoc_code_descr_coffin { r } { t }
+              { 0pt } { - \l__beerydoc_code_descr_yoffset_dim }
+          }
+        \coffin_typeset:Nnnnn \l__beerydoc_code_coffin { l } { T }
+          { - \marginparwidth - \marginparsep } { 0pt }
+      }
+      {
+        \box_if_empty:NTF \g__beerydoc_syntax_box
+          {
+            \coffin_set_eq:NN \l__beerydoc_code_coffin
+              \l__beerydoc_code_descr_coffin
+            \coffin_join:NnnNnnnn \l__beerydoc_code_coffin { l } { t }
+              \l__beerydoc_code_names_coffin { l } { t }
+              { - \l__beerydoc_code_names_dim - \marginparsep }
+              { \l__beerydoc_syntax_yoffset_dim }
+          }
+          {
+            \hcoffin_set:Nn \l__beerydoc_syntax_coffin
+              { \box_use:N \g__beerydoc_syntax_box }
+            \coffin_set_eq:NN \l__beerydoc_code_coffin
+              \l__beerydoc_syntax_coffin
+            \coffin_join:NnnNnnnn \l__beerydoc_code_coffin { l } { b }
+              \l__beerydoc_code_descr_coffin { l } { t }
+              { 0pt }
+              {
+                - \l__beerydoc_code_descr_yoffset_dim
+                - \l__beerydoc_syntax_yoffset_dim
+              }
+            \coffin_join:NnnNnnnn \l__beerydoc_code_coffin { l } { t }
+              \l__beerydoc_code_names_coffin { r } { t }
+              { - \marginparsep } { \l__beerydoc_syntax_yoffset_dim }
+          }
+        \coffin_typeset:Nnnnn \l__beerydoc_code_coffin { l } { T }
+          { - \l__beerydoc_code_names_dim - \marginparsep } { 0pt }
+      }
+  }
+\NewDocumentEnvironment { syntax } { } { \__beerydoc_syntax:w }
+  { \__beerydoc_syntax_end: }
+\cs_new_protected:Npn \__beerydoc_syntax:w
   {
     \bool_if:NF \l__beerydoc_code_bool
       { \msg_error:nn { beerydoc } { syntax-env-misused } }
     \bool_if:NT \l__beerydoc_syntax_bool
       { \msg_error:nn { beerydoc } { syntax-env-not-nestable } }
     \bool_set_true:N \l__beerydoc_syntax_bool
-    \ttfamily
-    \raggedright
-    \obeyspaces
-    \obeylines
+    \vbox_gset:Nw \g__beerydoc_syntax_box
+      \dim_set:Nn \hsize
+        {
+          \textwidth
+          \bool_if:NT \l__beerydoc_code_names_long_bool
+            { - \l__beerydoc_code_names_dim + \marginparwidth }
+        }
+      \setlength \parskip { 0pt }
+      \ttfamily
+      \small
+      \raggedright
+      \obeyspaces
+      \obeylines
   }
-\hook_gput_code:nnn { env/syntax/after } { beerydoc }
-  { \noindent \ignorespaces }
+\cs_new_protected:Npn \__beerydoc_syntax_end:
+  {
+    \vbox_gset_end:
+    \ignorespacesafterend
+  }
 
 % Floats
 
@@ -527,20 +652,23 @@
 \setlength \splittopskip { \topskip }
 
 \RequirePackage { geometry }
-\geometry
+\exp_args:Ne \geometry
   {
       a4paper
     , textwidth = 5in
     , textheight =
         \fp_to_dim:n { \c_beerydoc_golden_ratio_fp * \dim_to_fp:n { 5in } }
     , heightrounded
-    , centering
+    , hmarginratio = 2 \c_colon_str 1
     , headheight = \skip_use:N \l_fontscale_footnotesize_baselineskip_skip
     , headsep = \dim_use:N \c_beerydoc_big_dim
     , footskip =
         \dim_eval:n
           { \c_beerydoc_big_dim + \l_fontscale_footnotesize_baselineskip_skip }
   }
+\dim_set:Nn \marginparwidth { 55.33mm - 0.25in }
+\dim_log:N \marginparwidth
+\dim_set_eq:NN \marginparsep \l_fontscale_normalsize_size_dim
 
 \RequirePackage { fancyhdr }
 \pagestyle { fancy }
@@ -770,6 +898,11 @@
 
 \msg_new:nnn { beerydoc } { math-mode-invalid }
   { '\iow_char:N \\ #1'~ invalid~ in~ math~ mode~ \msg_line_context:. }
+\msg_new:nnn { beerydoc } { code-env-no-items }
+  {
+    The~ argument~ to~ the~ 'code'~ environment~ must~ contain~ at~ least~
+    one~ code~ element~ \msg_line_context:.
+  }
 \msg_new:nnn { beerydoc } { code-env-not-nestable }
   {
     The~ 'code'~ environment~ cannot~ be~ used~ within~ another~

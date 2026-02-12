@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 8 February 2026
+Version 5.0.0\quad 11 February 2026
 
 
 \section{Introduction}
@@ -74,29 +74,49 @@ font size of \cs{normalsize} set by this package.
 \subsection{The font size commands from \cs{tiny} to \cs{Huge}}
 \label{subsec:names}
 
-\listheading
-  {The font size commands from \cs{tiny} to \cs{Huge} defined by this package:}
-\begin{itemize}
-  \item
-  First set \cs{@currsize} to have the same meaning as the font size command.
-  This is needed only for backwards compatibility.
-  \item
-  Set the font size and font baselineskip using \cs{fontsize} and
-  \cs{selectfont}.
-  You can change the font sizes and font baselineskips that are set by the font
-  size commands by setting the \pkg{fontscale} package keys (\S\ref{sec:keys}).
-  (The font baselineskip should not be confused with the paragraph baselineskip
-  \cs{baselineskip}.)
-  \item
-  Cannot be used in math mode.
-  \item
-  Have no other functionality.
-  In particular, they do not change the vertical spacing for displayed math and
-  list structures.
-  This differs from the font size commands defined by many \LaTeX{} classes.
-  You can add arbitrary code to the font size commands using hooks, which are
-  documented in \pkg{lthooks} and \pkg{ltcmdhooks}.
-\end{itemize}
+\begin{code}
+  {
+    \tiny,
+    \scriptsize,
+    \footnotesize,
+    \small,
+    \normalsize,
+    \large,
+    \Large,
+    \LARGE,
+    \huge,
+    \Huge,
+    \@currsize
+  }
+  \listheading
+    {
+      The font size commands from \cs{tiny} to \cs{Huge} defined by this
+      package:
+    }
+  \begin{itemize}
+    \item
+    First set \cs{@currsize} to have the same meaning as the font size command.
+    This is needed only for backwards compatibility.
+    \item
+    Set the font size and font baselineskip using \cs{fontsize} and
+    \cs{selectfont}.
+    You can change the font sizes and font baselineskips that are set by the
+    font size commands by setting the \pkg{fontscale} package keys
+    (\S\ref{sec:keys}).
+    (The font baselineskip should not be confused with the paragraph
+    baselineskip
+    \cs{baselineskip}.)
+    \item
+    Cannot be used in math mode.
+    \item
+    Have no other functionality.
+    In particular, they do not change the vertical spacing for displayed math
+    and list structures.
+    This differs from the font size commands defined by many \LaTeX{} classes.
+    You can add arbitrary code to the font size commands using hooks, which are
+    documented in \pkg{lthooks} and \pkg{ltcmdhooks}.
+  \end{itemize}
+\end{code}
 
 \subsection{Syntax}
 \label{subsec:syntax}
@@ -131,10 +151,6 @@ initially set by the key \key{typographic-scale}.
 \end{code}
 
 \begin{code}{classic, musical}
-  \begin{syntax}
-    \key{classic}
-    \key{musical}
-  \end{syntax}
   Meta keys that set the key \key{typographic-scale} to the named value.
 \end{code}
 
@@ -242,9 +258,6 @@ remain correctly ordered from \cs{tiny} to \cs{Huge}.
 This is important for typographic and syntactic consistency.
 If the font sizes are in the wrong order, then \cs{fontscalesetup} will issue a
 warning and some package features may not work correctly.
-
-The syntax \meta{font size command} represents the name of a font size command
-from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{code}
   {
@@ -381,17 +394,11 @@ This section documents the commands provided by the \pkg{fontscale} package.
 \label{subsec:lengths}
 
 \begin{code}{\currentfontsize}
-  \begin{syntax}
-    \cs{currentfontsize}
-  \end{syntax}
   Dimen register (rigid length) that stores the current font size.
   This is more convenient than using \cs{f@size}.
 \end{code}
 
 \begin{code}{\currentfontbaselineskip}
-  \begin{syntax}
-    \cs{currentfontbaselineskip}
-  \end{syntax}
   Skip register (rubber length) that stores the current font baselineskip.
   This is more convenient than using \cs{f@baselineskip}.
   (The font baselineskip should not be confused with the paragraph baselineskip
@@ -399,9 +406,6 @@ This section documents the commands provided by the \pkg{fontscale} package.
 \end{code}
 
 \begin{code}{\currentnormalsize}
-  \begin{syntax}
-    \cs{currentnormalsize}
-  \end{syntax}
   Dimen register (rigid length) that stores the current font size of
   \cs{normalsize}.
 \end{code}
@@ -480,9 +484,6 @@ This section documents the commands provided by the \pkg{fontscale} package.
 \end{code}
 
 \begin{code}{\printfontsizecommand}
-  \begin{syntax}
-    \cs{printfontsizecommand}
-  \end{syntax}
   Prints \cs{\meta{font size command}} if the current font size equals the font
   size of any font size command from \cs{tiny} to \cs{Huge}.
   Otherwise, prints \enquote{\ttfamily\string\undefined}.
@@ -505,9 +506,6 @@ this package.
 
 \subsection{Variables set by \cs{fontscalesetup}}
 \label{subsec:varsetup}
-
-The syntax \meta{font size command} represents the name of a font size command
-from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 
 \begin{code}
   {
@@ -553,17 +551,11 @@ from \cs{tiny} to \cs{Huge}, omitting the backslash |\|.
 \label{subsec:varselectfont}
 
 \begin{code}{\l_fontscale_size_dim}
-  \begin{syntax}
-    \cs{l_fontscale_size_dim}
-  \end{syntax}
   Stores the current font size.
   Equivalent to \cs{currentfontsize} (\S\ref{subsec:lengths}).
 \end{code}
 
 \begin{code}{\l_fontscale_baselineskip_skip}
-  \begin{syntax}
-    \cs{l_fontscale_baselineskip_skip}
-  \end{syntax}
   Stores the current font baselineskip.
   Equivalent to \cs{currentfontbaselineskip} (\S\ref{subsec:lengths}).
 \end{code}

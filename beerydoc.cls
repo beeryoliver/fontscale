@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-02-11}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-02-12}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -757,14 +757,17 @@
 \setlist
   {
       % horizontal spacing
-      leftmargin = *
+      leftmargin = 2em
     , labelsep  = 0.5em
       % vertical spacing
     , topsep    = 0pt
     , partopsep = 0pt
-    , parsep    = \skip_use:N \c_beerydoc_small_skip
+    , parsep    = 0pt
     , itemsep   = 0pt
   }
+\setlist[2]{leftmargin=*}
+\setlist[3]{leftmargin=*}
+\setlist[4]{leftmargin=*}
 \setlist [ itemize   , 1 ] { label = \textbullet }
 \setlist [ itemize   , 2 ] { label = \scaletextbullets {2} }
 \setlist [ itemize   , 3 ] { label = \scaletextbullets {3} }
@@ -801,7 +804,6 @@
     #1
     \par
     \__beerydoc_keep_next_par_if_single_line:
-    \vspace { \skip_eval:n { \c_beerydoc_small_skip - \parskip } }
   }
 
 % Tables

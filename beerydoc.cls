@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-02-12}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-02-13}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -515,8 +515,8 @@
               colspec = { l }
             , abovesep = 0pt
             , belowsep = 0pt
-            , leftsep  = 2pt
-            , rightsep = 2pt
+            , leftsep  = 0pt
+            , rightsep = 0pt
           }
           \toprule
           \addlinespace[2pt]
@@ -666,9 +666,10 @@
         \dim_eval:n
           { \c_beerydoc_big_dim + \l_fontscale_footnotesize_baselineskip_skip }
   }
-\dim_set:Nn \marginparwidth { 55.33mm - 0.25in }
+\dim_set:Nn \marginparsep { 1em }
+\dim_log:N \marginparsep
+\dim_set:Nn \marginparwidth { 2in - \marginparsep }
 \dim_log:N \marginparwidth
-\dim_set_eq:NN \marginparsep \l_fontscale_normalsize_size_dim
 
 \RequirePackage { fancyhdr }
 \pagestyle { fancy }

@@ -7,7 +7,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.0] - 2026-01-31
+## [v5.0.0] - 2026-02-14
 
 ### Changed
 - Major update before TeX Live 2026. This update includes many changes that are

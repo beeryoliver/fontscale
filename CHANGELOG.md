@@ -37,7 +37,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ### Removed
 - Files:
-  - `fontscale-v3.sty`
+  - `fontscale-v3.sty` (no support for versions older than 5.0.0)
   - `fontscale-code.pdf`
 - Keys:
   - `typographic-scale/classic-10pt`

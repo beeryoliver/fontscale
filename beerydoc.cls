@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2025-11-01]
-\ProvidesExplClass{beerydoc}{2026-02-14}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-02-17}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -28,6 +28,36 @@
 
 \RequirePackage { fontscale }
 \fontscalesetup { musical }
+\RenewDocumentCommand \printfontsizecommand { }
+  {
+    \mode_if_math:TF
+      {
+        \msg_error:nnn { beerydoc } { math-mode-invalid }
+          { printfontsizecommand }
+      }
+      { \__beerydoc_print_name: }
+  }
+\cs_new_protected:Npn \__beerydoc_print_name:
+  {
+    \exp_args:Ne \cs
+      {
+        \dim_case:nnF { \l_fontscale_size_dim }
+          {
+            { \l_fontscale_tiny_size_dim         } { tiny         }
+            { \l_fontscale_scriptsize_size_dim   } { scriptsize   }
+            { \l_fontscale_footnotesize_size_dim } { footnotesize }
+            { \l_fontscale_small_size_dim        } { small        }
+            { \l_fontscale_normalsize_size_dim   } { normalsize   }
+            { \l_fontscale_large_size_dim        } { large        }
+            { \l_fontscale_Large_size_dim        } { Large        }
+            { \l_fontscale_LARGE_size_dim        } { LARGE        }
+            { \l_fontscale_huge_size_dim         } { huge         }
+            { \l_fontscale_Huge_size_dim         } { Huge         }
+          }
+          { undefined }
+      }
+  }
+
 \RequirePackage { siunitx }
 \sisetup { list-final-separator = { ,~ and~ } , mode = math }
 \RequirePackage { mathtools }
@@ -421,36 +451,6 @@
   { \textls [ \int_eval:n {#1} ] { \scshape \text_lowercase:n {#2} } }
 
 \RenewDocumentCommand \slash { } { / \penalty \exhyphenpenalty }
-
-\DeclareDocumentCommand \printfontsizecommand { }
-  {
-    \mode_if_math:TF
-      {
-        \msg_error:nnn { beerydoc } { math-mode-invalid }
-          { printfontsizecommand }
-      }
-      { \__beerydoc_print_name: }
-  }
-\cs_new_protected:Npn \__beerydoc_print_name:
-  {
-    \exp_args:Ne \cs
-      {
-        \dim_case:nnF { \l_fontscale_size_dim }
-          {
-            { \l_fontscale_tiny_size_dim         } { tiny         }
-            { \l_fontscale_scriptsize_size_dim   } { scriptsize   }
-            { \l_fontscale_footnotesize_size_dim } { footnotesize }
-            { \l_fontscale_small_size_dim        } { small        }
-            { \l_fontscale_normalsize_size_dim   } { normalsize   }
-            { \l_fontscale_large_size_dim        } { large        }
-            { \l_fontscale_Large_size_dim        } { Large        }
-            { \l_fontscale_LARGE_size_dim        } { LARGE        }
-            { \l_fontscale_huge_size_dim         } { huge         }
-            { \l_fontscale_Huge_size_dim         } { Huge         }
-          }
-          { undefined }
-      }
-  }
 
 % Code and syntax environments
 

@@ -1,10 +1,15 @@
-\ProvidesFile{fontscale-table-classic.tex}[2025-04-30]
+\ProvidesFile{fontscale-table-classic.tex}[2026-02-17]
 
 \begin{table}
   \centering
   \caption
     {%
-      The font size of each font size command from \cs{tiny} to \cs{Huge} in units of \unit{pt}, \unit{bp}, \unit{dd}, or \unit{nd} when using a classic typographic scale.%
+      The font size of each font size command from \cs{tiny} to \cs{Huge} when
+      setting the key \key{typographic-scale=classic} with different values for
+      the key \key{classic/base}.
+      The font sizes are in units of points.
+      The \enquote{point} used depends on the value of the key
+      \key{classic/point}.%
       \label{table:classic}%
     }
   \bigskip
@@ -21,10 +26,7 @@
       , cell{2-Z}{1}={cmd=\cs}
     }
     \toprule
-      font size command
-      & {\key{classic-10pt} \\ \key{classic-10bp} \\ \key{classic-10dd} \\ \key{classic-10nd}}
-      & {\key{classic-11pt} \\ \key{classic-11bp} \\ \key{classic-11dd} \\ \key{classic-11nd}}
-      & {\key{classic-12pt} \\ \key{classic-12bp} \\ \key{classic-12dd} \\ \key{classic-12nd}} \\
+      font size command & \key{=10} & \key{=11} & \key{=12} \\
     \midrule
       tiny         &  6 &  7 &  8 \\
       scriptsize   &  7 &  8 &  9 \\

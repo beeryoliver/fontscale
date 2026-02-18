@@ -1,0 +1,22 @@
+\ProvidesFile{fontscale-syntax.tex}[2026-02-17]
+
+\vspace{\skipeval{\bigskipamount-\parskip}}
+\begingroup
+  \centering
+  \begin{tblr}
+    {
+        colspec={ll}
+      , cell{2-Z}{1}={cmd=\meta}
+      , cell{2-Z}{2}={cmd=\cs}
+    }
+    \toprule
+      syntax & meaning \\
+    \midrule
+      number  & fpeval   \\
+      integer & inteval  \\
+      dimen   & dimeval  \\
+      skip    & skipeval \\
+    \bottomrule
+  \end{tblr}
+  \par
+\endgroup

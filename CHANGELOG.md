@@ -7,6 +7,86 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v5.0.0] - 2026-02-17
+
+### Changed
+- Major update before TeX Live 2026. This update includes many changes that are
+  backwards incompatible.
+- Updated requirements:
+  - Now requires `l3kernel` version 2023-11-01.
+  - No longer incompatible with the `scalefnt` package.
+- The documentation no longer uses the terms "font step" and "font scale" to
+  describe the font size. All package features which relied on the "font step"
+  or "font scale" have been removed or redesigned. In hindsight, I do not find
+  these concepts to be particularly helpful for users. Moreover, this had led
+  to large package feature bloat.
+- The documentation has been completely rewritten.
+- Improved performance in the package code added to the `selectfont` hook.
+- Keys `<font size command>/scale` renamed to
+  `<font size command>/size-normalsize-ratio`.
+- All font size commands defined by this package now issue an error instead of
+  a warning if used in math mode.
+- Improved the warning message in `\fontscalesetup` when the lengths of the
+  font sizes are not correctly ordered from `\tiny` to `\Huge`.
+- `\currentfontsize`, `\currentfontbaselineskip`, and `\currentnormalsize` are
+  now proper lengths instead of expandable commands. This is more convenient
+  when performing computations.
+- `\setfontsize` now has an `o`- instead of an `s`-type argument with a new
+  functionality.
+- `\printfontsizecommand` now prints the command name in `\ttfamily`.
+
+### Removed
+- Files:
+  - `fontscale-v3.sty` (no support for versions older than 5.0.0)
+  - `fontscale-code.pdf`
+- Keys:
+  - `typographic-scale/classic-10pt`
+  - `typographic-scale/classic-11pt`
+  - `typographic-scale/classic-12pt`
+  - `typographic-scale/classic-10bp`
+  - `typographic-scale/classic-11bp`
+  - `typographic-scale/classic-12bp`
+  - `typographic-scale/classic-10dd`
+  - `typographic-scale/classic-11dd`
+  - `typographic-scale/classic-12dd`
+  - `typographic-scale/classic-10nd`
+  - `typographic-scale/classic-11nd`
+  - `typographic-scale/classic-12nd`
+  - `classic-10pt`
+  - `classic-11pt`
+  - `classic-12pt`
+  - `classic-10bp`
+  - `classic-11bp`
+  - `classic-12bp`
+  - `classic-10dd`
+  - `classic-11dd`
+  - `classic-12dd`
+  - `classic-10nd`
+  - `classic-11nd`
+  - `classic-12nd`
+  - `magscale` (lacks use case)
+- Commands:
+  - `\currentfontstep`, `\currentfontscale`
+  - `\setfontstep`, `\setfontscale`
+  - `\scalefont` (redundant with `\setfontsize` and `\currentfontsize`)
+  - `\setfontsizebaselineskip` (redundant with `\setfontsize`)
+  - `\setfontbaselineskip` `s`-type argument (redundant with
+    `\currentfontbaselineskip`)
+  - `\printfontsizeparameters`, `\printallfontsizeparameters`
+- Variables:
+  - `\c_fontscale_<font size command>_step_fp`
+  - `\c_fontscale_normalsize_scale_fp`
+  - `\l_fontscale_<font size command>_scale_fp`
+  - `\l_fontscale_step_fp`, `\l_fontscale_scale_fp`
+
+### Added
+- Keys:
+  - `typographic-scale/classic`
+  - `classic`
+  - `classic/base`
+  - `classic/point`
+- `\stepfontsize`
+
 ## [v4.2.0] - 2025-04-30
 
 ### Added
@@ -182,8 +262,8 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ### Added
 - Added new `expl3` public variables that store the current font step, font
-  scale, font size, and font baselineskip. They are set in the `selectfont`
-  hook.
+  scale, font size, and font baselineskip, respectively. They are set in the
+  `selectfont` hook.
   - `\l_fontscale_step_fp`
   - `\l_fontscale_scale_fp`
   - `\l_fontscale_size_dim`
@@ -291,11 +371,11 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 - `\fontscalesetup` now provides error checking for the keys `modular/ratio`,
   `musical/ratio`, and `musical/notes`.
 - It is now documented that `\fontscalesetup` uses `\normalsize` after it
-  finishes processing the package keys.
+  sets and processes the package keys.
 
 ### Changed
-- The code now regularly uses `V`- and `v`-type arguments to get the value of a
-  variable.
+- The code now regularly uses `V`- and `v`-type arguments to get the value of
+  an `expl3` variable.
 - The code now uses private `expl3` wrappers around the `LaTeX2e` commands
   `\@setfontsize`, `\fontsize`, and `\selectfont`.
 
@@ -314,8 +394,8 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 ## [v1.2.1] - 2024-04-21
 
 ### Changed
-- Improved the error message for `\SetFontStep*` when the current font step is
-  undefined.
+- Improved the error message for `\SetFontStep` when adding the optional star
+  and the current font step is undefined.
 - Documentation improvements.
 
 ## [v1.2.0] - 2024-04-15
@@ -324,7 +404,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 - It is now documented that the keys and commands provided by this package take
   as a value or argument a dimen, skip, floating point, or integer expression
   instead of simply a size, skip, number, or integer.
-- This package now includes a CHANGELOG file.
+- The package now includes a CHANGELOG file.
 
 ### Changed
 - Documentation improvements.
@@ -344,7 +424,7 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ### Added
  - `\SetFontStep`, `\SetFontScale`, `\SetFontSize`, `\ScaleFont`, and
- `\SetFontSizeBaselineskip` are now set up to work with `\text_purify:n`.
+ `\SetFontSizeBaselineskip` are now correctly removed by `\text_purify:n`.
 
 ## [v1.0.3] - 2024-03-26
 

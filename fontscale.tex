@@ -10,7 +10,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.0\quad 17 February 2026
+Version 5.0.1\quad 22 August 2026
 
 
 \section{Introduction}
@@ -22,8 +22,7 @@ Version 5.0.0\quad 17 February 2026
 \listheading
   {The \pkg{fontscale} package provides the following functionalities:}
 \begin{itemize}
-  \item
-  Set font sizes using a classic or musical typographic scale.
+  \item Set font sizes using a classic or musical typographic scale.
   \item
   Set arbitrary font sizes and font baselineskips for the standard \LaTeX{}
   font size commands: \cs{tiny}, \cs{scriptsize}, \cs{footnotesize},
@@ -42,7 +41,7 @@ Version 5.0.0\quad 17 February 2026
 \end{itemize}
 
 \subsection{Loading the package}
-\label{subsec:loading}
+\label{subsec:load}
 
 \listheading{Requirements:}
 \begin{itemize}
@@ -88,11 +87,7 @@ font size of \cs{normalsize} set by this package.
     \Huge,
     \@currsize
   }
-  \listheading
-    {
-      The font size commands from \cs{tiny} to \cs{Huge} defined by this
-      package:
-    }
+  The font size commands from \cs{tiny} to \cs{Huge} defined by this package:
   \begin{itemize}
     \item
     First set \cs{@currsize} to have the same meaning as the font size command.
@@ -104,10 +99,8 @@ font size of \cs{normalsize} set by this package.
     font size commands by setting the \pkg{fontscale} package keys
     (\S\ref{sec:keys}).
     (The font baselineskip should not be confused with the paragraph
-    baselineskip
-    \cs{baselineskip}.)
-    \item
-    Cannot be used in math mode.
+    baselineskip \cs{baselineskip}.)
+    \item Cannot be used in math mode.
     \item
     Have no other functionality.
     In particular, they do not change the vertical spacing for displayed math
@@ -135,19 +128,19 @@ This section documents the keys provided by the \pkg{fontscale} package.
 Set the package keys using \cs{fontscalesetup} (\S\ref{subsec:setup}).
 
 \subsection{The key \key{typographic-scale}}
-\label{subsec:typographicscale}
+\label{subsec:scale}
 
 The font sizes of the font size commands from \cs{tiny} to \cs{Huge} are
 initially set by the key \key{typographic-scale}.
 
 \begin{code}{typographic-scale}
   \begin{syntax}
-    \key{typographic-scale=\choices{classic,musical}}
+    \key{typographic-scale=classic|musical}
   \end{syntax}
   Choice key that sets the font size of each font size command from \cs{tiny}
   to \cs{Huge} using a classic or musical typographic scale.
   These are common methods of choosing a set of document font sizes.
-  The initial value is \key{=classic}.
+  The initial value is |classic|.
 \end{code}
 
 \begin{code}{classic, musical}
@@ -155,12 +148,12 @@ initially set by the key \key{typographic-scale}.
 \end{code}
 
 \subsubsection{The classic typographic scale}
-\label{subsubsec:classictypographicscale}
+\label{subsubsec:classic}
 
 \begin{code}{classic/base, classic/point}
   \begin{syntax}
-    \key{classic/base=\choices{10,11,12}}
-    \key{classic/point=\choices{pt,bp,dd,nd}}
+    \key{classic/base=10|11|12}
+    \key{classic/point=pt|bp|dd|nd}
   \end{syntax}
   Setting the key \key{typographic-scale=classic} sets the font size of each
   font size command from \cs{tiny} to \cs{Huge} using the classic typographic
@@ -178,9 +171,9 @@ initially set by the key \key{typographic-scale}.
   The base font size is the font size of \cs{normalsize}.
   The font sizes of the other font size commands are the adjacent font sizes in
   the classic typographic scale in units of points.
-  The initial value is \key{=10}.
+  The initial value is |10|.
   The choice key \key{classic/point} sets which \enquote{point} is used.
-  The initial value is \key{=pt}.
+  The initial value is |pt|.
   Table \ref{table:classic} displays the font size of each font size command
   from \cs{tiny} to \cs{Huge} when setting the key
   \key{typographic-scale=classic}.
@@ -189,7 +182,7 @@ initially set by the key \key{typographic-scale}.
 \input{./fontscale-input-classic.tex}
 
 \subsubsection{The musical typographic scale}
-\label{subsubsec:musicaltypographicscale}
+\label{subsubsec:musical}
 
 \begin{code}{musical/base, musical/ratio, musical/notes}
   \begin{syntax}
@@ -370,7 +363,7 @@ warning and some package features may not work correctly.
 
 
 \section{Commands}
-\label{sec:commands}
+\label{sec:cmds}
 
 This section documents the commands provided by the \pkg{fontscale} package.
 
@@ -440,7 +433,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
   any \cs{\meta{font size command}}, then \cs{stepfontsize} uses
   \cs{\meta{font size command}}.
 
-  \listheading{Some exceptions:}
+  Some exceptions:
   \begin{itemize}
     \item
     Issues a warning if the current font size does not equal the font size of
@@ -453,8 +446,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
     \item
     Issues a warning and uses \cs{Huge} if the new font size would be larger
     than \cs{Huge}.
-    \item
-    Cannot be used in math mode.
+    \item Cannot be used in math mode.
   \end{itemize}
 \end{code}
 

@@ -7,7 +7,7 @@
 % Loading the package
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2026-02-17}{5.0.0}
+\ProvidesExplPackage{fontscale}{2026-08-22}{5.0.1}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -20,6 +20,16 @@
   { \msg_critical:nn { fontscale } { l3kernel } }
 
 % Some variables
+
+% Stores the current font size and font baselineskip. These variables will be
+% initialized when \normalsize is used.
+\dim_new:N \l_fontscale_size_dim
+\skip_new:N \l_fontscale_baselineskip_skip
+\hook_gput_code:nnn { selectfont } { fontscale }
+  {
+    \dim_set:Nn \l_fontscale_size_dim { \f@size pt }
+    \skip_set:Nn \l_fontscale_baselineskip_skip { \f@baselineskip }
+  }
 
 % Declares and initializes the font size and font baselineskip of each font
 % size command from \tiny to \Huge.
@@ -67,16 +77,6 @@
 \skip_set:Nn \l_fontscale_LARGE_baselineskip_skip        { 16.8pt }
 \skip_set:Nn \l_fontscale_huge_baselineskip_skip         { 19.2pt }
 \skip_set:Nn \l_fontscale_Huge_baselineskip_skip         { 21.6pt }
-
-% Stores the current font size and font baselineskip. These variables will be
-% initialized when \normalsize is used.
-\dim_new:N \l_fontscale_size_dim
-\skip_new:N \l_fontscale_baselineskip_skip
-\hook_gput_code:nnn { selectfont } { fontscale }
-  {
-    \dim_set:Nn \l_fontscale_size_dim { \f@size pt }
-    \skip_set:Nn \l_fontscale_baselineskip_skip { \f@baselineskip }
-  }
 
 % Used only to speed up floating point computations.
 \fp_new:N \l__fontscale_musical_base_fp
@@ -872,29 +872,31 @@
     does~ not~ equal~ the~ font~ size~ of~ any~ font~ size~ command~
     from~ \iow_char:N \\ tiny~ to~ \iow_char:N \\ Huge.
   }
-\cs_set_protected:Npn \__fontscale_tmp:nn #1#2
-  {
-    \msg_new:nnn { fontscale } {#1}
-      {
-        Using~ \iow_char:N \\ #2~ \msg_line_context:. \\
-        The~ font~ size~ '\dim_use:N \l_fontscale_size_dim \c_space_tl
-        ( \iow_char:N \\
-        \dim_case:nn { \l_fontscale_size_dim }
-          {
-            { \l_fontscale_tiny_size_dim         } { tiny         }
-            { \l_fontscale_scriptsize_size_dim   } { scriptsize   }
-            { \l_fontscale_footnotesize_size_dim } { footnotesize }
-            { \l_fontscale_small_size_dim        } { small        }
-            { \l_fontscale_normalsize_size_dim   } { normalsize   }
-            { \l_fontscale_large_size_dim        } { large        }
-            { \l_fontscale_Large_size_dim        } { Large        }
-            { \l_fontscale_LARGE_size_dim        } { LARGE        }
-            { \l_fontscale_huge_size_dim         } { huge         }
-            { \l_fontscale_Huge_size_dim         } { Huge         }
-          }
-        )'~ cannot~ be~ changed~ by~ '##1'~ step
-        \int_compare:nNnF { \int_abs:n {##1} } = 1 { s } .
-      }
-  }
-\__fontscale_tmp:nn { font-step-too-small } { tiny }
-\__fontscale_tmp:nn { font-step-too-large } { Huge }
+\group_begin:
+  \cs_set_protected:Npn \__fontscale_tmp:nn #1#2
+    {
+      \msg_new:nnn { fontscale } {#1}
+        {
+          Using~ \iow_char:N \\ #2~ \msg_line_context:. \\
+          The~ font~ size~ '\dim_use:N \l_fontscale_size_dim \c_space_tl
+          ( \iow_char:N \\
+          \dim_case:nn { \l_fontscale_size_dim }
+            {
+              { \l_fontscale_tiny_size_dim         } { tiny         }
+              { \l_fontscale_scriptsize_size_dim   } { scriptsize   }
+              { \l_fontscale_footnotesize_size_dim } { footnotesize }
+              { \l_fontscale_small_size_dim        } { small        }
+              { \l_fontscale_normalsize_size_dim   } { normalsize   }
+              { \l_fontscale_large_size_dim        } { large        }
+              { \l_fontscale_Large_size_dim        } { Large        }
+              { \l_fontscale_LARGE_size_dim        } { LARGE        }
+              { \l_fontscale_huge_size_dim         } { huge         }
+              { \l_fontscale_Huge_size_dim         } { Huge         }
+            }
+          )'~ cannot~ be~ changed~ by~ '##1'~ step
+          \int_compare:nNnF { \int_abs:n {##1} } = 1 { s } .
+        }
+    }
+  \__fontscale_tmp:nn { font-step-too-small } { tiny }
+  \__fontscale_tmp:nn { font-step-too-large } { Huge }
+\group_end:

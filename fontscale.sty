@@ -275,14 +275,14 @@
   }
 \cs_new_protected:Npn \__fontscale_keys_process:
   {
-    \__fontscale_keys_process_start:
+    \__fontscale_keys_process_chk:
     \__fontscale_keys_process_sizes_normalsize:
     \__fontscale_keys_process_sizes:
+    \__fontscale_keys_process_sizes_chk:
     \__fontscale_keys_process_baselineskips:
-    \__fontscale_keys_process_end:
     \prg_break_point:
   }
-\cs_new_protected:Npn \__fontscale_keys_process_start:
+\cs_new_protected:Npn \__fontscale_keys_process_chk:
   {
     \dim_compare:nF { \c_zero_dim < \l__fontscale_musical_base_dim < 2048pt }
       {
@@ -482,6 +482,23 @@
           }
       }
   }
+\cs_new_protected:Npn \__fontscale_keys_process_sizes_chk:
+  {
+    \dim_compare:nF
+      {
+          \l_fontscale_tiny_size_dim
+        < \l_fontscale_scriptsize_size_dim
+        < \l_fontscale_footnotesize_size_dim
+        < \l_fontscale_small_size_dim
+        < \l_fontscale_normalsize_size_dim
+        < \l_fontscale_large_size_dim
+        < \l_fontscale_Large_size_dim
+        < \l_fontscale_LARGE_size_dim
+        < \l_fontscale_huge_size_dim
+        < \l_fontscale_Huge_size_dim
+      }
+      { \msg_warning:nn { fontscale } { font-sizes-wrong-order } }
+  }
 \cs_new_protected:Npn \__fontscale_keys_process_baselineskips:
   {
     \tl_map_function:nN
@@ -532,23 +549,6 @@
           }
       }
     \prg_break_point:
-  }
-\cs_new_protected:Npn \__fontscale_keys_process_end:
-  {
-    \dim_compare:nF
-      {
-          \l_fontscale_tiny_size_dim
-        < \l_fontscale_scriptsize_size_dim
-        < \l_fontscale_footnotesize_size_dim
-        < \l_fontscale_small_size_dim
-        < \l_fontscale_normalsize_size_dim
-        < \l_fontscale_large_size_dim
-        < \l_fontscale_Large_size_dim
-        < \l_fontscale_LARGE_size_dim
-        < \l_fontscale_huge_size_dim
-        < \l_fontscale_Huge_size_dim
-      }
-      { \msg_warning:nn { fontscale } { font-sizes-wrong-order } }
   }
 
 % Document commands

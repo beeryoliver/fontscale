@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2026-08-16}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-08-23}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -127,7 +127,6 @@
 \tl_new:N \l__beerydoc_meta_tl
 \tl_new:N \l__beerydoc_hook_tl
 \tl_new:N \l__beerydoc_socket_tl
-\str_new:N \l__beerydoc_charcode_char_str
 
 \coffin_new:N \l__beerydoc_code_coffin
 \bool_new:N   \l__beerydoc_code_bool
@@ -431,42 +430,34 @@
     \mode_if_math:TF
       { \msg_error:nnn { beerydoc } { math-mode-invalid } { charcode } }
       {
+        \bool_lazy_and:nnF
+          { \tl_if_single_p:n {#2} }
+          { \tl_if_single_token_p:n #2 }
+          { \msg_error:nnn { beerydoc } { char-invalid } {#2} }
         \IfNoValueTF {#1}
-          { \__beerydoc_charcode:n {#2} }
-          { \__beerydoc_charcode:nn {#1} {#2} }
+          { \__beerydoc_charcode:N #2 }
+          { \__beerydoc_charcode:Nn #2 {#1} }
       }
   }
-\cs_new_protected:Npn \__beerydoc_charcode:nn #1#2
-  { \__beerydoc_charcode_aux:nn {#2} { \int_eval:n {#1} } }
-\cs_new_protected:Npn \__beerydoc_charcode:n #1
+\cs_new_protected:Npn \__beerydoc_charcode:N #1
   {
-    \__beerydoc_charcode_aux:nn {#1}
-      {
-        \exp_args:Ne \char_value_catcode:n { ` \l__beerydoc_charcode_char_str }
-      }
-  }
-\cs_new_protected:Npn \__beerydoc_charcode_aux:nn #1
-  {
-    \int_case:nnF { \str_count:n {#1} }
-      {
-        { 1 } { \str_set:Nn \l__beerydoc_charcode_char_str {#1} }
-        { 2 }
-        {
-          \str_if_eq:eeTF { \str_head:n {#1} } \c_backslash_str
-            {
-              \str_set:Ne \l__beerydoc_charcode_char_str
-                { \str_item:nn {#1} {2} }
-            }
-            { \msg_error:nnn { beerydoc } { char-invalid } {#1} }
-        }
-      }
-      { \msg_error:nnn { beerydoc } { char-invalid } {#1} }
     \texttt
       {
-        \str_if_eq:eeTF \l__beerydoc_charcode_char_str { ~ }
-          { \textvisiblespace } { \l__beerydoc_charcode_char_str }
+        \int_compare:nNnTF { `#1 } = { 32 }
+          { \textvisiblespace }
+          { \char_generate:nn { `#1 } { 12 } }
       }
-    \__beerydoc_charcode_subscript:n
+    \__beerydoc_charcode_subscript:n { \char_value_catcode:n { `#1 } }
+  }
+\cs_new_protected:Npn \__beerydoc_charcode:Nn #1#2
+  {
+    \texttt
+      {
+        \int_compare:nNnTF { `#1 } = { 32 }
+          { \textvisiblespace }
+          { \char_generate:nn { `#1 } { 12 } }
+      }
+    \__beerydoc_charcode_subscript:n { \int_eval:n {#2} }
   }
 \cs_new_eq:NN \__beerydoc_charcode_subscript:n \__beerydoc_meta_subscript:n
 

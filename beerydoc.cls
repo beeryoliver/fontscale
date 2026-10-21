@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2026-08-23}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-10-16}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -205,6 +205,7 @@
     \group_begin:
       \tl_set:Nn \l__beerydoc_key_tl {#1}
       \tl_replace_all:Nnn \l__beerydoc_key_tl { / } { \slash }
+      \tl_replace_all:NVn \l__beerydoc_key_tl \c__beerydoc_active_vert_tl { | }
       \ttfamily
       \l__beerydoc_key_tl \@
     \group_end:
@@ -368,6 +369,13 @@
   }
 \cs_new_protected:Npn \__beerydoc_s_arg:
   { \__beerydoc_langle: \texttt {*} \__beerydoc_rangle: }
+
+\NewDocumentCommand \file { m }
+  {
+    \mode_if_math:TF
+      { \msg_error:nnn { beerydoc } { math-mode-invalid } { file } }
+      { \nolinkurl {#1} }
+  }
 
 \cs_set_protected:Npn \__beerydoc_tmp:nN #1#2
   {
@@ -543,6 +551,7 @@
     \bool_set_true:N \l__beerydoc_code_bool
     \box_gclear:N \g__beerydoc_syntax_box
     \cs_set_eq:NN \footnote \__beerydoc_code_footnote:n
+    \fvset { gobble = 4 }
   }
 \cs_new_protected:Npn \__beerydoc_code_footnote:n #1
   {
@@ -834,6 +843,52 @@
   { \thesubsubsection } { 1em }
   { } { }
 
+\int_new:N \g__beerydoc_toc_section_int
+\dim_new:N \g__beerydoc_toc_subsection_leftmargin_dim
+\box_new:N \g__beerydoc_toc_subsection_leftmargin_box
+\int_new:N \g__beerydoc_toc_subsection_int
+\dim_new:N \g__beerydoc_toc_subsubsection_leftmargin_dim
+\box_new:N \g__beerydoc_toc_subsubsection_leftmargin_box
+
+\titlecontents { section }
+  [ 0pt ] % left
+  { % abovecode
+    \int_gincr:N \g__beerydoc_toc_section_int
+    \hbox_gset:Nn \g__beerydoc_toc_subsection_leftmargin_box
+      { \int_use:N \g__beerydoc_toc_section_int \quad }
+    \dim_gset:Nn \g__beerydoc_toc_subsection_leftmargin_dim
+      { \box_wd:N \g__beerydoc_toc_subsection_leftmargin_box }
+  }
+  { \bfseries \thecontentslabel \quad } % numbered entry format
+   % numberless entry format
+  { \skip_horizontal:N \g__beerydoc_toc_subsection_leftmargin_dim }
+  { \enskip \textbar \enskip \thecontentspage } % filler page format
+  [ \smallskip ] % below code
+\titlecontents { subsection }
+  [ \dim_use:N \g__beerydoc_toc_subsection_leftmargin_dim ]
+  {
+    \int_gincr:N \g__beerydoc_toc_subsection_int
+    \hbox_gset:Nn \g__beerydoc_toc_subsubsection_leftmargin_box
+      {
+        \int_use:N \g__beerydoc_toc_section_int \quad
+        \int_use:N \g__beerydoc_toc_section_int .
+        \int_use:N \g__beerydoc_toc_subsection_int \quad
+      }
+    \dim_gset:Nn \g__beerydoc_toc_subsubsection_leftmargin_dim
+      { \box_wd:N \g__beerydoc_toc_subsubsection_leftmargin_box }
+  }
+  { \thecontentslabel \quad }
+  { \thecontentslabel \quad }
+  { \enskip \textbar \enskip \thecontentspage }
+  [ \smallskip ]
+\titlecontents { subsubsection }
+  [ \dim_use:N \g__beerydoc_toc_subsubsection_leftmargin_dim ]
+  { }
+  { \thecontentslabel \quad }
+  { \thecontentslabel \quad }
+  { \enskip \textbar \enskip \thecontentspage }
+  [ \smallskip ]
+
 % Lists, List headings
 
 \RequirePackage { enumitem }
@@ -891,6 +946,10 @@
 \UseTblrLibrary { booktabs , siunitx }
 
 % Verbatim
+
+\usepackage{fancyvrb}
+\cs_set_eq:NN \verbatim \Verbatim
+\cs_set_eq:NN \endverbatim \endVerbatim
 
 \cs_new_protected:Npn \__beerydoc_active_vert:
   {

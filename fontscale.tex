@@ -1,4 +1,5 @@
 \documentclass{beerydoc}
+\usepackage{lipsum}
 
 
 \begin{document}
@@ -10,7 +11,11 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.1\quad 21 October 2026
+Version 5.0.1\quad 27 October 2026
+
+\pdfbookmark[1]{Contents}{contents}
+\tableofcontents
+\pagebreak
 
 
 \section{Introduction}
@@ -168,6 +173,8 @@ initially set by the key \key{typographic-scale}.
   The initial value is |pt|.
   Table \ref{table:classic} displays the font size of each font size command
   from \cs{tiny} to \cs{Huge} set by the key \key{typographic-scale=classic}.
+  Examples of setting the key \key{typographic-scale=classic} are provided in
+  \S\ref{subsec:exclassic}.
 \end{code}
 
 \input{./fontscale-input-classic.tex}
@@ -208,6 +215,8 @@ initially set by the key \key{typographic-scale}.
   The initial value is \num{5}.
   Table \ref{table:musical} displays the font size of each font size command
   from \cs{tiny} to \cs{Huge} set by the key \key{typographic-scale=musical}.
+  Examples of setting the key \key{typographic-scale=musical} are provided in
+  \S\ref{subsec:exmusical}.
 \end{code}
 
 \input{./fontscale-input-musical.tex}
@@ -262,6 +271,8 @@ warning and some package features may not work correctly.
   Overwrites the font size set by the key \key{typographic-scale}.
   The initial value is \meta{not set}.
   The key \key{normalsize/size-normalsize-ratio} is not defined.
+  Examples of \key{\meta{font size command}/size-normalsize-ratio} are provided
+  in \S\ref{subsec:exnameratio}.
 \end{code}
 
 \begin{code}
@@ -284,6 +295,8 @@ warning and some package features may not work correctly.
   Overwrites the font size set by the keys \key{typographic-scale} and
   \key{\meta{font size command}/size-normalsize-ratio}.
   The initial value is \meta{not set}.
+  Examples of \key{\meta{font size command}/size} are provided in
+  \S\ref{subsec:exnamesize}.
 \end{code}
 
 \begin{code}
@@ -363,6 +376,7 @@ This section documents the commands provided by the \pkg{fontscale} package.
   All assignments made by \cs{fontscalesetup} are local to the current group.
   Can be used mid-document.
   Cannot be used in math mode.
+  Examples of \cs{fontscalesetup} are provided in \S\ref{sec:examples}.
 \end{code}
 
 \subsection{Lengths}
@@ -398,6 +412,39 @@ This section documents the commands provided by the \pkg{fontscale} package.
   \key{baselineskip-size-ratio} (\S\ref{subsec:baselineskipsizeratio}).
   Cannot be used in math mode.
   This command is a more robust alternative to \cs{fontsize} + \cs{selectfont}.
+
+  \begin{verbatim}
+    \begingroup
+      \the\currentfontsize
+
+      \setfontsize{0.8\currentnormalsize}
+      \the\currentfontsize
+
+      \setfontsize{12pt}
+      \the\currentfontsize
+
+      \setfontsize{1.2\currentfontsize}
+      \the\currentfontsize
+
+      \setfontsize{\currentfontsize-2pt}
+      \the\currentfontsize
+    \endgroup
+  \end{verbatim}
+  \begingroup
+    \the\currentfontsize
+
+    \setfontsize{0.8\currentnormalsize}
+    \the\currentfontsize
+
+    \setfontsize{12pt}
+    \the\currentfontsize
+
+    \setfontsize{1.2\currentfontsize}
+    \the\currentfontsize
+
+    \setfontsize{\currentfontsize-2pt}
+    \the\currentfontsize
+  \endgroup
 \end{code}
 
 \begin{code}{\stepfontsize}
@@ -430,6 +477,39 @@ This section documents the commands provided by the \pkg{fontscale} package.
     than \cs{Huge}.
     \item Cannot be used in math mode.
   \end{itemize}
+
+  \begin{verbatim}
+    \begingroup
+      \printfontsizecommand
+
+      \stepfontsize{1}
+      \printfontsizecommand
+
+      \stepfontsize{-1}
+      \printfontsizecommand
+
+      \stepfontsize{-2}
+      \printfontsizecommand
+
+      \stepfontsize{1+3}
+      \printfontsizecommand
+    \endgroup
+  \end{verbatim}
+  \begingroup
+    \printfontsizecommand
+
+    \stepfontsize{1}
+    \printfontsizecommand
+
+    \stepfontsize{-1}
+    \printfontsizecommand
+
+    \stepfontsize{-2}
+    \printfontsizecommand
+
+    \stepfontsize{1+3}
+    \printfontsizecommand
+  \endgroup
 \end{code}
 
 \subsection{Setting only the font baselineskip}
@@ -442,10 +522,38 @@ This section documents the commands provided by the \pkg{fontscale} package.
   Sets the font baselineskip to \meta{skip}.
   Does not change the font size.
   Cannot be used in math mode.
+
+  For the example below, \cs{lipsum} generates placeholder text and is defined
+  by the \pkg{lipsum} package.
+  \begin{verbatim}
+    \begingroup
+      \the\currentfontbaselineskip\quad\lipsum[1][1-6]
+
+      \setfontbaselineskip{1.2\currentfontbaselineskip}
+      \the\currentfontbaselineskip\quad\lipsum[1][1-6]
+
+      \setfontbaselineskip{\currentfontbaselineskip+2pt}
+      \the\currentfontbaselineskip\quad\lipsum[1][1-6]
+
+    \endgroup
+  \end{verbatim}
+  \begingroup
+    \the\currentfontbaselineskip\quad\lipsum[1][1-6]
+
+    \setfontbaselineskip{1.2\currentfontbaselineskip}
+    \the\currentfontbaselineskip\quad\lipsum[1][1-6]
+
+    \setfontbaselineskip{\currentfontbaselineskip+2pt}
+    \the\currentfontbaselineskip\quad\lipsum[1][1-6]
+
+  \endgroup
 \end{code}
 
 \subsection{Printing sample text}
 \label{subsec:printsampletext}
+
+Examples of \cs{printsampletext} and \cs{printfontsizecommand} are provided in
+\S\ref{sec:examples}.
 
 \begin{code}{\printsampletext}
   \begin{syntax}
@@ -463,6 +571,387 @@ This section documents the commands provided by the \pkg{fontscale} package.
   Otherwise, prints \enquote{\ttfamily\string\undefined}.
   The command name is printed in \cs{ttfamily}.
 \end{code}
+
+
+\section{Examples}
+\label{sec:examples}
+
+This section provides several examples of using \cs{fontscalesetup}
+(\S\ref{subsec:setup}) to set the font sizes of the font size commands from
+\cs{tiny} to \cs{Huge}.
+
+\subsection{The classic typographic scale}
+\label{subsec:exclassic}
+
+This subsection provides examples of setting the key
+\key{typographic-scale=classic} (\S\ref{subsec:scale}).
+
+\begin{verbatim}
+  \begingroup
+    \fontscalesetup
+      {
+        typographic-scale=classic,
+        classic/base=10,
+        classic/point=pt
+      }
+    \printsampletext
+      {
+        The current font size of \printfontsizecommand{} is
+        \the\currentfontsize.
+      }
+  \endgroup
+\end{verbatim}
+\begingroup
+  \fontscalesetup
+    {
+      typographic-scale=classic,
+      classic/base=10,
+      classic/point=pt
+    }
+  \printsampletext
+    {
+      The current font size of \printfontsizecommand{} is
+      \the\currentfontsize.
+    }
+\endgroup
+\clearpage
+
+\begin{verbatim}
+  \begingroup
+    \fontscalesetup
+      {
+        typographic-scale=classic,
+        classic/base=11,
+        classic/point=pt
+      }
+    \printsampletext*
+      {
+        The current font size of \printfontsizecommand{} is
+        \the\currentfontsize.
+      }
+  \endgroup
+\end{verbatim}
+\begingroup
+  \fontscalesetup
+    {
+      typographic-scale=classic,
+      classic/base=11,
+      classic/point=pt
+    }
+  \printsampletext*
+    {
+      The current font size of \printfontsizecommand{} is
+      \the\currentfontsize.
+    }
+\endgroup
+\clearpage
+
+\begin{verbatim}
+  \begingroup
+    \fontscalesetup
+      {
+        classic,
+        classic/base=12,
+        classic/point=bp
+      }
+    \printsampletext
+      {
+        The current font size of \printfontsizecommand{} is
+        \the\currentfontsize.
+      }
+  \endgroup
+\end{verbatim}
+\begingroup
+  \fontscalesetup
+    {
+      classic,
+      classic/base=12,
+      classic/point=bp
+    }
+  \printsampletext
+    {
+      The current font size of \printfontsizecommand{} is
+      \the\currentfontsize.
+    }
+\endgroup
+\clearpage
+
+\subsection{The musical typographic scale}
+\label{subsec:exmusical}
+
+This subsection provides examples of setting the key
+\key{typographic-scale=musical} (\S\ref{subsec:scale}).
+
+\begin{verbatim}
+  \begingroup
+    \fontscalesetup
+      {
+        typographic-scale=musical,
+        musical/base=10pt,
+        musical/ratio=2,
+        musical/notes=5
+      }
+    \printsampletext
+      {
+        The current font size of \printfontsizecommand{} is
+        \the\currentfontsize.
+      }
+  \endgroup
+\end{verbatim}
+\begingroup
+  \fontscalesetup
+    {
+      typographic-scale=musical,
+      musical/base=10pt,
+      musical/ratio=2,
+      musical/notes=5
+    }
+  \printsampletext
+    {
+      The current font size of \printfontsizecommand{} is
+      \the\currentfontsize.
+    }
+\endgroup
+\clearpage
+
+\begin{verbatim}
+  \begingroup
+    \fontscalesetup
+      {
+        typographic-scale=musical,
+        musical/base=11pt,
+        musical/ratio=2,
+        musical/notes=4
+      }
+    \printsampletext
+      {
+        The current font size of \printfontsizecommand{} is
+        \the\currentfontsize.
+      }
+  \endgroup
+\end{verbatim}
+\begingroup
+  \fontscalesetup
+    {
+      typographic-scale=musical,
+      musical/base=11pt,
+      musical/ratio=2,
+      musical/notes=4
+    }
+  \printsampletext
+    {
+      The current font size of \printfontsizecommand{} is
+      \the\currentfontsize.
+    }
+\endgroup
+\clearpage
+
+\subsection
+  {%
+    Using the keys
+    \texorpdfstring
+      {\key{\meta{font size command}/size-normalsize-ratio}}
+      {\meta{font size command}/size-normalsize-ratio}%
+  }
+\label{subsec:exnameratio}
+
+In this example, the font size of \cs{normalsize} is set using the key
+\key{normalsize/size} (\S\ref{subsec:overwriting}).
+The font sizes of the other font size commands are set using the keys
+\key{\meta{font size command}/size-normalsize-ratio}
+(\S\ref{subsec:overwriting}).
+This example also includes \LaTeX3 floating point computations.
+
+\begin{verbatim}
+  \begingroup
+    \fontscalesetup
+      {
+        normalsize/size=10pt,
+        tiny/size-normalsize-ratio=0.5,
+        scriptsize/size-normalsize-ratio=2/3,
+        footnotesize/size-normalsize-ratio=1/1.2,
+        small/size-normalsize-ratio=1/sqrt(1.2),
+        large/size-normalsize-ratio=1.2,
+        Large/size-normalsize-ratio=1.2^2,
+        LARGE/size-normalsize-ratio=1.2^3,
+        huge/size-normalsize-ratio=1.2^4,
+        Huge/size-normalsize-ratio=1.2^5
+      }
+    \printsampletext
+      {
+        The current font size of \printfontsizecommand{} is
+        \the\currentfontsize.
+      }
+  \endgroup
+\end{verbatim}
+\begingroup
+  \fontscalesetup
+    {
+      normalsize/size=10pt,
+      tiny/size-normalsize-ratio=0.5,
+      scriptsize/size-normalsize-ratio=2/3,
+      footnotesize/size-normalsize-ratio=1/1.2,
+      small/size-normalsize-ratio=1/sqrt(1.2),
+      large/size-normalsize-ratio=1.2,
+      Large/size-normalsize-ratio=1.2^2,
+      LARGE/size-normalsize-ratio=1.2^3,
+      huge/size-normalsize-ratio=1.2^4,
+      Huge/size-normalsize-ratio=1.2^5
+    }
+  \printsampletext
+    {
+      The current font size of \printfontsizecommand{} is
+      \the\currentfontsize.
+    }
+\endgroup
+\clearpage
+
+This example is identical to the previous example, except that the value of the
+key \key{normalsize/size} is changed from \qty{10}{pt} to \qty{11}{bp}.
+The font sizes of the other font size commands are scaled proportionally.
+
+\begin{verbatim}
+  \begingroup
+    \fontscalesetup
+      {
+        normalsize/size=11bp,
+        tiny/size-normalsize-ratio=0.5,
+        scriptsize/size-normalsize-ratio=2/3,
+        footnotesize/size-normalsize-ratio=1/1.2,
+        small/size-normalsize-ratio=1/sqrt(1.2),
+        large/size-normalsize-ratio=1.2,
+        Large/size-normalsize-ratio=1.2^2,
+        LARGE/size-normalsize-ratio=1.2^3,
+        huge/size-normalsize-ratio=1.2^4,
+        Huge/size-normalsize-ratio=1.2^5
+      }
+    \printsampletext
+      {
+        The current font size of \printfontsizecommand{} is
+        \the\currentfontsize.
+      }
+  \endgroup
+\end{verbatim}
+\begingroup
+  \fontscalesetup
+    {
+      normalsize/size=11bp,
+      tiny/size-normalsize-ratio=0.5,
+      scriptsize/size-normalsize-ratio=2/3,
+      footnotesize/size-normalsize-ratio=1/1.2,
+      small/size-normalsize-ratio=1/sqrt(1.2),
+      large/size-normalsize-ratio=1.2,
+      Large/size-normalsize-ratio=1.2^2,
+      LARGE/size-normalsize-ratio=1.2^3,
+      huge/size-normalsize-ratio=1.2^4,
+      Huge/size-normalsize-ratio=1.2^5
+    }
+  \printsampletext
+    {
+      The current font size of \printfontsizecommand{} is
+      \the\currentfontsize.
+    }
+\endgroup
+
+\subsection
+  {%
+    Using the keys
+    \texorpdfstring
+      {\key{\meta{font size command}/size}}
+      {\meta{font size command}/size}%
+  }
+\label{subsec:exnamesize}
+
+This subsection provides examples of setting the keys
+\key{\meta{font size command}/size} (\S\ref{subsec:overwriting}).
+
+\begin{verbatim}
+  \begingroup
+    \fontscalesetup
+      {
+        tiny/size=5pt,
+        scriptsize/size=7pt,
+        footnotesize/size=8pt,
+        small/size=9pt,
+        normalsize/size=10pt,
+        large/size=12pt,
+        Large/size=14.4pt,
+        LARGE/size=17.28pt,
+        huge/size=20.74pt,
+        Huge/size=24.88pt
+      }
+    \printsampletext
+      {
+        The current font size of \printfontsizecommand{} is
+        \the\currentfontsize.
+      }
+  \endgroup
+\end{verbatim}
+\begingroup
+  \fontscalesetup
+    {
+      tiny/size=5pt,
+      scriptsize/size=7pt,
+      footnotesize/size=8pt,
+      small/size=9pt,
+      normalsize/size=10pt,
+      large/size=12pt,
+      Large/size=14.4pt,
+      LARGE/size=17.28pt,
+      huge/size=20.74pt,
+      Huge/size=24.88pt
+    }
+  \printsampletext
+    {
+      The current font size of \printfontsizecommand{} is
+      \the\currentfontsize.
+    }
+\endgroup
+\clearpage
+
+\begin{verbatim}
+  \begingroup
+    \fontscalesetup
+      {
+        tiny=6bp,
+        scriptsize=7bp,
+        footnotesize=8bp,
+        small=9bp,
+        normalsize=10bp,
+        large=11bp,
+        Large=12bp,
+        LARGE=14bp,
+        huge=16bp,
+        Huge=18bp
+      }
+    \printsampletext*
+      {
+        The current font size of \printfontsizecommand{} is
+        \the\currentfontsize.
+      }
+  \endgroup
+\end{verbatim}
+\begingroup
+  \fontscalesetup
+    {
+      tiny=6bp,
+      scriptsize=7bp,
+      footnotesize=8bp,
+      small=9bp,
+      normalsize=10bp,
+      large=11bp,
+      Large=12bp,
+      LARGE=14bp,
+      huge=16bp,
+      Huge=18bp
+    }
+  \printsampletext*
+    {
+      The current font size of \printfontsizecommand{} is
+      \the\currentfontsize.
+    }
+\endgroup
+\clearpage
 
 
 \section{Programming}

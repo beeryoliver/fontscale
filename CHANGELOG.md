@@ -7,6 +7,20 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v5.0.1] - 2026-10-27
+
+### Changed
+- Maintenance update.
+- The documentation now includes examples for:
+  - `\fontscalesetup`
+  - `\currentfontsize`, `\currentfontbaselineskip`, `\currentnormalsize`
+  - `\setfontsize`, `\stepfontsize`
+  - `\setfontbaselineskip`
+  - `\printsampletext`, `\printfontsizecommand`
+  - key `typographic-scale`
+  - keys `<font size command>/size`
+  - keys `<font size command>/size-normalsize-ratio`
+
 ## [v5.0.0] - 2026-02-17
 
 ### Changed

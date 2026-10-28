@@ -1,12 +1,12 @@
-\ProvidesFile{fontscale-table-classic.tex}[2026-02-17]
+\ProvidesFile{fontscale-input-classic.tex}[2026-09-02]
 
 \begin{table}
   \centering
   \caption
     {%
-      The font size of each font size command from \cs{tiny} to \cs{Huge} when
-      setting the key \key{typographic-scale=classic} with different values for
-      the key \key{classic/base}.
+      The font size of each font size command from \cs{tiny} to \cs{Huge} set
+      by the key \key{typographic-scale=classic} with different values for the
+      key \key{classic/base}.
       The font sizes are in units of points.
       The \enquote{point} used depends on the value of the key
       \key{classic/point}.%
@@ -22,11 +22,11 @@
             Q[si={table-format=3.2},c]
             Q[si={table-format=3.2},c]
           }
-      , cell{1}{2-Z}={guard}
+      , cell{1}{2-Z}={guard,cmd=\texttt}
       , cell{2-Z}{1}={cmd=\cs}
     }
     \toprule
-      font size command & \key{=10} & \key{=11} & \key{=12} \\
+      font size command & 10 & 11 & 12 \\
     \midrule
       tiny         &  6 &  7 &  8 \\
       scriptsize   &  7 &  8 &  9 \\

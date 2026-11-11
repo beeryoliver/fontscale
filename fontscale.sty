@@ -7,7 +7,7 @@
 % Loading the package
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2026-08-27}{5.0.1}
+\ProvidesExplPackage{fontscale}{2026-11-10}{5.0.2}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -101,10 +101,12 @@
         { \str_set:Nn \l__fontscale_typographic_scale_str {#1} }
     , typographic-scale .value_required:n = true
 
-    , classic .meta:n = { typographic-scale = classic }
+    , classic .code:n =
+        { \str_set:Nn \l__fontscale_typographic_scale_str { classic } }
     , classic .value_forbidden:n = true
 
-    , musical .meta:n = { typographic-scale = musical }
+    , musical .code:n =
+        { \str_set:Nn \l__fontscale_typographic_scale_str { musical } }
     , musical .value_forbidden:n = true
   }
 \keys_define:nn { fontscale / classic }

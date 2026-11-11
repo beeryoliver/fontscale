@@ -7,10 +7,16 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.2] - 2026-11-10
+## [v5.0.2] - 2026-11-11
 
 ### Changed
-- Maintenance update.
+- The displayed example code is now printed in `\small` instead of
+  `\normalsize` similar to block quotations.
+- Optimized the keys `classic` and `musical`.
+
+### Fixed
+- The code examples now correctly include the comment character `%` where
+  necessary.
 
 ## [v5.0.1] - 2026-10-27
 

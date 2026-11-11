@@ -7,6 +7,11 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
+## [v5.0.2] - 2026-11-10
+
+### Changed
+- Maintenance update.
+
 ## [v5.0.1] - 2026-10-27
 
 ### Changed

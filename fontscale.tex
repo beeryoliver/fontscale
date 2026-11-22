@@ -11,7 +11,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.2\quad 10 November 2026
+Version 5.0.2\quad 21 November 2026
 
 \pdfbookmark[1]{Contents}{contents}
 \tableofcontents
@@ -93,8 +93,7 @@ font size of \cs{normalsize} set by this package.
     Set the font size and font baselineskip using \cs{fontsize} and
     \cs{selectfont}.
     You can change the font sizes and font baselineskips that are set by the
-    font size commands by setting the \pkg{fontscale} package keys
-    (\S\ref{sec:keys}).
+    font size commands by setting the \pkg{fontscale} keys (\S\ref{sec:keys}).
     (The font baselineskip should not be confused with the paragraph
     baselineskip \cs{baselineskip}.)
     \item Cannot be used in math mode.
@@ -369,10 +368,10 @@ This section documents the commands provided by the \pkg{fontscale} package.
   \begin{syntax}
     \cs{fontscalesetup} \sarg{} \marg{key-value list}
   \end{syntax}
-  Sets and processes the \pkg{fontscale} package keys (\S\ref{sec:keys}) in
+  Sets and processes the \pkg{fontscale} keys (\S\ref{sec:keys}) in
   \meta{key-value list} and then uses \cs{normalsize}.
-  Adding the optional star first sets all the \pkg{fontscale} package keys to
-  their initial values.
+  Adding the optional star first sets all the \pkg{fontscale} keys to their
+  initial values.
   All assignments made by \cs{fontscalesetup} are local to the current group.
   Can be used mid-document.
   Cannot be used in math mode.

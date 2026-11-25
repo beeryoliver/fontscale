@@ -11,7 +11,7 @@ A flexible interface for setting font sizes
 
 Oliver Beery
 
-Version 5.0.2\quad 23 November 2026
+Version 5.1.0\quad 24 November 2026
 
 \pdfbookmark[1]{Contents}{contents}
 \tableofcontents
@@ -115,6 +115,11 @@ The syntaxes on the left have the same meaning as the argument to the
 corresponding command on the right.
 The commands on the right are documented in \pkg{usrguide}.
 \input{fontscale-input-syntax.tex}
+
+The \meta{key}|+=|\meta{value} syntax when setting keys in a
+\meta{key-value list} cannot be used if the value of the key is
+\meta{not set}.%
+\footnote{This syntax was added in \pkg{l3kernel} version 2026-11-16.}
 
 
 \section{Keys}

@@ -7,12 +7,19 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ## [Unreleased]
 
-## [v5.0.2] - 2026-11-11
+## [v5.1.0] - 2026-11-24
+
+### Added
+- The following keys now support the `+=` syntax when the keys are set:
+  - `<font size command>/size-normalsize-ratio`
+  - `<font size command>/size`
+  - `<font size command>`
+  - `<font size command>/baselineskip-size-ratio`
+  - `<font size command>/baselineskip`
 
 ### Changed
 - The displayed example code is now printed in `\small` instead of
   `\normalsize` similar to block quotations.
-- Optimized the keys `classic` and `musical`.
 
 ### Fixed
 - The code examples now correctly include the comment character `%` where

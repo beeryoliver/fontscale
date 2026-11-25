@@ -7,7 +7,7 @@
 % Loading the package
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{fontscale}{2026-11-10}{5.0.2}
+\ProvidesExplPackage{fontscale}{2026-11-24}{5.1.0}
   {A flexible interface for setting font sizes}
 
 \msg_new:nnn { fontscale } { l3kernel }
@@ -20,6 +20,9 @@
   { \msg_critical:nn { fontscale } { l3kernel } }
 
 % Some variables
+
+\bool_const:Nn \c__fontscale_keys_add_bool
+  { \IfExplAtLeastTF { 2026-11-16 } \c_true_bool \c_false_bool }
 
 % Stores the current font size and font baselineskip. These variables will be
 % initialized when \normalsize is used.
@@ -91,6 +94,25 @@
 \str_new:N \l__fontscale_classic_base_str
 \str_new:N \l__fontscale_classic_point_str
 
+\cs_new_protected:Npn \__fontscale_keys_dim_add:nNn #1#2#3
+  {
+    \quark_if_no_value:NTF #2
+      { \msg_error:nnn { fontscale } { keys-add } {#1} }
+      { \tl_put_right:Nn #2 { + \dim_eval:n {#3} } }
+  }
+\cs_new_protected:Npn \__fontscale_keys_skip_add:nNn #1#2#3
+  {
+    \quark_if_no_value:NTF #2
+      { \msg_error:nnn { fontscale } { keys-add } {#1} }
+      { \tl_put_right:Nn #2 { + \skip_eval:n {#3} } }
+  }
+\cs_new_protected:Npn \__fontscale_keys_fp_add:nNn #1#2#3
+  {
+    \quark_if_no_value:NTF #2
+      { \msg_error:nnn { fontscale } { keys-add } {#1} }
+      { \tl_put_right:Nn #2 { + (#3) } }
+  }
+
 \keys_define:nn { fontscale }
   {
       baselineskip-size-ratio .fp_set:N =
@@ -130,74 +152,116 @@
     , notes .int_set:N = \l__fontscale_musical_notes_int
     , notes .value_required:n = true
   }
-\keys_define:nn { fontscale / normalsize }
+\keys_define:ne { fontscale / normalsize }
   {
-      size .tl_set:N = \l__fontscale_normalsize_size_tl
+      size .tl_set:N = \exp_not:N \l__fontscale_normalsize_size_tl
     , size .value_required:n = true
 
     , baselineskip-size-ratio .tl_set:N =
-        \l__fontscale_normalsize_baselineskip_size_ratio_tl
+        \exp_not:N \l__fontscale_normalsize_baselineskip_size_ratio_tl
     , baselineskip-size-ratio .value_required:n = true
 
-    , baselineskip .tl_set:N = \l__fontscale_normalsize_baselineskip_tl
+    , baselineskip .tl_set:N =
+        \exp_not:N \l__fontscale_normalsize_baselineskip_tl
     , baselineskip .value_required:n = true
+
+    \bool_if:NT \c__fontscale_keys_add_bool
+      {
+        , size .append_method:n =
+            {
+              \__fontscale_keys_dim_add:nNn { normalsize / size }
+                \exp_not:N \l__fontscale_normalsize_size_tl {#1}
+            }
+        , baselineskip-size-ratio .append_method:n =
+            {
+              \__fontscale_keys_fp_add:nNn
+                { normalsize / baselineskip-size-ratio }
+                \exp_not:N \l__fontscale_normalsize_baselineskip_size_ratio_tl
+                {#1}
+            }
+        , baselineskip .append_method:n =
+            {
+              \__fontscale_keys_skip_add:nNn { normalsize / baselineskip }
+                \exp_not:N \l__fontscale_normalsize_baselineskip_tl {#1}
+            }
+      }
   }
-\tl_map_inline:nn
+\cs_set_protected:Npn \__fontscale_tmp:n #1
+  {
+    \keys_define:ne { fontscale / #1 }
+      {
+          size-normalsize-ratio .tl_set:N =
+            \exp_not:c { l__fontscale_#1_size_normalsize_ratio_tl }
+        , size-normalsize-ratio .value_required:n = true
+
+        , size .tl_set:N = \exp_not:c { l__fontscale_#1_size_tl }
+        , size .value_required:n = true
+
+        , baselineskip-size-ratio .tl_set:N =
+            \exp_not:c { l__fontscale_#1_baselineskip_size_ratio_tl }
+        , baselineskip-size-ratio .value_required:n = true
+
+        , baselineskip .tl_set:N =
+            \exp_not:c { l__fontscale_#1_baselineskip_tl }
+        , baselineskip .value_required:n = true
+
+        \bool_if:NT \c__fontscale_keys_add_bool
+          {
+            , size-normalsize-ratio .append_method:n =
+                {
+                  \__fontscale_keys_fp_add:nNn { #1 / size-normalsize-ratio }
+                    \exp_not:c { l__fontscale_#1_size_normalsize_ratio_tl }
+                    {##1}
+                }
+            , size .append_method:n =
+                {
+                  \__fontscale_keys_dim_add:nNn { #1 / size }
+                    \exp_not:c { l__fontscale_#1_size_tl } {##1}
+                }
+            , baselineskip-size-ratio .append_method:n =
+                {
+                  \__fontscale_keys_fp_add:nNn { #1 / baselineskip-size-ratio }
+                    \exp_not:c { l__fontscale_#1_baselineskip_size_ratio_tl }
+                    {##1}
+                }
+            , baselineskip .append_method:n =
+                {
+                  \__fontscale_keys_skip_add:nNn { #1 / baselineskip }
+                    \exp_not:c { l__fontscale_#1_baselineskip_tl } {##1}
+                }
+          }
+      }
+  }
+\tl_map_function:nN
   {
     {tiny} {scriptsize} {footnotesize} {small}
     {large} {Large} {LARGE} {huge} {Huge}
   }
-  {
-    \keys_define:nn { fontscale / #1 }
-      {
-          size-normalsize-ratio .tl_set:c =
-            { l__fontscale_#1_size_normalsize_ratio_tl }
-        , size-normalsize-ratio .value_required:n = true
-
-        , size .tl_set:c = { l__fontscale_#1_size_tl }
-        , size .value_required:n = true
-
-        , baselineskip-size-ratio .tl_set:c =
-            { l__fontscale_#1_baselineskip_size_ratio_tl }
-        , baselineskip-size-ratio .value_required:n = true
-
-        , baselineskip .tl_set:c = { l__fontscale_#1_baselineskip_tl }
-        , baselineskip .value_required:n = true
-      }
-  }
+  \__fontscale_tmp:n
 % As an optimization, the keys below are defined using .tl_set:N instead of
 % .meta:n.
-\keys_define:nn { fontscale }
+\cs_set:Npn \__fontscale_tmp:n #1
   {
-      tiny .tl_set:N = \l__fontscale_tiny_size_tl
-    , tiny .value_required:n = true
+    , #1 .tl_set:N = \exp_not:c { l__fontscale_#1_size_tl }
+    , #1 .value_required:n = true
 
-    , scriptsize .tl_set:N = \l__fontscale_scriptsize_size_tl
-    , scriptsize .value_required:n = true
-
-    , footnotesize .tl_set:N = \l__fontscale_footnotesize_size_tl
-    , footnotesize .value_required:n = true
-
-    , small .tl_set:N = \l__fontscale_small_size_tl
-    , small .value_required:n = true
-
-    , normalsize .tl_set:N = \l__fontscale_normalsize_size_tl
-    , normalsize .value_required:n = true
-
-    , large .tl_set:N = \l__fontscale_large_size_tl
-    , large .value_required:n = true
-
-    , Large .tl_set:N = \l__fontscale_Large_size_tl
-    , Large .value_required:n = true
-
-    , LARGE .tl_set:N = \l__fontscale_LARGE_size_tl
-    , LARGE .value_required:n = true
-
-    , huge .tl_set:N = \l__fontscale_huge_size_tl
-    , huge .value_required:n = true
-
-    , Huge .tl_set:N = \l__fontscale_Huge_size_tl
-    , Huge .value_required:n = true
+    \bool_if:NT \c__fontscale_keys_add_bool
+      {
+        , #1 .append_method:n =
+            {
+              \__fontscale_keys_dim_add:nNn { #1 / size }
+                \exp_not:c { l__fontscale_#1_size_tl } {##1}
+            }
+      }
+  }
+\keys_define:ne { fontscale }
+  {
+    \tl_map_function:nN
+      {
+        {tiny} {scriptsize} {footnotesize} {small} {normalsize}
+        {large} {Large} {LARGE} {huge} {Huge}
+      }
+      \__fontscale_tmp:n
   }
 
 % Sets the keys to their initial values. This is significantly faster than
@@ -801,6 +865,11 @@
     The~ font~ size~ must~ be~ a~ positive~ length~ and~ less~ than~ 2048pt.
   }
 % Messages used in \fontscalesetup.
+\msg_new:nnn { fontscale } { keys-add }
+  {
+    A~ value~ cannot~ be~ added~ to~ the~ key~ '#1'~ because~ its~ current~
+    value~ is~ '<not~ set>'~ \msg_line_context:.
+  }
 \msg_new:nnn { fontscale } { musical-base-invalid }
   {
     Invalid~ value~ '\dim_use:N \l__fontscale_musical_base_dim'~
